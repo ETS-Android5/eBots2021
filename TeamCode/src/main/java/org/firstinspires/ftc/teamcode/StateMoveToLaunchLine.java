@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.LaunchLine;
+
 public class StateMoveToLaunchLine implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -22,7 +24,7 @@ public class StateMoveToLaunchLine implements AutonState{
     boolean targetPoseAchieved = false;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateMoveToLaunchLine(LinearOpMode opModeIn, Robot robotIn){
+    public StateMoveToLaunchLine(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.MOVE_TO_LAUNCH_LINE;

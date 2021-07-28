@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class StatePlaceWobbleGoal implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
     StopWatch stateStopWatch;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePlaceWobbleGoal(LinearOpMode opModeIn, Robot robotIn){
+    public StatePlaceWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.PLACE_WOBBLE_GOAL;

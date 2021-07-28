@@ -35,6 +35,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+
 import static org.firstinspires.ftc.teamcode.AutonStateEnum.INITIALIZE;
 
 
@@ -50,7 +52,7 @@ public class AutonEbotsV1_ControlLoopSpeed extends LinearOpMode {
 
     //initializing and declaring class attributes
     private AutonParameters autonParameters;
-    private Robot robot;
+    private EbotsRobot robot;
 
     private AutonStateFactory autonStateFactory = new AutonStateFactory();
     private AutonState autonState;
@@ -137,7 +139,7 @@ public class AutonEbotsV1_ControlLoopSpeed extends LinearOpMode {
         autonParameters = AutonParameters.DEBUG_THREE_WHEEL;
         autonParameters.setSpeed(Speed.FAST);
 
-        robot = new Robot(startingPose, tempAlliance, autonParameters);
+        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
 
         //initialize drive wheels
         robot.initializeStandardDriveWheels(hardwareMap);

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class StateInitialize implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
 
@@ -16,7 +16,7 @@ public class StateInitialize implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateInitialize(LinearOpMode opModeIn, Robot robotIn){
+    public StateInitialize(LinearOpMode opModeIn, EbotsRobot robotIn){
         if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
         this.opMode = opModeIn;
         this.robot = robotIn;

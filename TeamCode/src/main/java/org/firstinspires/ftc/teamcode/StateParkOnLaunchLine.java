@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.LaunchLine;
+
 public class StateParkOnLaunchLine implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -15,7 +17,7 @@ public class StateParkOnLaunchLine implements AutonState{
     boolean targetPoseAchieved = false;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateParkOnLaunchLine(LinearOpMode opModeIn, Robot robotIn){
+    public StateParkOnLaunchLine(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.PARK_ON_LAUNCH_LINE;

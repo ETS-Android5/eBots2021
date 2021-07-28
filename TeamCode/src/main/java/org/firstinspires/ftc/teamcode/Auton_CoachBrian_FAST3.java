@@ -33,13 +33,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.LaunchLine;
+import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
+
 
 @Autonomous(name="Auton_CoachBrianFAST3", group="Auton")
 @Disabled
 public class Auton_CoachBrian_FAST3 extends LinearOpMode {
     //Declare and initialize class attributes
     AutonParameters autonParameters;
-    Robot robot;
+    EbotsRobot robot;
     TargetZone targetZone;
     LaunchLine launchLine;
 
@@ -69,7 +72,7 @@ public class Auton_CoachBrian_FAST3 extends LinearOpMode {
         autonParameters = AutonParameters.DEBUG_TWO_WHEEL;
         autonParameters.setSpeed(Speed.FAST);
         autonParameters.getSpeed().setK_i(0.3);
-        robot = new Robot(Pose.PresetPose.INNER_START_LINE, Alliance.RED, autonParameters);
+        robot = new EbotsRobot(Pose.PresetPose.INNER_START_LINE, Alliance.RED, autonParameters);
 
         targetZone = new TargetZone(robot.getAlliance(),TargetZone.Zone.B);
         launchLine = new LaunchLine();

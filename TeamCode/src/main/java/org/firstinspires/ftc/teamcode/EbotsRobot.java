@@ -18,6 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
+import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ import static org.firstinspires.ftc.teamcode.DriveWheel.WheelPosition;
  *              Core components include:  Drive System, Manipulator System, Sensor Network
  */
 
-public class Robot {
+public class EbotsRobot {
     /***************************************************************
      ******    CLASS VARIABLES
      ***************************************************************/
@@ -167,7 +170,7 @@ public class Robot {
      ******    CONSTRUCTORS
      ***************************************************************/
 
-    public Robot() {
+    public EbotsRobot() {
         this.driveCommand = new DriveCommand();
 
         //Build the robot physical dimensions
@@ -188,34 +191,34 @@ public class Robot {
 //        this.encoderSetup = EncoderSetup.TWO_WHEELS;    //Default value if none provided
     }
 
-    public Robot(Pose actualPose){
+    public EbotsRobot(Pose actualPose){
         this();     //Call the default constructor
         this.actualPose = actualPose;     //Set the input pose
         this.poseError = new PoseError(this);   //recalculate error
     }
 
-    public Robot(Pose pose, Alliance alliance){
+    public EbotsRobot(Pose pose, Alliance alliance){
         this(pose);     //Set the input pose by calling the above constructor with argument (Pose pose)
         this.alliance = alliance;
     }
 
-    public Robot(AutonParameters autonParameters){
+    public EbotsRobot(AutonParameters autonParameters){
         this();     //chain to constructor with arguments (Pose pose, Alliance alliance)
         this.ebotsMotionController = new EbotsMotionController(autonParameters);
 //        this.encoderSetup = autonParameters.getEncoderSetup();  //Set the encoderSetup class variable
     }
 
-    public Robot(Pose pose, Alliance alliance, AutonParameters autonParameters){
+    public EbotsRobot(Pose pose, Alliance alliance, AutonParameters autonParameters){
         this(pose, alliance);     //chain to constructor with arguments (Pose pose, Alliance alliance)
         this.ebotsMotionController = new EbotsMotionController(autonParameters);
 //        this.encoderSetup = autonParameters.getEncoderSetup();  //Set the encoderSetup class variable
     }
 
-    public Robot(Pose.PresetPose presetPose, Alliance alliance){
+    public EbotsRobot(Pose.PresetPose presetPose, Alliance alliance){
         this(new Pose(presetPose,alliance), alliance);  //chained to constructor with arguments (Pose pose, Alliance alliance)
     }
 
-    public Robot(Pose.PresetPose presetPose, Alliance alliance, AutonParameters autonParameters){
+    public EbotsRobot(Pose.PresetPose presetPose, Alliance alliance, AutonParameters autonParameters){
         this(new Pose(presetPose,alliance), alliance, autonParameters);  //chained to constructor with arguments (Pose, Alliance, AutonParameters)
 
     }
@@ -682,7 +685,7 @@ public class Robot {
         //Read the colorSensors
         if(includeColorSensors) {
             for (EbotsColorSensor ecs : ebotsColorSensors) {
-                ecs.setColorValue();
+                ecs.performHardwareRead();
             }
         }
 
@@ -755,7 +758,7 @@ public class Robot {
         //Read the colorSensors
         if(debugOn) operation = "Read colorSensors";
         for(EbotsColorSensor ecs: ebotsColorSensors){
-            ecs.setColorValue();
+            ecs.performHardwareRead();
         }
         if(debugOn) splitTimeMillis = stopWatch.logSplitTime(logTag, operation, splitTimeMillis, loopCount);
 

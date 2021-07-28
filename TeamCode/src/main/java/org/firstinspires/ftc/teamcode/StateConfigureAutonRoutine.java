@@ -6,12 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
 public class StateConfigureAutonRoutine implements AutonState{
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
 
@@ -32,7 +34,7 @@ public class StateConfigureAutonRoutine implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateConfigureAutonRoutine(LinearOpMode opModeIn, Robot robotIn) {
+    public StateConfigureAutonRoutine(LinearOpMode opModeIn, EbotsRobot robotIn) {
 
         this.opMode = opModeIn;
         this.robot = robotIn;

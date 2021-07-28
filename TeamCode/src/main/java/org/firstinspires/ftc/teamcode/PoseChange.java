@@ -2,10 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
 import java.util.ArrayList;
 
 /**
@@ -22,7 +18,7 @@ public class PoseChange {
     private final String logTag = "EBOTS";
     private final boolean debugOn = false;
 
-    public PoseChange(Robot robot) {
+    public PoseChange(EbotsRobot robot) {
         if(debugOn) Log.d(logTag, "Entering PoseChange (Robot) constructor...");
         //Start by calculating the spin angle
         this.spinAngleDeg = calculateSpinAngle(robot);
@@ -43,7 +39,7 @@ public class PoseChange {
      //******    Class METHODS
      //***************************************************************/
 
-    private double calculateSpinAngle(Robot robot) {
+    private double calculateSpinAngle(EbotsRobot robot) {
         //Spin clicks are calculated differently between 2-wheel and 3-wheel strategy
         //  For 2 wheel, must rely on the imu to estimate spin angle
         //  For 3 wheel, look at the difference between the encoders in the encoderDoubleDirection
@@ -92,7 +88,7 @@ public class PoseChange {
         return spinAngleDeg;
     }
 
-    private void calculateRobotMovement(Robot robot) {
+    private void calculateRobotMovement(EbotsRobot robot) {
         if(debugOn) Log.d(logTag, "Entering PoseChange.calculateRobotMovement...");
         //  Based on the encoder setup, determine the divisor of the component
         //  In 3-wheel systems, encoders aligned in doubleEncoderDirection are averaged
@@ -182,7 +178,7 @@ public class PoseChange {
         return appliedSign;
     }
 
-    public String toString(Robot robot){
+    public String toString(EbotsRobot robot){
         String returnString;
         returnString = "Movement in robot reference frame at heading: "
                 + "@" + String.format("%.2f",robot.getActualPose().getHeadingDeg())

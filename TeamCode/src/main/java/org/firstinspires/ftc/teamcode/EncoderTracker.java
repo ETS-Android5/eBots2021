@@ -283,7 +283,7 @@ public class EncoderTracker {
     //  FOR VIRTUAL ENCODERS
     //*************************************************************************
 
-    public void simulateLoopOutput(Robot robot, long loopDuration){
+    public void simulateLoopOutput(EbotsRobot robot, long loopDuration){
         boolean debugOn = true;
         String logTag = "EBOTS";
         if(debugOn) Log.d(logTag, "Entering EncoderTracker.simulateLoopOutput...");
@@ -300,7 +300,7 @@ public class EncoderTracker {
         this.processSpinLoopOutput(robot, loopDuration);
     }
 
-    private void processTranslationLoopOutput(Robot robot, long loopDuration){
+    private void processTranslationLoopOutput(EbotsRobot robot, long loopDuration){
         boolean debugOn = true;
         String logTag = "EBOTS";
         if(debugOn) {
@@ -352,7 +352,7 @@ public class EncoderTracker {
         }
     }
 
-    public double calculateSimulatedDistance(Robot robot, long timeStepMillis){
+    public double calculateSimulatedDistance(EbotsRobot robot, long timeStepMillis){
         boolean debugOn = true;
         if (debugOn) Log.d(logTag, "Entering EncoderTracker.calculateSimulatedDistance...");
 
@@ -377,7 +377,7 @@ public class EncoderTracker {
         return distance;
     }
 
-    private void processSpinLoopOutput(Robot robot, long loopDuration){
+    private void processSpinLoopOutput(EbotsRobot robot, long loopDuration){
         boolean debugOn = true;
         if(debugOn) Log.d(logTag, "Entering processSpinLoopOutput...");
 
@@ -397,7 +397,7 @@ public class EncoderTracker {
         }
     }
 
-    public double calculateSimulatedRotation(Robot robot, long timeStepMillis){
+    public double calculateSimulatedRotation(EbotsRobot robot, long timeStepMillis){
         boolean debugOn = true;
         if(debugOn) Log.d(logTag, "Entering calculateSimulatedRotation...");
 

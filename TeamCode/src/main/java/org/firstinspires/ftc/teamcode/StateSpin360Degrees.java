@@ -11,7 +11,7 @@ public class StateSpin360Degrees implements AutonState{
      * Exit conditions require user feedback so recordings can be made
      */
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -23,7 +23,7 @@ public class StateSpin360Degrees implements AutonState{
     private final String logTag = "EBOTS";
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateSpin360Degrees(LinearOpMode opModeIn, Robot robotIn){
+    public StateSpin360Degrees(LinearOpMode opModeIn, EbotsRobot robotIn){
         if(debugOn) Log.d(logTag, "Entering StateSpin360Degrees::constructor...");
         this.opMode = opModeIn;
         this.robot = robotIn;

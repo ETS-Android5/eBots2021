@@ -41,7 +41,7 @@ class DriveCommand {
         isSpinSignalSaturated = true;
     }
 
-    public DriveCommand(Robot robot, Speed speed){
+    public DriveCommand(EbotsRobot robot, Speed speed){
         //  This constructor is used to generate DriveCommands during Auton
         //  Calculates a drive command using input from
         //      -PoseError object

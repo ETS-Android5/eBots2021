@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class StatePickupSecondWobbleGoal implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -13,7 +13,7 @@ public class StatePickupSecondWobbleGoal implements AutonState{
     int cranePos;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePickupSecondWobbleGoal(LinearOpMode opModeIn, Robot robotIn){
+    public StatePickupSecondWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.PICKUP_SECOND_WOBBLE_GOAL;

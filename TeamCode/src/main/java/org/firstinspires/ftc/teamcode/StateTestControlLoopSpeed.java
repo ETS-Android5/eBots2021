@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class StateTestControlLoopSpeed implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit = 50000;
@@ -19,7 +17,7 @@ public class StateTestControlLoopSpeed implements AutonState{
     private final String logTag = "EBOTS";
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateTestControlLoopSpeed(LinearOpMode opModeIn, Robot robotIn){
+    public StateTestControlLoopSpeed(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.TEST_CONTROL_LOOP_SPEED;

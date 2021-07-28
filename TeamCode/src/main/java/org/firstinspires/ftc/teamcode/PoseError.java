@@ -69,7 +69,7 @@ public class PoseError {
         initializeErrorSums();
     }
 
-    public PoseError(Robot robot) {
+    public PoseError(EbotsRobot robot) {
         //  Set the errorSum to zero when instantiated
         resetErrorSums();
         initializeError(robot);
@@ -83,14 +83,14 @@ public class PoseError {
         this.initializeErrorSums();
     }
 
-    public void initializeError(Robot robot){
+    public void initializeError(EbotsRobot robot){
         //Initialize error
         this.positionError = new FieldPosition();
         calculateError(robot,0, Speed.SLOW);
         initializeErrorSums();
     }
 
-    public void calculateError(Robot robot, long loopDuration, Speed speed){
+    public void calculateError(EbotsRobot robot, long loopDuration, Speed speed){
         double xError = robot.getTargetPose().getX() - robot.getActualPose().getX();
         double yError = robot.getTargetPose().getY() - robot.getActualPose().getY();
         this.headingErrorDeg = Pose.applyAngleBound(robot.getTargetPose().getHeadingDeg() - robot.getActualPose().getHeadingDeg());
@@ -115,13 +115,13 @@ public class PoseError {
         }
     }
 
-    private void updateErrorSums(Robot robot, long loopDuration, Speed speed){
+    private void updateErrorSums(EbotsRobot robot, long loopDuration, Speed speed){
         for(ErrorSum errorSum:errorSums){
             errorSum.update(robot, loopDuration, speed);
         }
     }
 
-    public FieldPosition getPositionErrorInRobotCoordinateSystem(Robot robot){
+    public FieldPosition getPositionErrorInRobotCoordinateSystem(EbotsRobot robot){
         //this is used in auton to determine how the robot must drive to achieve target pose
 
         //Note: the positionErrorVector is the distance between robot and target pose in FIELD coordinate system

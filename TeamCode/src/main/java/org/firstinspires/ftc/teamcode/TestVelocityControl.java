@@ -8,11 +8,9 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -23,7 +21,7 @@ import static java.lang.String.format;
 @Disabled
 public class TestVelocityControl extends LinearOpMode {
 
-    org.firstinspires.ftc.teamcode.Robot robot;
+    EbotsRobot robot;
 
     final boolean debugOn = true;
     final String logTag = "EBOTS";
@@ -41,7 +39,7 @@ public class TestVelocityControl extends LinearOpMode {
         dashboardTelemetry = dashboard.getTelemetry();
         telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        robot = new Robot();
+        robot = new EbotsRobot();
         robot.setAlliance(Alliance.RED);
 
         robot.initializeManipMotors(this.hardwareMap);

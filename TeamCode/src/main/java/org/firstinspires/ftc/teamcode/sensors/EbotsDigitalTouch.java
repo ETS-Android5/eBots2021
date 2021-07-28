@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.sensors;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.ArrayList;
 
-public class EbotsDigitalTouch {
+public class EbotsDigitalTouch implements EbotsSensor, EbotsSensorReading<Boolean>{
 
     private DigitalChannel digitalTouch;
     private ButtonFunction buttonFunction;
@@ -35,6 +35,38 @@ public class EbotsDigitalTouch {
         digitalTouch.setMode(DigitalChannel.Mode.INPUT);
     }
 
+    @Override
+    public void reset() {
+        // Nothing to do to reset
+    }
+
+    @Override
+    public void performHardwareRead() {
+        // Note that backWall logic is reversed from other digital touch sensors
+        // Rev digital touches are closed by default, this one is open be default
+        if(this.buttonFunction==ButtonFunction.DETECT_BACK_WALL){
+            this.isPressed = this.digitalTouch.getState();
+        } else{
+            this.isPressed = !this.digitalTouch.getState();
+        }
+    }
+
+    @Override
+    public void flushReading() {
+        // No accumulator function
+        this.reset();
+    }
+
+    @Override
+    public Boolean getReading() {
+        return this.isPressed;
+    }
+
+    @Override
+    public void performErrorCheck() {
+        // No error check
+    }
+
     public DigitalChannel getDigitalTouch(){return this.digitalTouch;}
 
     public ButtonFunction getButtonFunction() {
@@ -45,13 +77,7 @@ public class EbotsDigitalTouch {
 
     public void setIsPressed(){
 
-        // Note that backWall logic is reversed from other digital touch sensors
-        // Rev digital touches are closed by default, this one is open be default
-        if(this.buttonFunction==ButtonFunction.DETECT_BACK_WALL){
-            this.isPressed = this.digitalTouch.getState();
-        } else{
-            this.isPressed = !this.digitalTouch.getState();
-        }
+        performHardwareRead();
     }
 
     public static EbotsDigitalTouch getEbotsDigitalTouchByButtonFunction(ButtonFunction buttonFunction, ArrayList<EbotsDigitalTouch> digitalTouches){

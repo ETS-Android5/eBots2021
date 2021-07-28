@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class StateMoveForCalibration implements AutonState{
     /**
@@ -12,7 +11,7 @@ public class StateMoveForCalibration implements AutonState{
      * Exit conditions require user feedback so recordings can be made
      */
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -29,7 +28,7 @@ public class StateMoveForCalibration implements AutonState{
     boolean targetPoseAchieved = false;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateMoveForCalibration(LinearOpMode opModeIn, Robot robotIn){
+    public StateMoveForCalibration(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.MOVE_FOR_CALIBRATION;

@@ -24,7 +24,7 @@ public class ErrorSum {
         return csysDirection;
     }
 
-    public void update(Robot robot, long loopDuration, Speed speed){
+    public void update(EbotsRobot robot, long loopDuration, Speed speed){
         //  Step 1:  See if integrator must be updated
         //           Add the integrator if the following conditions are met
         //              1) Loop Duration > 0s AND

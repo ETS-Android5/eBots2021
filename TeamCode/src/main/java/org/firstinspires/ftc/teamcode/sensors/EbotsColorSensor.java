@@ -1,18 +1,21 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.sensors;
 
 import android.graphics.Color;
 import android.util.Log;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
+import org.firstinspires.ftc.teamcode.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.FieldPosition;
+import org.firstinspires.ftc.teamcode.RobotSide;
+
 import java.util.ArrayList;
 import java.util.Formatter;
 
-public class EbotsColorSensor {
+public class EbotsColorSensor implements EbotsSensor, EbotsSensorReading<EbotsColorSensor.TapeColor>{
 
     /***************************************************************
      ******    CLASS VARIABLES
@@ -25,7 +28,12 @@ public class EbotsColorSensor {
     private float alpha;
     private final float SCALE_FACTOR = 255;
     private final float[] hsvValues = new float[3];
+
+    // Note:  observedColor is the returned object for getReading
     private TapeColor observedColor = null;  //Caution, may be null
+
+    //Note:  There is no accumulated value, just return null
+    private TapeColor accumulator = null;
 
     //private ColorSensor colorSensor;
     private NormalizedColorSensor colorSensor;
@@ -113,6 +121,54 @@ public class EbotsColorSensor {
     }
 
     /*****************************************************************
+     //******    INTERFACE METHODS FOR EbotsSensor
+     //****************************************************************/
+    @Override
+    public void reset(){
+        observedColor = null;
+    }
+
+    @Override
+    public void performHardwareRead() {
+//        redColor = (int) (colorSensor.red() * SCALE_FACTOR);
+//        blueColor = (int) (colorSensor.blue() * SCALE_FACTOR);
+//        greenColor = (int) (colorSensor.green() * SCALE_FACTOR);
+
+        // Get the normalized colors from the sensor
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        redColor = colors.red * SCALE_FACTOR;
+        blueColor = colors.blue * SCALE_FACTOR;
+        greenColor = colors.green * SCALE_FACTOR;
+
+        // Update the hsvValues array by passing it to Color.colorToHSV()
+        Color.colorToHSV(colors.toColor(), hsvValues);
+        this.hue = hsvValues[0];
+        this.value = hsvValues[2];
+        this.alpha = colors.alpha;
+
+        // set the local variable observedColor based on the sensor reading
+        this.observedColor = getObservedTapeColor();
+
+    }
+
+    @Override
+    public void flushReading(){
+        // There is nothing to move to the accumulator
+        this.reset();
+    }
+
+    @Override
+    public TapeColor getReading() {
+        return this.observedColor;
+    }
+
+    @Override
+    public void performErrorCheck() {
+        //  No error checking is implemented yet
+    }
+
+
+    /*****************************************************************
      //******    SIMPLE GETTERS AND SETTERS
      //****************************************************************/
     public TapeColor getObservedColor() { return observedColor;  }
@@ -132,7 +188,7 @@ public class EbotsColorSensor {
         return returnSensor;
     }
 
-    public static boolean isSideOnColor(ArrayList<EbotsColorSensor> ebotsColorSensors,RobotSide robotSide, TapeColor tapeColor){
+    public static boolean isSideOnColor(ArrayList<EbotsColorSensor> ebotsColorSensors, RobotSide robotSide, TapeColor tapeColor){
         boolean returnValue = true;     //assumes both wheels are on the color
         ArrayList<SensorLocation> sensorLocations = getSensorLocationsForSide(robotSide);  //find which wheel locations are on a side
         //Loop through all color sensors
@@ -170,28 +226,6 @@ public class EbotsColorSensor {
     /*****************************************************************
      //******    CLASS INSTANCE METHODS
      //****************************************************************/
-
-    public void setColorValue() {
-//        redColor = (int) (colorSensor.red() * SCALE_FACTOR);
-//        blueColor = (int) (colorSensor.blue() * SCALE_FACTOR);
-//        greenColor = (int) (colorSensor.green() * SCALE_FACTOR);
-
-        // Get the normalized colors from the sensor
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
-        redColor = colors.red * SCALE_FACTOR;
-        blueColor = colors.blue * SCALE_FACTOR;
-        greenColor = colors.green * SCALE_FACTOR;
-
-        // Update the hsvValues array by passing it to Color.colorToHSV()
-        Color.colorToHSV(colors.toColor(), hsvValues);
-        this.hue = hsvValues[0];
-        this.value = hsvValues[2];
-        this.alpha = colors.alpha;
-
-        this.observedColor = getObservedTapeColor();
-
-    }
-
     public boolean isRed() {
         boolean returnValue = false;
 //        int redThreshold = 170;

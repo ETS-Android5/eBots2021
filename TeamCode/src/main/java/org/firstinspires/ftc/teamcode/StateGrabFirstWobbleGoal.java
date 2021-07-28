@@ -10,7 +10,7 @@ public class StateGrabFirstWobbleGoal implements AutonState{
     //Position the robot and grab the first wobble goal
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     DcMotorEx crane;
@@ -23,7 +23,7 @@ public class StateGrabFirstWobbleGoal implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateGrabFirstWobbleGoal(LinearOpMode opModeIn, Robot robotIn){
+    public StateGrabFirstWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn){
         if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
         this.opMode = opModeIn;
         this.robot = robotIn;

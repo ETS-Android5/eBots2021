@@ -35,6 +35,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.LaunchLine;
+import org.firstinspires.ftc.teamcode.fieldobjects.PlayField;
+import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
+
 import static java.lang.String.format;
 
 /**
@@ -49,7 +53,7 @@ public class Auton_EncoderCalibration extends LinearOpMode {
     //Declare and initialize class attributes
     AutonParameters autonParameters = AutonParameters.DEBUG_THREE_WHEEL;
     Pose startPose = new Pose (0, new PlayField().getYCoordTouchingWall(0),0);
-    Robot robot = new Robot(startPose, Alliance.RED, autonParameters);
+    EbotsRobot robot = new EbotsRobot(startPose, Alliance.RED, autonParameters);
     TargetZone targetZone = new TargetZone(robot.getAlliance(),TargetZone.Zone.B);
     LaunchLine launchLine = new LaunchLine();
 

@@ -57,7 +57,7 @@ public class TeleOpEbots extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private StopWatch stopWatch;
-    private org.firstinspires.ftc.teamcode.Robot robot;
+    private EbotsRobot robot;
     private int loopCount = 0;
 
 //    FtcDashboard dashboard;
@@ -73,7 +73,7 @@ public class TeleOpEbots extends OpMode
 //        dashboardTelemetry = dashboard.getTelemetry();
 //        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        robot = new Robot();
+        robot = new EbotsRobot();
         //robot.initDriveMotors(hardwareMap);
         robot.initializeStandardDriveWheels(hardwareMap);
 //        robot.initializeEncoderTrackers(EncoderSetup.TWO_WHEELS, true);

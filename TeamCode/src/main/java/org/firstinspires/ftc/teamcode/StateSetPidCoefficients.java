@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class StateSetPidCoefficients implements AutonState{
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
 
@@ -21,7 +21,7 @@ public class StateSetPidCoefficients implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateSetPidCoefficients(LinearOpMode opModeIn, Robot robotIn) {
+    public StateSetPidCoefficients(LinearOpMode opModeIn, EbotsRobot robotIn) {
         if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Instantiating class");
 
         this.opMode = opModeIn;

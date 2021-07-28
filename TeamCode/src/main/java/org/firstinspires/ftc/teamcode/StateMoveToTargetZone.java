@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
+
 public class StateMoveToTargetZone implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -24,7 +26,7 @@ public class StateMoveToTargetZone implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateMoveToTargetZone(LinearOpMode opModeIn, Robot robotIn){
+    public StateMoveToTargetZone(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.MOVE_TO_TARGET_ZONE;

@@ -53,7 +53,7 @@ public class AutonEbotsV1_Calibration extends LinearOpMode {
     //initializing and declaring class attributes
     //  Note CALIBRATION_TWO_WHEEL requires the Encoder Setup be changed after initialization
     private AutonParameters autonParameters = AutonParameters.COMPETITION;
-    private Robot robot;
+    private EbotsRobot robot;
     private ArrayList<Pose> poseArray= new ArrayList<>();
 
     private AutonStateFactory autonStateFactory = new AutonStateFactory();
@@ -123,7 +123,7 @@ public class AutonEbotsV1_Calibration extends LinearOpMode {
         // Adjust the auton parameters before instantiating robot
 //        autonParameters.setSpeed(Speed.FAST);
 
-        robot = new Robot(startingPose, tempAlliance, autonParameters);
+        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
 
         //initialize drive wheels
         robot.initializeStandardDriveWheels(hardwareMap);

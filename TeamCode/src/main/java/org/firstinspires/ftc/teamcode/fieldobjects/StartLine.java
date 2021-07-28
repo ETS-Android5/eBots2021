@@ -1,4 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fieldobjects;
+
+import org.firstinspires.ftc.teamcode.Alliance;
+import org.firstinspires.ftc.teamcode.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.CsysDirection;
+import org.firstinspires.ftc.teamcode.FieldPosition;
+import org.firstinspires.ftc.teamcode.SizeCoordinate;
 
 import java.util.ArrayList;
 

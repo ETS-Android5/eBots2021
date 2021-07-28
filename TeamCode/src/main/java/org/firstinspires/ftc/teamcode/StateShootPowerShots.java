@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class StateShootPowerShots implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -18,7 +18,7 @@ public class StateShootPowerShots implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateShootPowerShots(LinearOpMode opModeIn, Robot robotIn){
+    public StateShootPowerShots(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.SHOOT_POWER_SHOTS;

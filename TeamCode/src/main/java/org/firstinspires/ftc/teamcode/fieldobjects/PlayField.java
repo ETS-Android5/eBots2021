@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fieldobjects;
+
+import org.firstinspires.ftc.teamcode.EbotsRobot;
 
 public class PlayField {
     private final double fieldWidth = 142;
@@ -17,9 +19,9 @@ public class PlayField {
     public double getYCoordTouchingWall(double headingAngle){
         double yCoord = -fieldHeight / 2;
         if(headingAngle == 0 | headingAngle == 180){
-            yCoord += (Robot.RobotSize.xSize.getSizeValue()/2);
+            yCoord += (EbotsRobot.RobotSize.xSize.getSizeValue()/2);
         } else if(yCoord == 90 | yCoord == -90){
-            yCoord += (Robot.RobotSize.ySize.getSizeValue()/2);
+            yCoord += (EbotsRobot.RobotSize.ySize.getSizeValue()/2);
         }
         return yCoord;
     }

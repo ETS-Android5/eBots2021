@@ -67,7 +67,7 @@ public class EbotsMotionController {
      //******    CLASS INSTANCE METHODS
      //***************************************************************/
 
-    public void moveToTargetPose(Robot robot, StopWatch travelLegTimer){
+    public void moveToTargetPose(EbotsRobot robot, StopWatch travelLegTimer){
         /*
         1) Calculate PoseError -- x,y, heading components of error and errorSums for integrator (using field coordinate system)
         2) Compute the DriveCommand for the robot considering error & speed(in the robot's coordinate system)
@@ -149,7 +149,7 @@ public class EbotsMotionController {
         loopEndTime = 0L;
         loopDuration = 0L;
     }
-    public void updatePoseAfterLoop(Robot robot){
+    public void updatePoseAfterLoop(EbotsRobot robot){
         //
         //  Update robot location based on the readings of encoders
 
@@ -164,7 +164,7 @@ public class EbotsMotionController {
         robot.updateAllSensorValues();
     }
 
-    public long calculateTimeLimitMillis(Robot robot){
+    public long calculateTimeLimitMillis(EbotsRobot robot){
         //Find the expected time required to achieve the target pose
         if(debugOn) Log.d(logTag, "Entering calculateTimeLimitMillis...");
 
@@ -190,7 +190,7 @@ public class EbotsMotionController {
     }
 
 
-    public boolean isTargetPoseReached(Robot robot){
+    public boolean isTargetPoseReached(EbotsRobot robot){
         //TODO:  This should probably be a method inside the robot, not the motion controller
         boolean debugOn = true;
         //if (debugOn) Log.d(logTag, "Entering isTargetPoseReached...");
@@ -228,7 +228,7 @@ public class EbotsMotionController {
         }
     }
 
-    public boolean isTargetPoseSustained(Robot robot, StopWatch stopWatch,
+    public boolean isTargetPoseSustained(EbotsRobot robot, StopWatch stopWatch,
                                          boolean isCurrentPositionCorrect, boolean wasTargetPosePreviouslyReached){
         //TODO:  This should probably be a method inside the robot, not the motion controller
         boolean isTargetPoseCompleted = false;
@@ -250,7 +250,7 @@ public class EbotsMotionController {
 
     }
 
-    private static void logPosition(Robot robot, int loopCount, StopWatch timer){
+    private static void logPosition(EbotsRobot robot, int loopCount, StopWatch timer){
         String logTag = "EBOTS";
         Log.d(logTag, "Logging Position...");
 

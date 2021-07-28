@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.util.Log;
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.fieldobjects.PlayField;
+import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
+import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class StatePrematchSetup implements AutonState{
      */
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
 
@@ -49,7 +49,7 @@ public class StatePrematchSetup implements AutonState{
     }
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePrematchSetup(LinearOpMode opModeIn, Robot robotIn){
+    public StatePrematchSetup(LinearOpMode opModeIn, EbotsRobot robotIn){
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.currentAutonStateEnum = AutonStateEnum.PREMATCH_SETUP;

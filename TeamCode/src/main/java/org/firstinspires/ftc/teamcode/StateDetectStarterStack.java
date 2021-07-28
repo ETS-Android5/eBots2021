@@ -6,17 +6,17 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
 
 import java.util.List;
 
 public class StateDetectStarterStack implements AutonState{
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
 
@@ -28,7 +28,7 @@ public class StateDetectStarterStack implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateDetectStarterStack(LinearOpMode opModeIn, Robot robotIn) {
+    public StateDetectStarterStack(LinearOpMode opModeIn, EbotsRobot robotIn) {
         if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Instantiating class");
 
         this.opMode = opModeIn;

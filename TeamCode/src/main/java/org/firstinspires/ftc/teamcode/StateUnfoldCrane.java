@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class StateUnfoldCrane implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     DcMotorEx crane;
@@ -21,7 +21,7 @@ public class StateUnfoldCrane implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateUnfoldCrane(LinearOpMode opModeIn, Robot robotIn){
+    public StateUnfoldCrane(LinearOpMode opModeIn, EbotsRobot robotIn){
         if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
         this.opMode = opModeIn;
         this.robot = robotIn;

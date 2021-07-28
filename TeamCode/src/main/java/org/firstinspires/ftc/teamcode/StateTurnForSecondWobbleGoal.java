@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+
 public class StateTurnForSecondWobbleGoal implements AutonState{
 
     LinearOpMode opMode;
-    Robot robot;
+    EbotsRobot robot;
     AutonStateEnum currentAutonStateEnum;
     AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
@@ -23,7 +25,7 @@ public class StateTurnForSecondWobbleGoal implements AutonState{
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateTurnForSecondWobbleGoal(LinearOpMode opModeIn, Robot robotIn){
+    public StateTurnForSecondWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn){
         Log.d(logTag, "Instantiating StateMoveToSecondStartLine");
         this.opMode = opModeIn;
         this.robot = robotIn;

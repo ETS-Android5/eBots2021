@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
+
 import java.util.ArrayList;
 
 /**
@@ -85,7 +87,7 @@ public class ColorSensorOpModeRefactor extends OpMode {
   @Override
   public void loop() {
     for (EbotsColorSensor ebotsColorSensor: ebotsColorSensors){
-      ebotsColorSensor.setColorValue();
+      ebotsColorSensor.performHardwareRead();
     }
     telemetry.addData("Status", "Run Time: " + runtime.toString());
 

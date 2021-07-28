@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.util.Log;
-import android.view.animation.AnimationUtils;
 
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -38,9 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
 
 import static org.firstinspires.ftc.teamcode.AutonStateEnum.INITIALIZE;
 
@@ -59,7 +56,7 @@ public class AutonEbotsV1 extends LinearOpMode {
 
     //initializing and declaring class attributes
     private AutonParameters autonParameters;
-    private Robot robot;
+    private EbotsRobot robot;
 
     private AutonStateFactory autonStateFactory = new AutonStateFactory();
     private AutonState autonState;
@@ -167,7 +164,7 @@ public class AutonEbotsV1 extends LinearOpMode {
         //autonParameters.setSpeed(Speed.FAST);
         autonParameters = AutonParameters.COMPETITION;
 
-        robot = new Robot(startingPose, tempAlliance, autonParameters);
+        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
 
         //initialize drive wheels
         robot.initializeStandardDriveWheels(hardwareMap);
