@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+
 import java.util.ArrayList;
 
 import static java.lang.String.format;
@@ -65,7 +69,7 @@ public class PoseError {
     ***************************************************************/
     public PoseError(){
         this.headingErrorDeg = 0;
-        this.positionError = new FieldPosition(0,0,CoordinateSystem.FIELD);
+        this.positionError = new FieldPosition(0,0, CoordinateSystem.FIELD);
         initializeErrorSums();
     }
 

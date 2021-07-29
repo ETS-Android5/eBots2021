@@ -1,0 +1,59 @@
+package org.firstinspires.ftc.teamcode.opmodes.autonstates;
+
+import android.util.Log;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.EbotsRobot;
+
+public class StateInitialize implements AutonState {
+
+    LinearOpMode opMode;
+    EbotsRobot robot;
+    AutonStateEnum currentAutonStateEnum;
+    AutonStateEnum nextAutonStateEnum;
+
+    boolean debugOn = true;
+    String logTag = "EBOTS";
+
+
+    // ***********   CONSTRUCTOR   ***********************
+    public StateInitialize(LinearOpMode opModeIn, EbotsRobot robotIn){
+        if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
+        this.opMode = opModeIn;
+        this.robot = robotIn;
+        this.currentAutonStateEnum = AutonStateEnum.INITIALIZE;
+        this.nextAutonStateEnum = AutonStateEnum.MOVE_TO_TARGET_ZONE;
+    }
+
+    // ***********   GETTERS    ***********************
+    @Override
+    public AutonStateEnum getNextAutonStateEnum() {
+        return nextAutonStateEnum;
+    }
+
+    @Override
+    public AutonStateEnum getCurrentAutonStateEnum() {
+        return currentAutonStateEnum;
+    }
+
+    // ***********   INTERFACE METHODS   ***********************
+    @Override
+    public boolean areExitConditionsMet() {
+        // This condition should be immediately satisfied
+        return opMode.opModeIsActive();
+    }
+
+    @Override
+    public void performStateSpecificTransitionActions() {
+        // Zero all encoders
+        robot.zeroEncoders();
+    }
+
+    @Override
+    public void performStateActions() {
+        // There are no stat actions except to
+        this.opMode.telemetry.addLine("Stuck in INITIALIZED state, something is wrong");
+        this.opMode.telemetry.update();
+    }
+}

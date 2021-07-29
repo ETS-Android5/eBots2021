@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.fieldobjects;
 
-import org.firstinspires.ftc.teamcode.Alliance;
-import org.firstinspires.ftc.teamcode.CoordinateSystem;
-import org.firstinspires.ftc.teamcode.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.FieldPosition;
 import org.firstinspires.ftc.teamcode.SizeCoordinate;
 

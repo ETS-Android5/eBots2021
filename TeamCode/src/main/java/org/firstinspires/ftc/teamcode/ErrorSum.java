@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+
 public class ErrorSum {
     /**
      * Error sum represents the cumulative error value used in the integrator control

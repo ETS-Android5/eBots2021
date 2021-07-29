@@ -18,9 +18,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderCalibration;
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderModel;
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotDesign;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotOrientation;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.opmodes.AutonParameters;
 import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
+import org.firstinspires.ftc.teamcode.sensors.EbotsRev2mDistanceSensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +69,7 @@ public class EbotsRobot {
     private ArrayList<EbotsRevBlinkinLedDriver> ledDrivers = new ArrayList<>();
 
     // Camera object detection
-    private TFObjectDetector tfod;
+    // private TFObjectDetector tfod;
 
     // Field position
     private Pose actualPose;       //Current Pose, which consists of Field Position and Heading
@@ -251,7 +262,7 @@ public class EbotsRobot {
 
     //public RevBlinkinLedDriver getRevBlinkinLedDriver(){return this.revBlinkinLedDriver;}
     public ArrayList<EbotsRevBlinkinLedDriver> getLedDrivers(){return this.ledDrivers;}
-    public TFObjectDetector getTfod(){return this.tfod;}
+    // public TFObjectDetector getTfod(){return this.tfod;}
 
     public Alliance getAlliance(){return this.alliance;}
     public Pose getActualPose(){return this.actualPose;}
@@ -306,9 +317,6 @@ public class EbotsRobot {
     }
 
 
-    public void setTfod(TFObjectDetector tfodIn){
-        this.tfod = tfodIn;
-    }
     public void setActualPose(Pose pose) {
         boolean debugOn = true;
         if(debugOn) {
@@ -335,13 +343,15 @@ public class EbotsRobot {
 
     public void setDriveCommand(DriveCommand driveCommandIn){
         this.driveCommand = driveCommandIn;
-        this.calculateDrivePowers();
+        this.calculateDrivePowers(driveCommandIn);
 
     }
 
     public void setDriveCommand(Gamepad gamepad){
-        this.driveCommand = calculateDriveCommandFromGamepad(gamepad);
-        this.calculateDrivePowers();
+//        this.driveCommand = calculateDriveCommandFromGamepad(gamepad);
+        DriveCommand driveCommand = new DriveCommand(gamepad);
+        this.driveCommand = driveCommand;
+        this.calculateDrivePowers(driveCommand);
     }
 
     public void setAlliance(Alliance allianceIn){
@@ -798,9 +808,10 @@ public class EbotsRobot {
         StopWatch stopWatch = new StopWatch();
         long lockoutTimeMillis = 750L;
 
-        this.driveCommand = new DriveCommand();
-        this.driveCommand.setMagnitude(0.2);
-        this.calculateDrivePowers();
+        DriveCommand driveCommand = new DriveCommand();
+        driveCommand.setMagnitude(0.2);
+        this.driveCommand = driveCommand;
+        this.calculateDrivePowers(driveCommand);
 
         for (DriveWheel dw: driveWheels){
             this.stop();
@@ -837,7 +848,10 @@ public class EbotsRobot {
         return rotationAngleDeg;
     }
 
+    @Deprecated
     public DriveCommand calculateDriveCommandFromGamepad(Gamepad gamepad){
+        //  Deprecated, use new DriveCommand(gamepad) instead
+
         //  Robot Drive Angle is interpreted as follows:
         //
         //      0 degrees -- forward - (Positive X-Direction)
@@ -1133,8 +1147,32 @@ public class EbotsRobot {
         conveyor.setPower(0);
     }
 
-
+    @Deprecated
     public void calculateDrivePowers(){
+        //Loop through the drive wheels and set the calculated power
+
+        for(DriveWheel dw: driveWheels){
+            dw.setCalculatedPower(driveCommand);     //Considers translation and spin
+        }
+
+        //Now condition the calculated drive powers
+        //  --If magnitude of any drive is greater than 1, then scale all down
+        //    Note:  this scaling is different from scaling due to Speed objects
+        //           this makes sures the motors aren't over-driven, which would cause erratic controls
+        //           For instance, it is possible to have both translate and spin speeds governed to 0.5
+        //           but still drive a motor to its full potential of 1.0
+
+        double maxCalculatedPowerMagnitude = getMaxCalculatedPowerMagnitude();
+        double maxAllowedPower = 1.0;
+
+        //Apply a scale factor if maxAllowedPower is exceeded
+        if(maxCalculatedPowerMagnitude>maxAllowedPower){
+            double scaleFactor = maxAllowedPower/maxCalculatedPowerMagnitude;
+            this.applyScaleToCalculatedDrive(scaleFactor);
+        }
+    }
+
+    public void calculateDrivePowers(DriveCommand driveCommand){
         //Loop through the drive wheels and set the calculated power
 
         for(DriveWheel dw: driveWheels){

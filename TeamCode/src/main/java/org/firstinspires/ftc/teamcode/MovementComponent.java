@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+
 public class MovementComponent {
     private CoordinateSystem coordinateSystem;
     private CsysDirection csysDirection;

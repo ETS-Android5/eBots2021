@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
-import org.firstinspires.ftc.teamcode.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.FieldPosition;
-import org.firstinspires.ftc.teamcode.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 
 import java.util.ArrayList;
 import java.util.Formatter;

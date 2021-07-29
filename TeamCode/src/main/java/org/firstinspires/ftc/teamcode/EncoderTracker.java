@@ -5,6 +5,10 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderCalibration;
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderModel;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotOrientation;
+
 import java.util.ArrayList;
 import java.util.Formatter;
 
@@ -214,10 +218,6 @@ public class EncoderTracker {
 
         this.motor = motor;
         this.zeroEncoder();
-        // The following was broken out to method zeroEncoder
-//        DcMotorEx.RunMode incomingMode = motor.getMode();
-//        motor.setMode(Dc Motor.RunMode.STOP_AND_RESET_ENCODER);
-//        motor.setMode(incomingMode);
     }
 
     public void reverseClickDirection(){

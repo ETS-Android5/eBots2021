@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotOrientation;
+
 import java.util.ArrayList;
 
 /**

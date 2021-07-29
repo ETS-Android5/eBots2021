@@ -2,6 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.Accuracy;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.GyroSetting;
+import org.firstinspires.ftc.teamcode.ebotsenums.SoftStart;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.opmodes.AutonParameters;
+
 public class EbotsMotionController {
     /**
      * This class functions as a PID controller for translation and rotation
@@ -106,11 +113,12 @@ public class EbotsMotionController {
 
         //2) Compute the DriveCommand for the robot considering error & speed(in the robot's coordinate system)
         if(debugOn) logPosition(robot, loopCount, travelLegTimer);     //Logs the current & target pose + error
-        robot.setDriveCommand(new DriveCommand(robot, speed));
+        DriveCommand driveCommand = new DriveCommand(robot, speed);
+        robot.setDriveCommand(driveCommand);
         if (debugOn) Log.d(logTag, robot.getDriveCommand().toString());
 
         //3) Calculate the motor powers based on DriveCommand
-        robot.calculateDrivePowers();
+        robot.calculateDrivePowers(driveCommand);
 
         //4) Scale for softStart if necessary
         if(loopStartTime < softStart.getDurationMillis()){

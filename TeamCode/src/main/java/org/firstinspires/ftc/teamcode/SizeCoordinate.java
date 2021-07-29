@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import java.lang.reflect.Array;
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+
 import java.util.ArrayList;
 
 public class SizeCoordinate {

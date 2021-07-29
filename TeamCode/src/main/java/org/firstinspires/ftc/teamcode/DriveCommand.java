@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+
 import java.util.Formatter;
 
 import static java.lang.String.format;
@@ -96,6 +101,44 @@ class DriveCommand {
         this.setSpinDrive(spinSignal, peakSpinSpeed);
         this.toString();
     }
+
+    public DriveCommand (Gamepad gamepad){
+        //  This constructor is used to generate DriveCommands during Auton
+        //  Robot Drive Angle is interpreted as follows:
+        //
+        //      0 degrees -- forward - (Positive X-Direction)
+        //      90 degrees -- left   - (Positive Y-Direction)
+        //      180 degrees -- backwards (Negative X-Direction)
+        //      -90 degrees -- right    (Negative Y-Direction)
+        //
+        //  NOTE: This convention follows the right hand rule method, where :
+        //      +X --> Forward, +Y is Left, +Z is up
+        //   +Spin --> Counter clockwise
+        //boolean debugOn = false;
+        if(debugOn) Log.d(logTag, "Entering calculateDriveCommandFromGamepad...");
+
+
+        //Read in the gamepad inputs
+        double forwardInput = -gamepad.left_stick_y;  //reversing sign because up on gamepad is negative
+        double lateralInput = -gamepad.left_stick_x;  //reversing sign because right on gamepad is positive
+        double spinInput = -gamepad.right_stick_x;    //Positive means to spin to the left (counterclockwise (CCW) when looking down on robot)
+
+        double translateMaxSignal = Speed.TELEOP.getMaxSpeed();
+        double spinMaxSignal = Speed.TELEOP.getTurnSpeed();
+
+        //todo:  VERIFY the super Slow Mo controls
+//        double minAllowed = 0.3;
+//        //Get the input for Super Slo-Mo.  If it is less than the minAllowed than use minAllowed
+//        double superSloMoInput = Math.max(1-gamepad.left_trigger, minAllowed);
+//        translateMaxSignal = Math.min(superSloMoInput, translateMaxSignal);
+//        spinMaxSignal = Math.min(superSloMoInput, spinMaxSignal);
+
+        //Set the values for the robot's driveCommand object
+        this.setMagnitudeAndDriveAngle(forwardInput, lateralInput, translateMaxSignal);
+        this.setSpinDrive(spinInput, spinMaxSignal);
+    }
+
+
 
     /***************************************************************
      ******    SIMPLE GETTERS AND SETTERS
