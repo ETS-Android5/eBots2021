@@ -130,8 +130,6 @@ public class AutonEbotsV1 extends LinearOpMode {
         while (opModeIsActive()){
             executeStateMachine();
         }
-
-
     }
 
     private void executeStateMachine() {
@@ -172,12 +170,19 @@ public class AutonEbotsV1 extends LinearOpMode {
         //autonParameters.setSpeed(Speed.FAST);
         autonParameters = AutonParameters.COMPETITION;
 
-        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
-
+        // These were all replaced with the the new constructor that includes hardwareMap
+        //robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
         //initialize drive wheels
-        robot.initializeStandardDriveWheels(hardwareMap);
+        //robot.initializeStandardDriveWheels(hardwareMap);
         //initialize manip motors
-        robot.initializeManipMotors(hardwareMap);
+        //robot.initializeManipMotors(hardwareMap);
+        //prepare expansion hubs for bulk heads
+        robot.initializeExpansionHubsForBulkRead(hardwareMap);
+
+
+        //  this constructor also builds the drive wheel motors and manip devices
+        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters, hardwareMap);
+
 
         //initialize imu if being used by the auton setup
         if(autonParameters.getGyroSetting() != GyroSetting.NONE) {
@@ -191,8 +196,6 @@ public class AutonEbotsV1 extends LinearOpMode {
         robot.initializeEbotsRevBlinkinDriver(hardwareMap);
         //initialize Rev2MeterDistance sensors
 //        robot.initializeEbotsRev2mDistanceSensors(hardwareMap);
-        //prepare expansion hubs for bulk heads
-        robot.initializeExpansionHubsForBulkRead(hardwareMap);
         // preapare encoderTrackers
         robot.initializeEncoderTrackers(autonParameters);
         //  Note CALIBRATION_TWO_WHEEL requires the Encoder Setup be changed after initialization

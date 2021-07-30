@@ -23,11 +23,19 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderCalibration;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderModel;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
+import org.firstinspires.ftc.teamcode.ebotsenums.GyroSetting;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotDesign;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotOrientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.manips.Conveyor;
+import org.firstinspires.ftc.teamcode.manips.Crane;
+import org.firstinspires.ftc.teamcode.manips.EbotsManip;
+import org.firstinspires.ftc.teamcode.manips.Gripper;
+import org.firstinspires.ftc.teamcode.manips.Intake;
+import org.firstinspires.ftc.teamcode.manips.Launcher;
+import org.firstinspires.ftc.teamcode.manips.RingFeeder;
 import org.firstinspires.ftc.teamcode.opmodes.AutonParameters;
 import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
@@ -56,6 +64,9 @@ public class EbotsRobot {
 
     private Servo gripper;
     private Servo ringFeeder;
+
+    // Manip Devices
+    private ArrayList<EbotsManip> ebotsManips = new ArrayList<>();
 
     // Sensor arrays
     private ArrayList<DriveWheel> driveWheels;
@@ -201,6 +212,30 @@ public class EbotsRobot {
         this.ebotsMotionController = new EbotsMotionController();
 //        this.encoderSetup = EncoderSetup.TWO_WHEELS;    //Default value if none provided
     }
+    public EbotsRobot(HardwareMap hardwareMap) {
+        this.driveCommand = new DriveCommand();
+
+        //Build the robot physical dimensions
+        robotSizeCoordinates = new ArrayList<>();
+        for(RobotSize rs: RobotSize.values()){
+            robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
+        }
+
+        //Assumes blue alliance if none stated
+        this.alliance = Alliance.BLUE;
+        //Assumes a default starting position if none specified
+        this.actualPose = new Pose(Pose.PresetPose.INNER_START_LINE, alliance);     //Defaults to INNER and BLUE
+        //When no target pose is given, assume Power Shot Launch position
+        this.targetPose = new Pose(Pose.PresetPose.LAUNCH_POWER_SHOT, alliance);
+        this.poseError = new PoseError(this);
+
+        this.ebotsMotionController = new EbotsMotionController();
+
+        //  Initialize the drive wheels and manip devices
+        this.initializeStandardDriveWheels(hardwareMap);
+        this.initializeEbotsManips(hardwareMap);
+    }
+
 
     public EbotsRobot(Pose actualPose){
         this();     //Call the default constructor
@@ -225,13 +260,49 @@ public class EbotsRobot {
 //        this.encoderSetup = autonParameters.getEncoderSetup();  //Set the encoderSetup class variable
     }
 
+    public EbotsRobot(Pose actualPose, Alliance alliance, AutonParameters autonParameters, HardwareMap hardwareMap){
+        this.driveCommand = new DriveCommand();
+
+        //Build the robot physical dimensions
+        robotSizeCoordinates = new ArrayList<>();
+        for(RobotSize rs: RobotSize.values()){
+            robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
+        }
+
+        //Assumes blue alliance if none stated
+        this.alliance = alliance;
+        this.actualPose = actualPose;     //Set the input pose
+
+        //When no target pose is given, assume Power Shot Launch position
+        this.targetPose = new Pose(Pose.PresetPose.LAUNCH_POWER_SHOT, alliance);
+        this.poseError = new PoseError(this);
+
+        this.ebotsMotionController = new EbotsMotionController(autonParameters);
+
+        //  Initialize the drive wheels and manip devices
+        initializeStandardDriveWheels(hardwareMap);
+        initializeEbotsManips(hardwareMap);
+
+        // Initialize exp hubs and sensors
+        initializeExpansionHubsForBulkRead(hardwareMap);
+        //initialize imu if being used by the auton setup
+        if(autonParameters.getGyroSetting() != GyroSetting.NONE) {
+            this.initializeImu(hardwareMap);
+        }
+        //initialize color sensors
+        this.initializeColorSensors(hardwareMap);
+        //initialize digital touch sensors
+        this.initializeEbotsDigitalTouches(hardwareMap);
+        //initialize LED lights
+        this.initializeEbotsRevBlinkinDriver(hardwareMap);
+    }
+
     public EbotsRobot(Pose.PresetPose presetPose, Alliance alliance){
         this(new Pose(presetPose,alliance), alliance);  //chained to constructor with arguments (Pose pose, Alliance alliance)
     }
 
     public EbotsRobot(Pose.PresetPose presetPose, Alliance alliance, AutonParameters autonParameters){
         this(new Pose(presetPose,alliance), alliance, autonParameters);  //chained to constructor with arguments (Pose, Alliance, AutonParameters)
-
     }
 
     /*****************************************************************
@@ -252,6 +323,9 @@ public class EbotsRobot {
         return driveWheel;
     }
 
+    public ArrayList<EbotsManip> getEbotsManips(){
+        return ebotsManips;
+    }
     public ArrayList<DriveWheel> getDriveWheels(){
         return driveWheels;
     }
@@ -450,6 +524,7 @@ public class EbotsRobot {
         }
     }
 
+    @Deprecated
     public void initializeManipMotors(HardwareMap hardwareMap){
         //  Initialize
         //    4 DC motors: intake, conveyer, shooter, crane
@@ -480,7 +555,21 @@ public class EbotsRobot {
         gripper = hardwareMap.get(Servo.class, "gripper");
 
         ringFeeder = hardwareMap.get(Servo.class, "ringFeeder");
+    }
 
+    public void initializeEbotsManips(HardwareMap hardwareMap){
+        EbotsManip conveyor = new Conveyor(hardwareMap);
+        ebotsManips.add(conveyor);
+        EbotsManip crane = new Crane(hardwareMap);
+        ebotsManips.add(crane);
+        EbotsManip gripper = new Gripper(hardwareMap);
+        ebotsManips.add(gripper);
+        EbotsManip intake = new Intake(hardwareMap);
+        ebotsManips.add(intake);
+        EbotsManip launcher = new Launcher(hardwareMap);
+        ebotsManips.add(launcher);
+        EbotsManip ringFeeder = new RingFeeder(hardwareMap);
+        ebotsManips.add(ringFeeder);
     }
 
 
@@ -691,7 +780,6 @@ public class EbotsRobot {
             edt.setIsPressed();
         }
 
-
         //Read the colorSensors
         if(includeColorSensors) {
             for (EbotsColorSensor ecs : ebotsColorSensors) {
@@ -886,6 +974,8 @@ public class EbotsRobot {
         return driveCommand;
     }
 
+
+    @Deprecated
     public void handleManipInput(Gamepad gamepad){
         // handles gamepad input from the controller and actuates motors
         // controls intake, conveyor, launcher, crane, ringFeeder, gripper
@@ -1064,6 +1154,7 @@ public class EbotsRobot {
 
     }
 
+    @Deprecated
     public void toggleGripper(){
         boolean isOpen = Math.abs(gripper.getPosition() - GRIPPER_OPEN) < 0.05;
         if(isOpen){
@@ -1071,12 +1162,14 @@ public class EbotsRobot {
         } else{
             gripper.setPosition(GRIPPER_OPEN);
         }
-
     }
+
+    @Deprecated
     public void closeGripper(){
         gripper.setPosition(GRIPPER_CLOSED);
     }
 
+    @Deprecated
     public int unfoldCrane(){
         // Actuates motors to unfolds the crane and returns the current position
         int cranePos = crane.getCurrentPosition();
@@ -1093,6 +1186,7 @@ public class EbotsRobot {
         return cranePos;
     }
 
+    @Deprecated
     public int moveCraneToDragWobbleGoal() {
         int cranePos = crane.getCurrentPosition();
         int MAX_HEIGHT = CRANE_DRAG_HEIGHT;
@@ -1103,6 +1197,7 @@ public class EbotsRobot {
         return cranePos;
     }
 
+    @Deprecated
     public void moveCraneToLiftOverWall(){
         int cranePos = crane.getCurrentPosition();
         int MAX_HEIGHT = CRANE_OVER_WALL_HEIGHT;
@@ -1112,15 +1207,18 @@ public class EbotsRobot {
         crane.setPower(passPower);
     }
 
+    @Deprecated
     public void stopCrane(){
         crane.setPower(0);
     }
 
+    @Deprecated
     public void resetCraneEncoder(){
         crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    @Deprecated
     public void feedRing(){
         final long CYCLE_TIME = 500;    // intended to be time to move between positions
         ringFeederCycleTimer.reset();
@@ -1131,18 +1229,22 @@ public class EbotsRobot {
         ringFeeder.setPosition(RECEIVE);
     }
 
+    @Deprecated
     public void startLauncher(){
         launcher.setVelocity(HIGH_GOAL);
     }
 
+    @Deprecated
     public void stopLauncher() {
         launcher.setPower(0);
     }
 
+    @Deprecated
     public void startConveyor(){
         conveyor.setPower(1.0);
     }
 
+    @Deprecated
     public void stopConveyor(){
         conveyor.setPower(0);
     }

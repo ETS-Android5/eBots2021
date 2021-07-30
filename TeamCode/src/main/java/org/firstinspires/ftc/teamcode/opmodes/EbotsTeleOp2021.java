@@ -3,16 +3,21 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.DriveWheel;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.StopWatch;
+import org.firstinspires.ftc.teamcode.manips.EbotsManip;
+
+import java.util.ArrayList;
 
 import static java.lang.String.format;
 
 @TeleOp(name="2021 Teleop", group="Dev")
-public class EbotsTeleOp extends LinearOpMode {
+public class EbotsTeleOp2021 extends LinearOpMode {
 
     // Declare OpMode members.
     private StopWatch stopWatch;
@@ -27,20 +32,16 @@ public class EbotsTeleOp extends LinearOpMode {
 //        dashboardTelemetry = dashboard.getTelemetry();
 //        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        robot = new EbotsRobot();
-        //robot.initDriveMotors(hardwareMap);
-        robot.initializeStandardDriveWheels(hardwareMap);
-//        robot.initializeEncoderTrackers(EncoderSetup.TWO_WHEELS, true);
-//        robot.initializeExpansionHubsForBulkRead(hardwareMap);
+        //robot = new EbotsRobot();
+        //robot.initializeStandardDriveWheels(hardwareMap);
+        //robot.initializeManipMotors(this.hardwareMap);
 
-        robot.initializeManipMotors(this.hardwareMap);
-//        PIDFCoefficients cranePIDF = new PIDFCoefficients(2.5,0,0,0);
-//        robot.getCrane().setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, cranePIDF);
-
+        // This constructor initializes driveWheels and manip devices
+        robot = new EbotsRobot(hardwareMap);
         robot.setAlliance(Alliance.RED);
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
-
 
         waitForStart();
 
@@ -54,8 +55,19 @@ public class EbotsTeleOp extends LinearOpMode {
             robot.setDriveCommand(gamepad1);        //Sets command and runs calculateDrivePowers
             //robot.calculateDrivePowers();
             robot.drive();
-            robot.handleManipInput(gamepad2);
+            // robot.handleManipInput(gamepad2);
+            handleManipInput(gamepad2);
+            updateTelemetry();
+        }
+    }
 
+    private void handleManipInput(Gamepad gamepad){
+        // Get an array of all the manip devices
+        ArrayList<EbotsManip> ebotsManips = robot.getEbotsManips();
+
+        // Send each manip device the gamepad inputs to process
+        for(EbotsManip m: ebotsManips){
+            m.handleGamepadInput(gamepad2);
         }
     }
 
@@ -82,6 +94,7 @@ public class EbotsTeleOp extends LinearOpMode {
             int encoderClicks = dw.getEncoderClicks();
             telemetry.addData(dw.getWheelPosition() + " encoder Clicks: ", encoderClicks);
         }
+
         telemetry.addLine(stopWatch.toString(loopCount));
         telemetry.update();
     }

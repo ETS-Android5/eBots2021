@@ -111,4 +111,32 @@ public class Crane implements EbotsManip{
         craneMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+
+    public int unfoldCrane(){
+        // Actuates motors to unfolds the crane and returns the current position
+        int cranePos = craneMotor.getCurrentPosition();
+        if (cranePos < CRANE_VERTICAL_HEIGHT) {
+            // Need max power when crane is fully folded
+            craneMotor.setPower(1);
+        } else if (cranePos < CRANE_DRAG_HEIGHT){
+            // Between vertical and drag height slow down
+            craneMotor.setPower(0.45);
+        } else {
+            // After drag height, go slow until bottom is hit
+            craneMotor.setPower(0.25);
+        }
+        return cranePos;
+    }
+
+
+    public int moveCraneToDragWobbleGoal() {
+        int cranePos = craneMotor.getCurrentPosition();
+        int MAX_HEIGHT = CRANE_DRAG_HEIGHT;
+        boolean allowUpwardsTravel = cranePos > MAX_HEIGHT;        //only allow upwards travel if greater than max height
+        double passPower = 0;
+        if (allowUpwardsTravel) passPower = (cranePos < (MAX_HEIGHT + 5)) ? -0.4 : -1.0;
+        craneMotor.setPower(passPower);
+        return cranePos;
+    }
+
 }
