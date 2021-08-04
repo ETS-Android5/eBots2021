@@ -8,38 +8,26 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.EncoderTracker;
 
-public class StateAwaitUserFeedback implements AutonState {
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
-
+public class StateAwaitUserFeedback extends AbstractAutonState {
     final boolean debugOn = false;
     final String logTag = "EBOTS";
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateAwaitUserFeedback(LinearOpMode opModeIn, EbotsRobot robotIn) {
+    public StateAwaitUserFeedback(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
 
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.AWAIT_USER_FEEDBACK;
-        this.nextAutonStateEnum = AutonStateEnum.MOVE_FOR_CALIBRATION;
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Instantiating class");
+        if(debugOn) Log.d(logTag, currentAutonState.getSimpleName() + ": Instantiating class");
 
     }
 
 
     // ***********   GETTERS   ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
 
 
@@ -58,7 +46,7 @@ public class StateAwaitUserFeedback implements AutonState {
     public void performStateActions() {
         Telemetry t = opMode.telemetry;
         t.addLine("Push Left Bumper + X on Gamepad1 to proceed");
-        t.addData("Current State ", currentAutonStateEnum.toString());
+        t.addData("Current State ", currentAutonState.getSimpleName());
         t.addData("actual pose: ", robot.getActualPose().toString());
         t.addData("Target Pose: ", robot.getTargetPose().toString());
         t.addData("Error: ", robot.getPoseError().toString());

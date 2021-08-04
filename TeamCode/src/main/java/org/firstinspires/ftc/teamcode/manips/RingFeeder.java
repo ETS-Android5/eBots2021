@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.StopWatch;
 
 public class RingFeeder implements EbotsManip{
 
-    private Servo ringFeeder;
+    private Servo ringFeederMotor;
     private StopWatch ringFeederCycleTimer = new StopWatch();
 
 
@@ -18,7 +18,7 @@ public class RingFeeder implements EbotsManip{
 
 
     public RingFeeder(HardwareMap hardwareMap){
-        ringFeeder = hardwareMap.get(Servo.class, "ringFeeder");
+        ringFeederMotor = hardwareMap.get(Servo.class, "ringFeeder");
     }
 
     @Override
@@ -34,31 +34,40 @@ public class RingFeeder implements EbotsManip{
         //  readyToReceiveRing makes sure that the servo is back to the original position before cycling again
         //  also, conveyors shouldn't feed into shooter if not ready for feed
         boolean cycleTimeout = (ringFeederCycleTimer.getElapsedTimeMillis() > (2*CYCLE_TIME));
-        double errorFromReceivePosition = ringFeeder.getPosition() - RECEIVE;
-        double errorFromFeedPosition = ringFeeder.getPosition() - FEED;
+        double errorFromReceivePosition = ringFeederMotor.getPosition() - RECEIVE;
+        double errorFromFeedPosition = ringFeederMotor.getPosition() - FEED;
 
         if(triggerPressed  && (cycleTimeout)){
             ringFeederCycleTimer.reset();
-            ringFeeder.setPosition(FEED);
+            ringFeederMotor.setPosition(FEED);
         } else if(ringFeederCycleTimer.getElapsedTimeMillis() > CYCLE_TIME){
-            ringFeeder.setPosition(RECEIVE);
+            ringFeederMotor.setPosition(RECEIVE);
         }
 
+    }
+
+    public double getPosition(){
+        return this.ringFeederMotor.getPosition();
+    }
+
+    @Deprecated
+    public void setPosition(double targetPosition){
+        this.ringFeederMotor.setPosition(targetPosition);
     }
 
     @Override
     public void stop() {
         //  Find the current position and set as target position
-        ringFeeder.setPosition(ringFeeder.getPosition());
+        ringFeederMotor.setPosition(ringFeederMotor.getPosition());
     }
 
     public void feedRing(){
         ringFeederCycleTimer.reset();
-        ringFeeder.setPosition(FEED);
+        ringFeederMotor.setPosition(FEED);
         while(ringFeederCycleTimer.getElapsedTimeMillis() < CYCLE_TIME){
             //wait for a cycle
         }
-        ringFeeder.setPosition(RECEIVE);
+        ringFeederMotor.setPosition(RECEIVE);
     }
 
 }

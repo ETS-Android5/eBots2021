@@ -43,9 +43,10 @@ import org.firstinspires.ftc.teamcode.Pose;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
 import org.firstinspires.ftc.teamcode.ebotsenums.GyroSetting;
 import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonState;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateEnum;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateFactory;
+import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateInitialize;
 
 import static org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateEnum.INITIALIZE;
 
@@ -68,11 +69,16 @@ public class AutonEbotsV1 extends LinearOpMode {
 
     private AutonStateFactory autonStateFactory = new AutonStateFactory();
     private AutonState autonState;
+    private AutonRoutine autonRoutine = new AutonRoutine(PresetAutonRoutine.STANDARD);
+
+//    FtcDashboard dashboard;
+    Telemetry dashboardTelemetry;
     private StartLine.LinePosition startLinePosition = StartLine.LinePosition.INNER;
 
 
     final boolean debugOn = true;
     final String logTag = "EBOTS";
+
 
     public StartLine.LinePosition getStartLinePosition() {
         return startLinePosition;
@@ -81,9 +87,6 @@ public class AutonEbotsV1 extends LinearOpMode {
     public void setStartLinePosition(StartLine.LinePosition startLinePosition) {
         this.startLinePosition = startLinePosition;
     }
-
-//    FtcDashboard dashboard;
-    Telemetry dashboardTelemetry;
 
     // Getters
 
@@ -106,21 +109,24 @@ public class AutonEbotsV1 extends LinearOpMode {
 //        dashboardTelemetry = dashboard.getTelemetry();
 //        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        autonState = autonStateFactory.getAutonState(AutonStateEnum.DETECT_STARTER_STACK, this, robot);
-
+        // autonState = autonStateFactory.getAutonState(AutonStateEnum.DETECT_STARTER_STACK, this, robot);
+        Class<? extends AbstractAutonState> firstStateClass = autonRoutine.getNextAutonStateClass();
+        Class<? extends AbstractAutonState> nextStateClass = autonRoutine.getNextAutonStateClass();
+        autonState = autonStateFactory.getAutonState(firstStateClass,this, robot, nextStateClass);
         // Create two state machines.  The first one is prior to pushing "Start"
         // The second is after pushing start
 
         // This first state machine is intended for states prior to starting routine such as:
         //  CONFIGURE_AUTON_ROUTINE, PREMATCH_SETUP, DETECT_STARTER_STACK
         //  All states within consideration should check for isStarted in exit conditions
-        while (!isStarted() && autonState.getCurrentAutonStateEnum() != INITIALIZE){
+        while (!isStarted()
+                && autonState.getCurrentAutonState() != StateInitialize.class){
             executeStateMachine();  //
         }
 
         // Perform a log dump if reached this point and not in initialize
-        if(autonState.getCurrentAutonStateEnum() != INITIALIZE){
-            Log.d(logTag, "AutonEbotsV1::runOpMode First state machine exited and not in INITIALIZE but: " + autonState.getCurrentAutonStateEnum());
+        if(autonState.getCurrentAutonState() != StateInitialize.class){
+            Log.d(logTag, "AutonEbotsV1::runOpMode First state machine exited and not in INITIALIZE but: " + autonState.getCurrentAutonState().getSimpleName());
         }
 
         waitForStart();
@@ -153,8 +159,16 @@ public class AutonEbotsV1 extends LinearOpMode {
     public void performStandardStateTransitionActions(){
         telemetry.clearAll();
         robot.getEbotsMotionController().resetLoopVariables();
+        this.incrementState();
+    }
+
+    private void incrementState(){
         //Set the next AutonState
-        autonState = autonStateFactory.getAutonState(autonState.getNextAutonStateEnum(), this, robot);
+        Class<? extends AbstractAutonState> targetStateClass = autonState.getNextAutonState();
+        Class<? extends AbstractAutonState> nextStateClass = autonRoutine.getNextAutonStateClass();
+        if(debugOn) Log.d(logTag, "Attempting to create state: " + targetStateClass.getSimpleName() +
+                " with nextState: " + nextStateClass.getSimpleName());
+        autonState = autonStateFactory.getAutonState(targetStateClass,this, robot, nextStateClass);
     }
 
 

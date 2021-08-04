@@ -7,14 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.StopWatch;
+import org.firstinspires.ftc.teamcode.manips.Crane;
 
-public class StateUnfoldCrane implements AutonState {
+public class StateUnfoldCrane extends AbstractAutonState {
 
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
-    DcMotorEx crane;
+    Crane crane;
     int cranePos = 0;
     long timeout = 2500L;
     StopWatch stateTimer;
@@ -24,26 +21,20 @@ public class StateUnfoldCrane implements AutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateUnfoldCrane(LinearOpMode opModeIn, EbotsRobot robotIn){
+    public StateUnfoldCrane(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
         if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.UNFOLD_CRANE;
-        this.nextAutonStateEnum = AutonStateEnum.PLACE_WOBBLE_GOAL;
         stateTimer = new StopWatch();
         crane = robot.getCrane();
     }
 
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
     // ***********   INTERFACE METHODS   ***********************
     @Override
@@ -65,7 +56,7 @@ public class StateUnfoldCrane implements AutonState {
         cranePos = robot.unfoldCrane();
 
         String f = "%.2f";
-        opMode.telemetry.addData("Current State ", currentAutonStateEnum.toString());
+        opMode.telemetry.addData("Current State ", currentAutonState.getSimpleName());
         opMode.telemetry.addData("Crane  Power", String.format(f,crane.getPower()));
         opMode.telemetry.addData("crane Position", cranePos);
         opMode.telemetry.update();

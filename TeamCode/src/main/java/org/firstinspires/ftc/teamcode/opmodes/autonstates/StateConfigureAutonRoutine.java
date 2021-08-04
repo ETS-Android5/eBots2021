@@ -16,11 +16,7 @@ import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
-public class StateConfigureAutonRoutine implements AutonState {
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
+public class StateConfigureAutonRoutine extends AbstractAutonState {
 
     EbotsDigitalTouch selectAlliance;
     EbotsDigitalTouch selectStartLine;
@@ -39,14 +35,11 @@ public class StateConfigureAutonRoutine implements AutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateConfigureAutonRoutine(LinearOpMode opModeIn, EbotsRobot robotIn) {
+    public StateConfigureAutonRoutine(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
 
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.CONFIGURE_AUTON_ROUTINE;
-        this.nextAutonStateEnum = AutonStateEnum.PREMATCH_SETUP;
-
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Instantiating class");
+        if(debugOn) Log.d(logTag, this.getClass().getSimpleName() + ": Instantiating class");
 
         ArrayList<EbotsDigitalTouch>  digitalTouches = robot.getEbotsDigitalTouches();
         this.selectAlliance = EbotsDigitalTouch.getEbotsDigitalTouchByButtonFunction(EbotsDigitalTouch.ButtonFunction.SELECT_ALLIANCE, digitalTouches);
@@ -66,16 +59,10 @@ public class StateConfigureAutonRoutine implements AutonState {
 
 
     // ***********   GETTERS   ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return currentAutonStateEnum;
-    }
-
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
 
     // ***********   INTERFACE METHODS   ***********************
@@ -141,7 +128,7 @@ public class StateConfigureAutonRoutine implements AutonState {
     private void updateTelemetry(){
         Telemetry t = opMode.telemetry;
         String fmt = "%d";
-        opMode.telemetry.addData("Current State: ", currentAutonStateEnum.toString());
+        opMode.telemetry.addData("Current State: ", currentAutonState.getSimpleName());
         opMode.telemetry.addLine("Push Left Bumper + X on Gamepad1 to proceed");
         t.addData("Alliance: ", robot.getAlliance());
         t.addData("Start Line: ", autonEbotsV1.getStartLinePosition());

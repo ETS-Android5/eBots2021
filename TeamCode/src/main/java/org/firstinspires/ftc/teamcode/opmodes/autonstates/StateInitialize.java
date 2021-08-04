@@ -6,36 +6,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 
-public class StateInitialize implements AutonState {
-
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
+public class StateInitialize extends AbstractAutonState {
 
     boolean debugOn = true;
     String logTag = "EBOTS";
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateInitialize(LinearOpMode opModeIn, EbotsRobot robotIn){
+    public StateInitialize(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
         if(debugOn) Log.d(logTag, "Entering StateInitialize::Constructor...");
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.INITIALIZE;
-        this.nextAutonStateEnum = AutonStateEnum.MOVE_TO_TARGET_ZONE;
     }
 
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
     // ***********   INTERFACE METHODS   ***********************
     @Override

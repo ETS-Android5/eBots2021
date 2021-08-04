@@ -76,15 +76,10 @@ public class EbotsTeleOp2021 extends LinearOpMode {
         String f = "%.2f";
         telemetry.addData("Status", "Run Time: " + stopWatch.getElapsedTimeSeconds());
         telemetry.addData("Crane Power", String.format(f, robot.getCrane().getPower()));
-        telemetry.addData("Crane PID", robot.getCrane().getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).toString());
         telemetry.addData("Shooter Power/Velocity:  ",
-                format(f, robot.getMotorPower(robot.getLauncher())) + " / "
-                        + format(f, robot.getMotorVelocity(robot.getLauncher())));
+                format(f, robot.getLauncher().getPower()) + " / "
+                        + format(f, robot.getLauncher().getVelocity()));
         telemetry.addData("Crane Position", robot.getCrane().getCurrentPosition());
-
-        telemetry.addData("Crane Power/Velocity:  ",
-                format(f, robot.getMotorPower(robot.getCrane())) + " / "
-                        + format(f, robot.getMotorVelocity(robot.getCrane())));
 
         telemetry.addData("ringFeeder Position", robot.getRingFeeder().getPosition());
         telemetry.addData("ringFeeder cycle timer:", robot.getRingFeederCycleTimer().getElapsedTimeMillis());

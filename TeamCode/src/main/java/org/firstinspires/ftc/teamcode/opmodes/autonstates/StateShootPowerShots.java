@@ -7,12 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.StopWatch;
 
-public class StateShootPowerShots implements AutonState {
+public class StateShootPowerShots extends AbstractAutonState {
 
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
+
     long stateTimeLimit;
     StopWatch stateStopWatch;
     int ringsLaunched = 0;
@@ -21,27 +18,22 @@ public class StateShootPowerShots implements AutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateShootPowerShots(LinearOpMode opModeIn, EbotsRobot robotIn){
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.SHOOT_POWER_SHOTS;
-        this.nextAutonStateEnum = AutonStateEnum.PARK_ON_LAUNCH_LINE;
+    public StateShootPowerShots(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
         stateTimeLimit = 10000;
         stateStopWatch = new StopWatch();
-        robot.startLauncher();
+        robot.getLauncher().stop();
 
     }
 
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return this.nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return this.currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
+
 
     // ***********   INTERFACE METHODS   ***********************
     @Override
@@ -53,22 +45,18 @@ public class StateShootPowerShots implements AutonState {
     @Override
     public void performStateSpecificTransitionActions() {
         Log.d("EBOTS", "StateShootPowerShotes::performStateSpecificTransitionActions");
-        robot.stopLauncher();
-        robot.stopConveyor();
-        //Create a new target pose on the launch line in the center of field
-//        double xCoord = (new LaunchLine()).getX() - (robot.getSizeCoordinate(CsysDirection.X) / 2);
-//        Pose targetPose = new Pose(xCoord, 36, 0);
-//        robot.setTargetPose(targetPose);
+        robot.getLauncher().stop();
+        robot.getConveyor().stop();
     }
 
     @Override
     public void performStateActions() {
         if(ringLaunchTimer.getElapsedTimeMillis() > ringCadence) {
             ringLaunchTimer.reset();
-            robot.feedRing();
+            robot.getRingFeeder().feedRing();
             ringsLaunched++;
             if (ringsLaunched == 2) {
-                robot.startConveyor();
+                robot.getConveyor().startConveyor();
                 ringCadence += 1500;
             }
 //            if (ringsLaunched > 2) {
@@ -85,7 +73,7 @@ public class StateShootPowerShots implements AutonState {
 //            }
 
         }
-        opMode.telemetry.addData("Current State ", currentAutonStateEnum.toString());
+        opMode.telemetry.addData("Current State ", currentAutonState.getSimpleName());
         opMode.telemetry.addLine(stateStopWatch.toString() + " time limit " + stateTimeLimit);
         opMode.telemetry.update();
     }

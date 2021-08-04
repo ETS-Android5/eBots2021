@@ -57,13 +57,13 @@ public class EbotsRobot {
      ******    CLASS VARIABLES
      ***************************************************************/
     // Manip Motors
-    private DcMotorEx intake ;
-    private DcMotorEx conveyor;
-    private DcMotorEx launcher;
-    private DcMotorEx crane;
+    private Intake intake ;
+    private Conveyor conveyor;
+    private Launcher launcher;
+    private Crane crane;
 
-    private Servo gripper;
-    private Servo ringFeeder;
+    private Gripper gripper;
+    private RingFeeder ringFeeder;
 
     // Manip Devices
     private ArrayList<EbotsManip> ebotsManips = new ArrayList<>();
@@ -231,9 +231,14 @@ public class EbotsRobot {
 
         this.ebotsMotionController = new EbotsMotionController();
 
+        //  Set the cache strategy for expansion hubs (for control loop speed)
+        initializeExpansionHubsForBulkRead(hardwareMap);
+
         //  Initialize the drive wheels and manip devices
         this.initializeStandardDriveWheels(hardwareMap);
         this.initializeEbotsManips(hardwareMap);
+
+
     }
 
 
@@ -358,13 +363,13 @@ public class EbotsRobot {
         return sizeValue;
     }
 
-    public DcMotorEx getLauncher(){return launcher;}
-    public DcMotorEx getCrane(){return crane;}
-    public DcMotorEx getConveyor(){return conveyor;}
-    public DcMotorEx getIntake(){return intake;}
+    public Launcher getLauncher(){return launcher;}
+    public Crane getCrane(){return crane;}
+    public Conveyor getConveyor(){return conveyor;}
+    public Intake getIntake(){return intake;}
 
-    public Servo getGripper(){return gripper;}
-    public Servo getRingFeeder(){return ringFeeder;}
+    public Gripper getGripper(){return gripper;}
+    public RingFeeder getRingFeeder(){return ringFeeder;}
 
     public int getCRANE_MIN_CRANE_HEIGHT(){return CRANE_MIN_CRANE_HEIGHT;}
     public int getCRANE_DRAG_HEIGHT(){return CRANE_DRAG_HEIGHT;}
@@ -531,30 +536,17 @@ public class EbotsRobot {
         //    2 Servos:  gripper, ringFeeder
 
 
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake = new Intake(hardwareMap);
 
-        conveyor = hardwareMap.get(DcMotorEx.class, "conveyor");
-        conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
-        conveyor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        conveyor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        conveyor = new Conveyor(hardwareMap);
 
-        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
-        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
-        launcher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcher = new Launcher(hardwareMap);
 
-        crane = hardwareMap.get(DcMotorEx.class, "crane");
-        crane.setDirection(DcMotorEx.Direction.FORWARD);
-        crane.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        crane = new Crane(hardwareMap);
 
-        gripper = hardwareMap.get(Servo.class, "gripper");
+        gripper = new Gripper(hardwareMap);
 
-        ringFeeder = hardwareMap.get(Servo.class, "ringFeeder");
+        ringFeeder = new RingFeeder(hardwareMap);
     }
 
     public void initializeEbotsManips(HardwareMap hardwareMap){
@@ -998,7 +990,7 @@ public class EbotsRobot {
             launcher.setVelocity(LOW_GOAL);
 //            launcher.setPower(LOW_GOAL);
         }else if(gamepad.x){
-            launcher.setPower(0);
+            launcher.stop();
         }
 
         // ************     RING FEEDER     **********************
@@ -1166,23 +1158,12 @@ public class EbotsRobot {
 
     @Deprecated
     public void closeGripper(){
-        gripper.setPosition(GRIPPER_CLOSED);
+        gripper.closeGripper();
     }
 
     @Deprecated
     public int unfoldCrane(){
-        // Actuates motors to unfolds the crane and returns the current position
-        int cranePos = crane.getCurrentPosition();
-        if (cranePos < CRANE_VERTICAL_HEIGHT) {
-            // Need max power when crane is fully folded
-            crane.setPower(1);
-        } else if (cranePos < CRANE_DRAG_HEIGHT){
-            // Between vertical and drag height slow down
-            crane.setPower(0.45);
-        } else {
-            // After drag height, go slow until bottom is hit
-            crane.setPower(0.25);
-        }
+        int cranePos = crane.unfoldCrane();
         return cranePos;
     }
 
@@ -1214,8 +1195,7 @@ public class EbotsRobot {
 
     @Deprecated
     public void resetCraneEncoder(){
-        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        crane.resetCraneEncoder();
     }
 
     @Deprecated

@@ -54,4 +54,14 @@ public class Gripper implements EbotsManip{
         gripper.setPosition(GRIPPER_CLOSED);
     }
 
+    @Deprecated
+    public double getPosition(){
+        return this.gripper.getPosition();
+    }
+
+    @Deprecated
+    public void setPosition(double targetPosition){
+        this.gripper.setPosition(targetPosition);
+    }
+
 }

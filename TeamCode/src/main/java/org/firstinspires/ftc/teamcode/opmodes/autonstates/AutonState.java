@@ -7,10 +7,9 @@ public interface AutonState {
      * The enumeration AutonStateEnum controls the available options
      */
 
+    public Class<? extends AbstractAutonState> getNextAutonState();
 
-    public AutonStateEnum getNextAutonStateEnum();
-
-    public AutonStateEnum getCurrentAutonStateEnum();
+    public Class<? extends AbstractAutonState> getCurrentAutonState();
 
     public boolean areExitConditionsMet();
 

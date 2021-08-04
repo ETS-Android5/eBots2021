@@ -7,15 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.EncoderTracker;
 import org.firstinspires.ftc.teamcode.Pose;
+import org.firstinspires.ftc.teamcode.StarterStackObservation;
 import org.firstinspires.ftc.teamcode.StopWatch;
 import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
 
-public class StateMoveToTargetZone implements AutonState {
+public class StateMoveToTargetZone extends AbstractAutonState {
 
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
     StopWatch stateStopWatch = new StopWatch();
     long previousLoopEnd;
@@ -30,11 +27,10 @@ public class StateMoveToTargetZone implements AutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateMoveToTargetZone(LinearOpMode opModeIn, EbotsRobot robotIn){
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.MOVE_TO_TARGET_ZONE;
-        this.nextAutonStateEnum = AutonStateEnum.UNFOLD_CRANE;
+    public StateMoveToTargetZone(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
 
         //set target positionSDF
         TargetZone.Zone observedTarget = StarterStackObservation.getObservedTarget();
@@ -54,7 +50,7 @@ public class StateMoveToTargetZone implements AutonState {
                 targetPose.getHeadingDeg());
         robot.setTargetPose(offsetTargetPose);
         if(debugOn){
-            Log.d(logTag, "Entering state: " + currentAutonStateEnum);
+            Log.d(logTag, "Entering state: " + currentAutonState.getSimpleName());
             Log.d(logTag, "Actual " + robot.getActualPose().toString());
             Log.d(logTag, "Target " + robot.getTargetPose().toString());
             // Compare the heading from the actual reading to that of the gyro
@@ -70,15 +66,9 @@ public class StateMoveToTargetZone implements AutonState {
     }
 
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return this.nextAutonStateEnum;
-    }
-
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return this.currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
     // ***********   INTERFACE METHODS   ***********************
     @Override

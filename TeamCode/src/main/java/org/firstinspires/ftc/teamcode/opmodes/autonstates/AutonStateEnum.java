@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonstates;
 
+@Deprecated
 public enum AutonStateEnum {
     CONFIGURE_AUTON_ROUTINE,
     PREMATCH_SETUP,

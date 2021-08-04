@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
-public class StatePrematchSetup implements AutonState {
+public class StatePrematchSetup extends AbstractAutonState {
     /**
      * This method defines a State intended to be run as a state machine
      * It implements AutonState interface
@@ -25,11 +25,6 @@ public class StatePrematchSetup implements AutonState {
      * Note that if right bumper is pressed, Telemetry screen is toggled for detailed
      * information about the encoder readings, which can be used for manual calibration
      */
-
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
 
 
     boolean isSetupCorrect;
@@ -57,26 +52,19 @@ public class StatePrematchSetup implements AutonState {
     }
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePrematchSetup(LinearOpMode opModeIn, EbotsRobot robotIn){
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.PREMATCH_SETUP;
-        this.nextAutonStateEnum = AutonStateEnum.DETECT_STARTER_STACK;
+    public StatePrematchSetup(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
         ledDriver = EbotsRevBlinkinLedDriver.getEbotsRevBlinkinLedDriverByLedLocation(EbotsRevBlinkinLedDriver.LedLocation.MAIN, robot.getLedDrivers());
 
     }
 
-
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return this.nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return this.currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
 
     // ***********   INTERFACE METHODS   ***********************
@@ -267,7 +255,7 @@ public class StatePrematchSetup implements AutonState {
 
     private void updateTelemetry(){
         if(telemetryScreen == TelemetryScreen.A) {
-            this.opMode.telemetry.addLine("Current autonState: " + this.currentAutonStateEnum.toString());
+            this.opMode.telemetry.addLine("Current autonState: " + this.getClass().getSimpleName());
             this.opMode.telemetry.addLine("opMode is Started / Active: " + opMode.isStarted() + "/" + opMode.opModeIsActive());
             this.opMode.telemetry.addLine("Setup Config: " + robot.getAlliance() + " | " + robot.getActualPose().toString());
             this.opMode.telemetry.addLine("Actual -- Expected[<-->]: " +

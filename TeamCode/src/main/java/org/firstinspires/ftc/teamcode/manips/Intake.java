@@ -7,13 +7,18 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake implements EbotsManip{
-    private DcMotorEx intake ;
+    private DcMotorEx intakeMotor;
 
     public Intake(HardwareMap hardwareMap){
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    @Deprecated
+    public void setPower(double targetPower){
+        this.intakeMotor.setPower(targetPower);
     }
 
     @Override
@@ -24,11 +29,11 @@ public class Intake implements EbotsManip{
         // Condition the input signal to either be -1, 0, or 1
         double intakePower = (Math.abs(intakeInput) < inputThreshold) ? 0 : Math.signum(intakeInput) * 1;
 
-        intake.setPower(intakePower);
+        intakeMotor.setPower(intakePower);
     }
 
     @Override
     public void stop() {
-        intake.setPower(0);
+        intakeMotor.setPower(0);
     }
 }

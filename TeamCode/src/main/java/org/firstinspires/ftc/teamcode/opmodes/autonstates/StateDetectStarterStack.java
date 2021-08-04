@@ -12,15 +12,12 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.R;
+import org.firstinspires.ftc.teamcode.StarterStackObservation;
 import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
 
 import java.util.List;
 
-public class StateDetectStarterStack implements AutonState {
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
+public class StateDetectStarterStack extends AbstractAutonState {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
@@ -30,14 +27,13 @@ public class StateDetectStarterStack implements AutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateDetectStarterStack(LinearOpMode opModeIn, EbotsRobot robotIn) {
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Instantiating class");
+    public StateDetectStarterStack(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
 
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.DETECT_STARTER_STACK;
-        this.nextAutonStateEnum = AutonStateEnum.INITIALIZE;
-        this.robot.closeGripper();
+        if(debugOn) Log.d(logTag, this.getClass().getSimpleName() + ": Instantiating class");
+
+        this.robot.getGripper().closeGripper();
 
         // Only initialize these if the opMode hasn't already been started
         if(!opMode.isStarted()) {
@@ -80,15 +76,10 @@ public class StateDetectStarterStack implements AutonState {
 
 
     // ***********   GETTERS   ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
 
     // ***********   INTERFACE METHODS   ***********************
@@ -101,7 +92,7 @@ public class StateDetectStarterStack implements AutonState {
 
     @Override
     public void performStateSpecificTransitionActions() {
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Entering performStateSpecificTransitionActions");
+        if(debugOn) Log.d(logTag, currentAutonState.getSimpleName() + ": Entering performStateSpecificTransitionActions");
 
         if (tfod != null) {
             try {
@@ -114,7 +105,7 @@ public class StateDetectStarterStack implements AutonState {
             }
             tfod.shutdown();
         }
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": After shutting down tfod");
+        if(debugOn) Log.d(logTag, currentAutonState.getSimpleName() + ": After shutting down tfod");
 
     }
 
@@ -163,7 +154,7 @@ public class StateDetectStarterStack implements AutonState {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Entering initVuforia");
+        if(debugOn) Log.d(logTag, currentAutonState.getSimpleName() + ": Entering initVuforia");
 
         String VUFORIA_KEY =
                 "AdGgXjv/////AAABmSSQR7vFmE3cjN2PqTebidhZFI8eL1qz4JblkX3JPyyYFRNp/Su1RHcHvkTzJ1YjafcDYsT0l6b/2U/fEZObIq8Si3JYDie2PfMRfdbx1+U0supMRZFrkcdize8JSaxMeOdtholJ+hUZN+C4Ovo7Eiy/1sBrqihv+NGt1bd2/fXwvlIDJFm5lJHF6FCj9f4I7FtIAB0MuhdTSu4QwYB84m3Vkx9iibTUB3L2nLLtRYcbVpoiqvlxvZomUd2JMef+Ux6+3FA3cPKCicVfP2psbjZrxywoc8iYUAq0jtsEaxgFdYoaTR+TWwNtKwJS6kwCgBWThcIQ6yI1jWEdrJYYFmHXJG/Rf/Nw8twEVh8l/Z0M";
@@ -182,7 +173,7 @@ public class StateDetectStarterStack implements AutonState {
      * Initialize the TensorFlow Object Detection engine.
      */
     private void initTfod() {
-        if(debugOn) Log.d(logTag, currentAutonStateEnum + ": Entering initTfod");
+        if(debugOn) Log.d(logTag, currentAutonState.getSimpleName() + ": Entering initTfod");
 
         String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
         String LABEL_FIRST_ELEMENT = "Quad";

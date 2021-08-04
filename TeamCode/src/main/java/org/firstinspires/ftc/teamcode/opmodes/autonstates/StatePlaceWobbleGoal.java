@@ -5,36 +5,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.StopWatch;
 
-public class StatePlaceWobbleGoal implements AutonState {
+public class StatePlaceWobbleGoal extends AbstractAutonState {
 
-    LinearOpMode opMode;
-    EbotsRobot robot;
-    AutonStateEnum currentAutonStateEnum;
-    AutonStateEnum nextAutonStateEnum;
     long stateTimeLimit;
     StopWatch stateStopWatch;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePlaceWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn){
-        this.opMode = opModeIn;
-        this.robot = robotIn;
-        this.currentAutonStateEnum = AutonStateEnum.PLACE_WOBBLE_GOAL;
-        this.nextAutonStateEnum = AutonStateEnum.MOVE_TO_LAUNCH_LINE;
+    public StatePlaceWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+        // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
+        super(opModeIn, robotIn, nextAutonState);
+
         stateTimeLimit = 750L;
         stateStopWatch = new StopWatch();
-        robot.toggleGripper();
+        robot.getGripper().toggleGripper();
     }
 
     // ***********   GETTERS    ***********************
-    @Override
-    public AutonStateEnum getNextAutonStateEnum() {
-        return this.nextAutonStateEnum;
-    }
 
-    @Override
-    public AutonStateEnum getCurrentAutonStateEnum() {
-        return this.currentAutonStateEnum;
-    }
+    // NOTE: there are default getters in AbstractAutonState for
+    //      getCurrentAutonState
+    //      getNextAutonState
 
     // ***********   INTERFACE METHODS   ***********************
     @Override
@@ -53,7 +43,7 @@ public class StatePlaceWobbleGoal implements AutonState {
 //        robot.getEbotsMotionController().moveToTargetPose(robot, stateStopWatch);
         //report telemetry
 
-        opMode.telemetry.addData("Current State ", currentAutonStateEnum.toString());
+        opMode.telemetry.addData("Current State ", currentAutonState.getSimpleName());
         opMode.telemetry.addLine(stateStopWatch.toString() + " time limit " + stateTimeLimit);
         opMode.telemetry.update();
     }

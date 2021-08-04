@@ -23,6 +23,20 @@ public class Crane implements EbotsManip{
         craneMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    @Deprecated
+    public int getCurrentPosition(){
+        return craneMotor.getCurrentPosition();
+    }
+
+    @Deprecated
+    public void setPower(double powerLevel){
+        craneMotor.setPower(powerLevel);
+    }
+
+    public double getPower(){
+        return craneMotor.getPower();
+    }
+
     @Override
     public void handleGamepadInput(Gamepad gamepad) {
         int cranePos = craneMotor.getCurrentPosition() + CRANE_ENCODER_OFFSET;
