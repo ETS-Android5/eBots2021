@@ -188,6 +188,10 @@ public class FactoryMain{
         for(c = sequence.getNextAutonStateClass(); c != null; c=sequence.getNextAutonStateClass()){
             System.out.println(c.getSimpleName());
         }
+
+        int a[][] = {{2,1},{1,2}};
+        int b[][] = {{5,5},{5,5}};
+
     }
 
 }

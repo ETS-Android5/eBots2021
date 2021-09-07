@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public enum PresetAutonRoutine {
+
     STANDARD(new ArrayList<>(Arrays.asList(
             StateConfigureAutonRoutine.class,
             StatePrematchSetup.class,

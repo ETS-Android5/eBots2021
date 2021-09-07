@@ -213,6 +213,10 @@ public class EbotsRobot {
 //        this.encoderSetup = EncoderSetup.TWO_WHEELS;    //Default value if none provided
     }
     public EbotsRobot(HardwareMap hardwareMap) {
+        boolean debugOn = true;
+        if(debugOn){
+            Log.d(logTag, "Instantiating EbotsRobot...");
+        }
         this.driveCommand = new DriveCommand();
 
         //Build the robot physical dimensions
@@ -550,17 +554,17 @@ public class EbotsRobot {
     }
 
     public void initializeEbotsManips(HardwareMap hardwareMap){
-        EbotsManip conveyor = new Conveyor(hardwareMap);
+        conveyor = new Conveyor(hardwareMap);
         ebotsManips.add(conveyor);
-        EbotsManip crane = new Crane(hardwareMap);
+        crane = new Crane(hardwareMap);
         ebotsManips.add(crane);
-        EbotsManip gripper = new Gripper(hardwareMap);
+        gripper = new Gripper(hardwareMap);
         ebotsManips.add(gripper);
-        EbotsManip intake = new Intake(hardwareMap);
+        intake = new Intake(hardwareMap);
         ebotsManips.add(intake);
-        EbotsManip launcher = new Launcher(hardwareMap);
+        launcher = new Launcher(hardwareMap);
         ebotsManips.add(launcher);
-        EbotsManip ringFeeder = new RingFeeder(hardwareMap);
+        ringFeeder = new RingFeeder(hardwareMap);
         ebotsManips.add(ringFeeder);
     }
 

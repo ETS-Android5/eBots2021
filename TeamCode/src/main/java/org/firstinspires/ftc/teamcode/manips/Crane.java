@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.manips;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -13,9 +15,14 @@ public class Crane implements EbotsManip{
     final int CRANE_DRAG_HEIGHT = 290;
     final int CRANE_VERTICAL_HEIGHT = 145;
     int CRANE_ENCODER_OFFSET = 0;
+    boolean debugOn = true;
+    String logTag = "EBOTS";
 
 
     public Crane(HardwareMap hardwareMap){
+        if (debugOn){
+            Log.d(logTag, "Instantiating Crane...");
+        }
         craneMotor = hardwareMap.get(DcMotorEx.class, "crane");
         craneMotor.setDirection(DcMotorEx.Direction.FORWARD);
         craneMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -39,6 +46,11 @@ public class Crane implements EbotsManip{
 
     @Override
     public void handleGamepadInput(Gamepad gamepad) {
+        if (debugOn){
+            Log.d(logTag, "Crane::handleGamepadInput...");
+        }
+
+
         int cranePos = craneMotor.getCurrentPosition() + CRANE_ENCODER_OFFSET;
         boolean dragWobble = false;
         boolean liftOverWall = false;

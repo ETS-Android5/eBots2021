@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 import static java.lang.String.format;
 
+import android.util.Log;
+
 @TeleOp(name="2021 Teleop", group="Dev")
 public class EbotsTeleOp2021 extends LinearOpMode {
 
@@ -23,6 +25,8 @@ public class EbotsTeleOp2021 extends LinearOpMode {
     private StopWatch stopWatch;
     private EbotsRobot robot;
     private int loopCount = 0;
+    private boolean debugOn = true;
+    private String logTag = "EBOTS";
 
 
     @Override
@@ -32,11 +36,10 @@ public class EbotsTeleOp2021 extends LinearOpMode {
 //        dashboardTelemetry = dashboard.getTelemetry();
 //        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        //robot = new EbotsRobot();
-        //robot.initializeStandardDriveWheels(hardwareMap);
-        //robot.initializeManipMotors(this.hardwareMap);
-
         // This constructor initializes driveWheels and manip devices
+        if (debugOn){
+            Log.d(logTag, "EbotsTeleOp2021::runOpMode...");
+        }
         robot = new EbotsRobot(hardwareMap);
         robot.setAlliance(Alliance.RED);
 
@@ -72,6 +75,9 @@ public class EbotsTeleOp2021 extends LinearOpMode {
     }
 
     public void updateTelemetry(){
+        if (debugOn){
+            Log.d(logTag, "EbotsTeleOp2021::updateTelemetry");
+        }
         // Show the elapsed game time and wheel power.
         String f = "%.2f";
         telemetry.addData("Status", "Run Time: " + stopWatch.getElapsedTimeSeconds());
