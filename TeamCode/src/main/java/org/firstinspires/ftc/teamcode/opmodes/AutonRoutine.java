@@ -17,14 +17,14 @@ public class AutonRoutine {
     }
 
     public Class<? extends AbstractAutonState> getNextAutonStateClass(){
-        Class<? extends AbstractAutonState> returnValue = null;
+        Class<? extends AbstractAutonState> nextStateClass = null;
         try{
-            returnValue = this.sequence.get(0);
-            this.sequence.remove(0);
+            // The remove method returns the removed item
+            nextStateClass = this.sequence.remove(0);
         } catch (Exception e){
             System.out.println("In catch of AutonSequence::getnextAutonStateClass");
             System.out.println(e.getMessage());
         }
-        return returnValue;
+        return nextStateClass;
     }
 }

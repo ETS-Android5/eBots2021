@@ -7,17 +7,13 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderCalibration;
@@ -43,8 +39,6 @@ import org.firstinspires.ftc.teamcode.sensors.EbotsRev2mDistanceSensor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.firstinspires.ftc.teamcode.DriveWheel.WheelPosition;
 
 /**
  *   CLASS:     Robot
@@ -109,10 +103,10 @@ public class EbotsRobot {
     private List<LynxModule> expansionHubs;         //Array list of all expansion hubs on robot
     private BNO055IMU imu;
     private double initialGyroOffset;  //When the robot starts, the gyro is zero in whichever orientation the robot is facing
-                                        //  So if robot always faces the center, from the red side, the gyro will read 0 when the
-                                        //  robot is actually facing +90°
-                                        //  This captures the rotation required to bring the field coordinates frame in line with the
-                                        //  the robot coordinate system
+    //  So if robot always faces the center, from the red side, the gyro will read 0 when the
+    //  robot is actually facing +90°
+    //  This captures the rotation required to bring the field coordinates frame in line with the
+    //  the robot coordinate system
 
 
     private StopWatch ringFeederCycleTimer = new StopWatch();
@@ -197,7 +191,7 @@ public class EbotsRobot {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(RobotSize rs: RobotSize.values()){
+        for(EbotsRobot.RobotSize rs: EbotsRobot.RobotSize.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 
@@ -221,7 +215,7 @@ public class EbotsRobot {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(RobotSize rs: RobotSize.values()){
+        for(EbotsRobot.RobotSize rs: EbotsRobot.RobotSize.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 
@@ -274,7 +268,7 @@ public class EbotsRobot {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(RobotSize rs: RobotSize.values()){
+        for(EbotsRobot.RobotSize rs: EbotsRobot.RobotSize.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 
@@ -304,6 +298,19 @@ public class EbotsRobot {
         this.initializeEbotsDigitalTouches(hardwareMap);
         //initialize LED lights
         this.initializeEbotsRevBlinkinDriver(hardwareMap);
+
+        // prepare encoderTrackers
+        this.initializeEncoderTrackers(autonParameters);
+
+        //  Note CALIBRATION_TWO_WHEEL requires the Encoder Setup be changed after initialization
+        if(autonParameters == AutonParameters.CALIBRATION_TWO_WHEEL){
+            // During robot creation, the encoder setup was set to THREE_WHEELS to instantiate all three encoders
+            // This must be switched back to TWO_WHEELS after instantiation so navigation used TWO_WHEEL algorithm
+            // Specifically, this affects PoseChange::calculateRobotMovement() and PoseChange::calculateSpinAngle()
+            // Note: enum is singleton, so this must be reset next time this routine is run
+            autonParameters.setEncoderSetup(EncoderSetup.TWO_WHEELS);
+        }
+
     }
 
     public EbotsRobot(Pose.PresetPose presetPose, Alliance alliance){
@@ -525,7 +532,7 @@ public class EbotsRobot {
         driveWheels = new ArrayList<>();
 
         //Loop through the enumeration in DriveWheel and create a wheel for each position
-        for(WheelPosition pos: WheelPosition.values()){
+        for(DriveWheel.WheelPosition pos: DriveWheel.WheelPosition.values()){
             //Create the drive wheel
             DriveWheel driveWheel = new DriveWheel(pos,hardwaremap);
             //Add it to the array
@@ -610,9 +617,9 @@ public class EbotsRobot {
             //DcMotorEx motor, RobotOrientation robotOrientation, EncoderModel encoderModel
             //ToDo:  Find a better way to handle mapping of Encoders.  Should be property of Drivewheel?
 //            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(WheelPosition.BACK_RIGHT).getWheelMotor();
-            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(WheelPosition.BACK_LEFT).getWheelMotor();
+            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.BACK_LEFT).getWheelMotor();
 //            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(WheelPosition.FRONT_RIGHT).getWheelMotor();
-            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(WheelPosition.FRONT_LEFT).getWheelMotor();
+            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.FRONT_LEFT).getWheelMotor();
             EncoderTracker e1 = new EncoderTracker(forwardEncoderMotor, RobotOrientation.FORWARD, encoderModel);
             e1.setEncoderCalibration(EncoderCalibration.FORWARD_LEFT);
 
@@ -629,7 +636,7 @@ public class EbotsRobot {
 
             if (encoderSetup == EncoderSetup.THREE_WHEELS) {
                 //Create a second forward encoder
-                final DcMotorEx forward2EncoderMotor = this.getDriveWheel(WheelPosition.FRONT_LEFT).getWheelMotor();
+                final DcMotorEx forward2EncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.FRONT_LEFT).getWheelMotor();
                 EncoderTracker thirdEncoder = new EncoderTracker(forward2EncoderMotor, RobotOrientation.FORWARD, encoderModel);
                 thirdEncoder.setSpinBehavior(EncoderTracker.SpinBehavior.DECREASES_WITH_ANGLE);
                 thirdEncoder.setEncoderCalibration(EncoderCalibration.FORWARD_LEFT);
@@ -652,7 +659,7 @@ public class EbotsRobot {
         }
     }
 
-        public void initializeColorSensors(HardwareMap hardwareMap){
+    public void initializeColorSensors(HardwareMap hardwareMap){
         //Create color sensors used on the robot
 
         //Make sure the list is empty before initializing
@@ -904,7 +911,7 @@ public class EbotsRobot {
             while(!opMode.isStopRequested()
                     && !opMode.isStarted()
                     && !(gamepad1.x && stopWatch.getElapsedTimeMillis()>lockoutTimeMillis)
-                    ) {
+            ) {
                 opMode.telemetry.clearAll();
                 opMode.telemetry.addData("Current Motor", dw.getWheelPosition().toString());
                 opMode.telemetry.addLine("Push X to go to next motor");
@@ -1412,5 +1419,4 @@ public class EbotsRobot {
         if(actualPose != null) outString.append("Actual " + actualPose.toString());
         if(targetPose != null) outString.append("\n" + "Target " + targetPose.toString());
         return outString.toString();
-    }
-}
+    }}

@@ -40,15 +40,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.EbotsRobot;
 import org.firstinspires.ftc.teamcode.Pose;
-import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
-import org.firstinspires.ftc.teamcode.ebotsenums.GyroSetting;
 import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonState;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateFactory;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateInitialize;
-
-import static org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateEnum.INITIALIZE;
 
 
 /**
@@ -73,12 +69,11 @@ public class AutonEbotsV1 extends LinearOpMode {
 
 //    FtcDashboard dashboard;
     Telemetry dashboardTelemetry;
-    private StartLine.LinePosition startLinePosition = StartLine.LinePosition.INNER;
 
+    private StartLine.LinePosition startLinePosition = StartLine.LinePosition.INNER;
 
     final boolean debugOn = true;
     final String logTag = "EBOTS";
-
 
     public StartLine.LinePosition getStartLinePosition() {
         return startLinePosition;
@@ -109,18 +104,29 @@ public class AutonEbotsV1 extends LinearOpMode {
 //        dashboardTelemetry = dashboard.getTelemetry();
 //        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
-        // autonState = autonStateFactory.getAutonState(AutonStateEnum.DETECT_STARTER_STACK, this, robot);
         Class<? extends AbstractAutonState> firstStateClass = autonRoutine.getNextAutonStateClass();
         Class<? extends AbstractAutonState> nextStateClass = autonRoutine.getNextAutonStateClass();
         autonState = autonStateFactory.getAutonState(firstStateClass,this, robot, nextStateClass);
+
         // Create two state machines.  The first one is prior to pushing "Start"
         // The second is after pushing start
+        preMatchStateMachine();
 
+        // NOTE:  wiatForStart() must be called or the compiler will flag an error
+        waitForStart();
+
+        // This second state machine is intended for executing the auton routine such as:
+        //  INITIALIZE, ALL_AUTON_ACTIONS
+        matchPlayStateMachine();
+    }
+
+
+    private void preMatchStateMachine() {
         // This first state machine is intended for states prior to starting routine such as:
         //  CONFIGURE_AUTON_ROUTINE, PREMATCH_SETUP, DETECT_STARTER_STACK
-        //  All states within consideration should check for isStarted in exit conditions
-        while (!isStarted()
-                && autonState.getCurrentAutonState() != StateInitialize.class){
+        //  NOTE:  All states within consideration should check for isStarted in exit conditions
+
+        while (!isStarted() && autonState.getCurrentAutonState() != StateInitialize.class){
             executeStateMachine();  //
         }
 
@@ -128,15 +134,15 @@ public class AutonEbotsV1 extends LinearOpMode {
         if(autonState.getCurrentAutonState() != StateInitialize.class){
             Log.d(logTag, "AutonEbotsV1::runOpMode First state machine exited and not in INITIALIZE but: " + autonState.getCurrentAutonState().getSimpleName());
         }
+    }
 
-        waitForStart();
 
-        // This second state machine is intended for executing the auton routine such as:
-        //  INITIALIZE, ALL_AUTON_ACTIONS
+    private void matchPlayStateMachine() {
         while (opModeIsActive()){
             executeStateMachine();
         }
     }
+
 
     private void executeStateMachine() {
         /**
@@ -162,6 +168,7 @@ public class AutonEbotsV1 extends LinearOpMode {
         this.incrementState();
     }
 
+
     private void incrementState(){
         //Set the next AutonState
         Class<? extends AbstractAutonState> targetStateClass = autonState.getNextAutonState();
@@ -177,55 +184,14 @@ public class AutonEbotsV1 extends LinearOpMode {
         Alliance tempAlliance = Alliance.RED;
         Pose startingPose = new Pose(startLinePosition, tempAlliance);
 
-        // Adjust the auton parameters before instantiating robot
-        //autonParameters = AutonParameters.CALIBRATION_TWO_WHEEL;
-        //autonParameters = AutonParameters.DEBUG_TWO_WHEEL;
-        //autonParameters = AutonParameters.DEBUG_THREE_WHEEL;
-        //autonParameters.setSpeed(Speed.FAST);
         autonParameters = AutonParameters.COMPETITION;
 
-        // These were all replaced with the the new constructor that includes hardwareMap
-        //robot = new EbotsRobot(startingPose, tempAlliance, autonParameters);
-        //initialize drive wheels
-        //robot.initializeStandardDriveWheels(hardwareMap);
-        //initialize manip motors
-        //robot.initializeManipMotors(hardwareMap);
-        //prepare expansion hubs for bulk heads
-        robot.initializeExpansionHubsForBulkRead(hardwareMap);
-
-
-        //  this constructor also builds the drive wheel motors and manip devices
+        //  this constructor also builds the drive wheel motors and manip devices and encoders
         robot = new EbotsRobot(startingPose, tempAlliance, autonParameters, hardwareMap);
 
-
-        //initialize imu if being used by the auton setup
-        if(autonParameters.getGyroSetting() != GyroSetting.NONE) {
-            robot.initializeImu(hardwareMap);
-        }
-        //initialize color sensors
-        robot.initializeColorSensors(hardwareMap);
-        //initialize digital touch sensors
-        robot.initializeEbotsDigitalTouches(hardwareMap);
-        //initialize LED lights
-        robot.initializeEbotsRevBlinkinDriver(hardwareMap);
-        //initialize Rev2MeterDistance sensors
-//        robot.initializeEbotsRev2mDistanceSensors(hardwareMap);
-        // preapare encoderTrackers
-        robot.initializeEncoderTrackers(autonParameters);
-        //  Note CALIBRATION_TWO_WHEEL requires the Encoder Setup be changed after initialization
-        if(autonParameters == AutonParameters.CALIBRATION_TWO_WHEEL){
-            // During robot creation, the encoder setup was set to THREE_WHEELS to instantiate all three encoders
-            // This must be switched back to TWO_WHEELS after instantiation so navigation used TWO_WHEEL algorithm
-            // Specifically, this affects PoseChange::calculateRobotMovement() and PoseChange::calculateSpinAngle()
-            // Note: enum is singleton, so this must be reset next time this routine is run
-            autonParameters.setEncoderSetup(EncoderSetup.TWO_WHEELS);
-        }
 
         telemetry.addLine(robot.getActualPose().toString());
         telemetry.addLine("Initialize Complete!");
         telemetry.update();
     }
-
-
-
 }
