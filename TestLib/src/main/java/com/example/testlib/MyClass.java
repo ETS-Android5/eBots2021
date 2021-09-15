@@ -9,12 +9,29 @@ public class MyClass {
 
 
     public static void main(String[] args){
-        System.out.println("Hello World");
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Thomas");
+        nameList.add("Michael");
+        nameList.add("Carter");
+        nameList.add("Sean");
 
+        for(String programmer: nameList){
+            if (programmer != "Michael") {
+                System.out.println("Hello " + programmer);
+            } else {
+                System.out.println("How was football " + programmer);
+            }
+        }
+
+        BodyOfWater lakeMichigan = new BodyOfWater("Lake Michigan", 922, 1180, false);
+        System.out.println(lakeMichigan.getVolume());
+        System.out.println(lakeMichigan.toString());
+
+        lakeMichigan.receiveRainfall(100);
+
+        System.out.println(lakeMichigan.toString());
 //        FunctionChaining();
-
-
-        typeStudyPolymorphism();
+//        typeStudyPolymorphism();
     }
 
     private static void typeStudyPolymorphism() {
