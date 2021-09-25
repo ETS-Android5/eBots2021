@@ -52,8 +52,6 @@ public class MyClass {
         System.out.println("");
 
 
-
-
         //  ***     Section 2 explore casting
         System.out.println("***  SECTION 2:  explore casting");
         System.out.println("______________________________________________");
