@@ -26,12 +26,8 @@ public class Carousel {
          speed = carouselMotor.getPower();
 
     }
-    private void startMotor (){
-        carouselMotor.setPower(0.2);
-    }
-    private void stopMotor (){
-        carouselMotor.setPower(0);
-    }
+    private void startMotor (){carouselMotor.setPower(0.2);}
+    private void stopMotor (){carouselMotor.setPower(0);}
     private void setSpeed(double amount){
         double newPower = carouselMotor.getPower() + amount;
         carouselMotor.setPower(newPower);
