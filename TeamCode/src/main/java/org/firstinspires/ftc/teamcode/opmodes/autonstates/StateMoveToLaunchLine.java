@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.Pose;
-import org.firstinspires.ftc.teamcode.StopWatch;
-import org.firstinspires.ftc.teamcode.fieldobjects.LaunchLine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
 
 public class StateMoveToLaunchLine extends AbstractAutonState {
 
@@ -26,7 +26,7 @@ public class StateMoveToLaunchLine extends AbstractAutonState {
     boolean targetPoseAchieved = false;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateMoveToLaunchLine(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StateMoveToLaunchLine(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

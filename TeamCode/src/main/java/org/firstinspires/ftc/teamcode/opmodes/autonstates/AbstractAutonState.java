@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.autonstates;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public abstract class AbstractAutonState implements AutonState {
     LinearOpMode opMode;
-    EbotsRobot robot;
+    EbotsRobot2020 robot;
 
     protected Class<? extends AbstractAutonState> currentAutonState = this.getClass();
     protected Class<? extends AbstractAutonState> nextAutonState;
@@ -23,7 +23,7 @@ public abstract class AbstractAutonState implements AutonState {
 
     }
 
-    public AbstractAutonState(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+    public AbstractAutonState(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState) {
         this.opMode = opModeIn;
         this.robot = robotIn;
         this.nextAutonState = nextAutonState;

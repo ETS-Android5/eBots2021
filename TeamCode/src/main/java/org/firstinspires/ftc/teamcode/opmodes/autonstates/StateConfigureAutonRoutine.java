@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.opmodes.AutonEbotsV1;
-import org.firstinspires.ftc.teamcode.EbotsRevBlinkinLedDriver;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.Pose;
-import org.firstinspires.ftc.teamcode.StopWatch;
-import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
-import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRevBlinkinLedDriver;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class StateConfigureAutonRoutine extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateConfigureAutonRoutine(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+    public StateConfigureAutonRoutine(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState) {
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

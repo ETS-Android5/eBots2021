@@ -34,13 +34,14 @@ import android.util.Log;
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.Pose;
-import org.firstinspires.ftc.teamcode.fieldobjects.StartLine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonState;
 import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateFactory;
@@ -56,12 +57,12 @@ import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateInitialize;
  */
 
 @Autonomous(name="AutonEbotsV1", group="Competition")
-//@Disabled
+@Disabled
 public class AutonEbotsV1 extends LinearOpMode {
 
     //initializing and declaring class attributes
     private AutonParameters autonParameters;
-    private EbotsRobot robot;
+    private EbotsRobot2020 robot;
 
     private AutonStateFactory autonStateFactory = new AutonStateFactory();
     private AutonState autonState;
@@ -187,7 +188,7 @@ public class AutonEbotsV1 extends LinearOpMode {
         autonParameters = AutonParameters.COMPETITION;
 
         //  this constructor also builds the drive wheel motors and manip devices and encoders
-        robot = new EbotsRobot(startingPose, tempAlliance, autonParameters, hardwareMap);
+        robot = new EbotsRobot2020(startingPose, tempAlliance, autonParameters, hardwareMap);
 
 
         telemetry.addLine(robot.getActualPose().toString());

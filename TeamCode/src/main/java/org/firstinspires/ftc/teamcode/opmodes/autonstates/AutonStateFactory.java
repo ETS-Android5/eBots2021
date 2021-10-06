@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonstates;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
 public class AutonStateFactory {
     /**
@@ -14,7 +14,7 @@ public class AutonStateFactory {
      */
 
     public AutonState getAutonState(Class<? extends AutonState> targetState, LinearOpMode opMode,
-                                    EbotsRobot robot, Class<? extends AbstractAutonState> nextState) {
+                                    EbotsRobot2020 robot, Class<? extends AbstractAutonState> nextState) {
         AutonState returnState = null;
 
         if (targetState == StatePrematchSetup.class) {
@@ -52,7 +52,7 @@ public class AutonStateFactory {
     }
 
     @Deprecated
-    public AutonState getAutonState(AutonStateEnum autonStateEnum, LinearOpMode opMode, EbotsRobot robot) {
+    public AutonState getAutonState(AutonStateEnum autonStateEnum, LinearOpMode opMode, EbotsRobot2020 robot) {
         AutonState returnState = null;
 
         if (autonStateEnum == null) {

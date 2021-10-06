@@ -10,10 +10,10 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.R;
-import org.firstinspires.ftc.teamcode.StarterStackObservation;
-import org.firstinspires.ftc.teamcode.fieldobjects.TargetZone;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StarterStackObservation;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.TargetZone;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class StateDetectStarterStack extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateDetectStarterStack(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+    public StateDetectStarterStack(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState) {
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

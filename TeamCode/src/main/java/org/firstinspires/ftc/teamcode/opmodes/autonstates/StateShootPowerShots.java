@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class StateShootPowerShots extends AbstractAutonState {
 
@@ -18,7 +18,7 @@ public class StateShootPowerShots extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateShootPowerShots(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StateShootPowerShots(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

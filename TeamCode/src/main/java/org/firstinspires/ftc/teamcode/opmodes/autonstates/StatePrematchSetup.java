@@ -5,15 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
-import org.firstinspires.ftc.teamcode.sensors.EbotsRev2mDistanceSensor;
-import org.firstinspires.ftc.teamcode.EbotsRevBlinkinLedDriver;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.EncoderTracker;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRev2mDistanceSensor;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRevBlinkinLedDriver;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
-import org.firstinspires.ftc.teamcode.StopWatch;
-import org.firstinspires.ftc.teamcode.fieldobjects.PlayField;
-import org.firstinspires.ftc.teamcode.sensors.EbotsColorSensor;
-import org.firstinspires.ftc.teamcode.sensors.EbotsDigitalTouch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.PlayField;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsColorSensor;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsDigitalTouch;
 
 import java.util.ArrayList;
 
@@ -52,7 +52,7 @@ public class StatePrematchSetup extends AbstractAutonState {
     }
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePrematchSetup(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StatePrematchSetup(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

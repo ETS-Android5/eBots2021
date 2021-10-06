@@ -5,8 +5,8 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.EncoderTracker;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
 
 public class StateAwaitUserFeedback extends AbstractAutonState {
     final boolean debugOn = false;
@@ -14,7 +14,7 @@ public class StateAwaitUserFeedback extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateAwaitUserFeedback(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState) {
+    public StateAwaitUserFeedback(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState) {
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

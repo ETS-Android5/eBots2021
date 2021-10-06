@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
 public class StateInitialize extends AbstractAutonState {
 
@@ -13,7 +13,7 @@ public class StateInitialize extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateInitialize(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StateInitialize(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

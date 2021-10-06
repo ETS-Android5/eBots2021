@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.opmodes.autonstates;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class StatePlaceWobbleGoal extends AbstractAutonState {
 
@@ -11,7 +11,7 @@ public class StatePlaceWobbleGoal extends AbstractAutonState {
     StopWatch stateStopWatch;
 
     // ***********   CONSTRUCTOR   ***********************
-    public StatePlaceWobbleGoal(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StatePlaceWobbleGoal(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

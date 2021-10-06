@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes.autonstates;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.StopWatch;
-import org.firstinspires.ftc.teamcode.manips.Crane;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.manips2020.Crane;
 
 public class StateUnfoldCrane extends AbstractAutonState {
 
@@ -21,7 +20,7 @@ public class StateUnfoldCrane extends AbstractAutonState {
 
 
     // ***********   CONSTRUCTOR   ***********************
-    public StateUnfoldCrane(LinearOpMode opModeIn, EbotsRobot robotIn, Class<? extends AbstractAutonState> nextAutonState){
+    public StateUnfoldCrane(LinearOpMode opModeIn, EbotsRobot2020 robotIn, Class<? extends AbstractAutonState> nextAutonState){
         // Call the generic constructor from the super class (AbstractAutonState) to initialize opmode, robot, nextAutonStateClass
         super(opModeIn, robotIn, nextAutonState);
 

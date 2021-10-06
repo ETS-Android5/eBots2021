@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.ebotsenums;
 
-import org.firstinspires.ftc.teamcode.EbotsRobot;
-import org.firstinspires.ftc.teamcode.FieldPosition;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition;
 
 public enum CoordinateSystem {
     ROBOT, FIELD;
 
-    public static FieldPosition transformCoordinateSystem(FieldPosition inputPosition, CoordinateSystem targetCoordinateSystem, EbotsRobot robot){
+    public static FieldPosition transformCoordinateSystem(FieldPosition inputPosition, CoordinateSystem targetCoordinateSystem, EbotsRobot2020 robot){
         //This performs a rotation transform of a Position and converts to either Field or Robot Coordinate System
         //It uses a calculation from https://en.wikipedia.org/wiki/Transformation_matrix#Rotation
         //Note:  this is typically used during auton to determine distances from target using robot reference frame
