@@ -7,31 +7,52 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class Carousel {
-
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Attributes
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     double speed;
     StopWatch stopWatch;
     boolean isTouching;
     int encoderClicks;
     DcMotorEx carouselMotor;
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Constructors
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public Carousel(HardwareMap hardwareMap){
         initMotor(hardwareMap);
         stopWatch = new StopWatch();
     }
 
-
-
-
-    private void initMotor (HardwareMap hardwareMap){
-         carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
-         speed = carouselMotor.getPower();
-
-    }
-    private void startMotor (){carouselMotor.setPower(0.2);}
-    private void stopMotor (){carouselMotor.setPower(0);}
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Getters & Setters
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private void setSpeed(double amount){
         double newPower = carouselMotor.getPower() + amount;
         carouselMotor.setPower(newPower);
     }
+    public double getSpeed(){
+        return carouselMotor.getPower();
+    }
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Static Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    // No static methods defined
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    private void initMotor (HardwareMap hardwareMap){
+         carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
+         speed = carouselMotor.getPower();
+    }
+
+    private void startMotor (){carouselMotor.setPower(0.2);}
+
+    private void stopMotor (){carouselMotor.setPower(0);}
+
     public void handleUserInput(Gamepad gamepad){
         double increment = 0.05;
         long timeOut = 1000;
@@ -48,14 +69,6 @@ public class Carousel {
           stopMotor();
       }
 
-
-
     }
-    public double getSpeed(){
-        return carouselMotor.getPower();
-    }
-
-
-
 
 }

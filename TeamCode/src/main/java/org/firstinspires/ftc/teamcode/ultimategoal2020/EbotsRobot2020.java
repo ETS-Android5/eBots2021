@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal2020.manips2020.Gripper;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.manips2020.Intake2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.manips2020.Launcher;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.manips2020.RingFeeder;
-import org.firstinspires.ftc.teamcode.opmodes.AutonParameters;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.AutonParameters;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsDigitalTouch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRev2mDistanceSensor;

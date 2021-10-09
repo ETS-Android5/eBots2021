@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes;
 
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonState;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.AbstractAutonState;
 
 import java.util.ArrayList;
 

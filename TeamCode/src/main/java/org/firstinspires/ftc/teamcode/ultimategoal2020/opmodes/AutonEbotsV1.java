@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes;
 
 import android.util.Log;
 
@@ -42,10 +42,10 @@ import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonState;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AutonStateFactory;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateInitialize;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.AbstractAutonState;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.AutonState;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.AutonStateFactory;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateInitialize;
 
 
 /**

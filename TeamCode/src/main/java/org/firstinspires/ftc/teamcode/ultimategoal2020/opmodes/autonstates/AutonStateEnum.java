@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonstates;
+package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates;
 
 @Deprecated
 public enum AutonStateEnum {

@@ -6,23 +6,39 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class Intake {
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Attributes
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private DcMotorEx intakeMotor;
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Constructors
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public Intake(HardwareMap hardwareMap) {
         intakeMotor(hardwareMap);
     }
 
-    private void intakeMotor(HardwareMap hardwareMap) {
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-    }
-
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Getters & Setters
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public double getSpeed(){
         return intakeMotor.getPower();
     }
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Static Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    // No static methods defined
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    private void intakeMotor(HardwareMap hardwareMap) {
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+    }
 
     public void handleUserInput(Gamepad gamepad) {
-
         if (gamepad.right_trigger > 0.3) {
             intakeMotor.setPower(gamepad.right_trigger);
 
@@ -32,6 +48,5 @@ public class Intake {
         } else  {
             intakeMotor.setPower(0);
         }
-
     }
 }

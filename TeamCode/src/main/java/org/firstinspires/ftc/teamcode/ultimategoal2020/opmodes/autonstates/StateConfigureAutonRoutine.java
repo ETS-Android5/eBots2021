@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonstates;
+package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates;
 
 import android.util.Log;
 
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmodes.AutonEbotsV1;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.AutonEbotsV1;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRevBlinkinLedDriver;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;

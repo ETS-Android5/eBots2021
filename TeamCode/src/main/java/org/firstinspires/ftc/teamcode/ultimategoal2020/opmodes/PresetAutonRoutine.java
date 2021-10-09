@@ -1,16 +1,16 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes;
 
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.AbstractAutonState;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateConfigureAutonRoutine;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateDetectStarterStack;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateInitialize;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateMoveToLaunchLine;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateMoveToTargetZone;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateParkOnLaunchLine;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StatePlaceWobbleGoal;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StatePrematchSetup;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateShootPowerShots;
-import org.firstinspires.ftc.teamcode.opmodes.autonstates.StateUnfoldCrane;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.AbstractAutonState;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateConfigureAutonRoutine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateDetectStarterStack;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateInitialize;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateMoveToLaunchLine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateMoveToTargetZone;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateParkOnLaunchLine;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StatePlaceWobbleGoal;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StatePrematchSetup;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateShootPowerShots;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates.StateUnfoldCrane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
