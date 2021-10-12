@@ -1,0 +1,23 @@
+package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
+
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+public interface EbotsMotionController {
+    public String getName();
+
+    public void stop();
+
+    public void handleUserInput(Gamepad gamepad);
+
+    public static EbotsMotionController getMotionController(Class targetClass, HardwareMap hardwareMap){
+        EbotsMotionController outputMotionController = null;
+        if(targetClass == DriveAndSpin.class){
+            outputMotionController = new DriveAndSpin(hardwareMap);
+        } else if (targetClass == TankDrive.class){
+            outputMotionController = new TankDrive(hardwareMap);
+        }
+        return outputMotionController;
+    }
+
+}

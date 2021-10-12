@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 
 import java.util.ArrayList;
 
-public class DriveAndSpin {
+public class DriveAndSpin implements EbotsMotionController{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -34,8 +34,8 @@ public class DriveAndSpin {
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motors.add(frontRight);
         motors.add(frontLeft);
@@ -53,6 +53,7 @@ public class DriveAndSpin {
     public double getSpinInput() {
         return spinInput;
     }
+    @Override
     public String getName(){
         return this.name;
     }
@@ -66,19 +67,24 @@ public class DriveAndSpin {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public void stopMotor(Gamepad gamepad){
+    @Override
+    public void stop(){
         for (DcMotorEx m : motors){
             m.setPower(0.0);
         }
     }
 
+    @Override
     public void handleUserInput(Gamepad gamepad){
-        forwardInput = -gamepad.left_stick_y;
-        spinInput = gamepad.right_stick_x;
+        double sloMo = 1-gamepad.left_trigger;
+        sloMo = Math.max(sloMo, 0.2);
 
-        frontLeft.setPower(forwardInput + spinInput);
-        frontRight.setPower(forwardInput - spinInput);
-        backLeft.setPower(forwardInput + spinInput);
-        backRight.setPower(forwardInput - spinInput);
+        forwardInput = -gamepad.left_stick_y;
+        spinInput = gamepad.right_stick_x * 0.5;
+
+        frontLeft.setPower((forwardInput + spinInput) * sloMo);
+        frontRight.setPower((forwardInput - spinInput) * sloMo);
+        backLeft.setPower((forwardInput + spinInput) * sloMo);
+        backRight.setPower((forwardInput - spinInput) * sloMo);
     }
 }

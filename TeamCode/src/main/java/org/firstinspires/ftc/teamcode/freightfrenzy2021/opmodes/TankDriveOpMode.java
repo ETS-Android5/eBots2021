@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes;
 import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveAndSpin;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.TankDrive;
-
+@TeleOp
 public class TankDriveOpMode extends LinearOpMode {
 
     @SuppressLint("DefaultLocale")

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.ArrayList;
 
-public class TankDrive {
+public class TankDrive implements EbotsMotionController {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
@@ -33,8 +33,8 @@ public class TankDrive {
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motors.add(frontRight);
         motors.add(frontLeft);
@@ -54,11 +54,13 @@ public class TankDrive {
         return rightInput;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
-    public void stopMotor(){
+    @Override
+    public void stop(){
         for (DcMotorEx m : motors){
             m.setPower(0.0);
         }
@@ -74,14 +76,17 @@ public class TankDrive {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    @Override
     public void handleUserInput(Gamepad gamepad){
+        double sloMo = 1-gamepad.left_trigger;
+        sloMo = Math.max(sloMo, 0.2);
 
         leftInput = -gamepad.left_stick_y;
         rightInput = -gamepad.right_stick_y;
 
-        frontLeft.setPower(leftInput);
-        frontRight.setPower(rightInput);
-        backLeft.setPower(leftInput);
-        backRight.setPower(rightInput);
+        frontLeft.setPower((leftInput) * sloMo);
+        frontRight.setPower((rightInput) * sloMo);
+        backLeft.setPower((leftInput) * sloMo);
+        backRight.setPower((rightInput) * sloMo);
     }
 }
