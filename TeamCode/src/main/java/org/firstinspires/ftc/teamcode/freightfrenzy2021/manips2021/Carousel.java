@@ -49,9 +49,9 @@ public class Carousel {
          speed = carouselMotor.getPower();
     }
 
-    private void startMotor (){carouselMotor.setPower(0.2);}
+    public void startMotor (){carouselMotor.setPower(0.35);}
 
-    private void stopMotor (){carouselMotor.setPower(0);}
+    public void stopMotor (){carouselMotor.setPower(0);}
 
     public void handleUserInput(Gamepad gamepad){
         double increment = 0.05;
