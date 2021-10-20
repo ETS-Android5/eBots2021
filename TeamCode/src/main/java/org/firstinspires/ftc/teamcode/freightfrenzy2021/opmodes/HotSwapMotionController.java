@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveAndSpin;
@@ -26,9 +28,12 @@ public class HotSwapMotionController extends LinearOpMode {
         Carousel carousel = new Carousel(hardwareMap);
 
         motionController = EbotsMotionController.getMotionController(DriveAndSpin.class, hardwareMap);
+        DistanceSensor distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
+
         while (! this.isStarted()){
             handleUserInput(gamepad1);
             telemetry.addData("Motion Controller", motionController.getName());
+            telemetry.addData("Current Distance", distanceSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
         }
 
@@ -42,6 +47,7 @@ public class HotSwapMotionController extends LinearOpMode {
 
             String twoDecimals = "%.2f";
             telemetry.addData("Motion Controller", motionController.getName());
+            telemetry.addData("Current Distance", distanceSensor.getDistance(DistanceUnit.INCH));
             telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getSpeed()));
             telemetry.addData("Intake Speed", String.format(twoDecimals, intake2021.getSpeed()));
             telemetry.update();
