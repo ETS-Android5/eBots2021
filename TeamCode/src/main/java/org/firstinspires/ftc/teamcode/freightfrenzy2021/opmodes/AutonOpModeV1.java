@@ -16,7 +16,7 @@ public class AutonOpModeV1 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         boolean stateComplete = false;
         waitForStart();
-        EbotsAutonState currentState = EbotsAutonState.get(StateDriveToCarousel.class,hardwareMap);
+        EbotsAutonState currentState = EbotsAutonState.get(StateDriveToCarousel.class,hardwareMap, this);
 
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
@@ -29,7 +29,7 @@ public class AutonOpModeV1 extends LinearOpMode {
             }
 
         }
-        currentState = EbotsAutonState.get(StateDeliverDuck.class, hardwareMap);
+        currentState = EbotsAutonState.get(StateDeliverDuck.class, hardwareMap,this);
         stateComplete = false;
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
