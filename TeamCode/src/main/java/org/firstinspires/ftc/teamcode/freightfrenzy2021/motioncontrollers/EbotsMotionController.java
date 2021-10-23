@@ -16,6 +16,8 @@ public interface EbotsMotionController {
             outputMotionController = new DriveAndSpin(hardwareMap);
         } else if (targetClass == TankDrive.class){
             outputMotionController = new TankDrive(hardwareMap);
+        } else if(targetClass == SeanMode.class){
+            outputMotionController = new SeanMode(hardwareMap);
         } else if(targetClass == MecanumDrive.class){
             outputMotionController = new MecanumDrive(hardwareMap);
         }

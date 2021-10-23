@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveAndSpin;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.EbotsMotionController;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.SeanMode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.TankDrive;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -65,10 +66,14 @@ public class HotSwapMotionController extends LinearOpMode {
             if(motionController instanceof DriveAndSpin){
                 motionController = EbotsMotionController.get(TankDrive.class, hardwareMap);
             } else if (motionController instanceof TankDrive){
+                motionController = EbotsMotionController.get(SeanMode.class, hardwareMap);
+            } else if (motionController instanceof SeanMode){
                 motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
             } else if (motionController instanceof MecanumDrive){
                 motionController = EbotsMotionController.get(DriveAndSpin.class, hardwareMap);
             }
+            gamepad.rumble(0.9, 0, 200);  // 200 mSec burst on left motor.
+
         }
         stopWatch.reset();
     }
