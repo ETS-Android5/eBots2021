@@ -329,7 +329,7 @@ public class EbotsRobot2020 {
         return driveCommand;
     }
 
-    public DriveWheel getDriveWheel(DriveWheel.WheelPosition wheelPosition){
+    public DriveWheel getDriveWheel(WheelPosition2020 wheelPosition){
         DriveWheel driveWheel = null;
         for(DriveWheel dw: driveWheels){
             if(dw.getWheelPosition()==wheelPosition){
@@ -533,7 +533,7 @@ public class EbotsRobot2020 {
         driveWheels = new ArrayList<>();
 
         //Loop through the enumeration in DriveWheel and create a wheel for each position
-        for(DriveWheel.WheelPosition pos: DriveWheel.WheelPosition.values()){
+        for(WheelPosition2020 pos: WheelPosition2020.values()){
             //Create the drive wheel
             DriveWheel driveWheel = new DriveWheel(pos,hardwaremap);
             //Add it to the array
@@ -618,9 +618,9 @@ public class EbotsRobot2020 {
             //DcMotorEx motor, RobotOrientation robotOrientation, EncoderModel encoderModel
             //ToDo:  Find a better way to handle mapping of Encoders.  Should be property of Drivewheel?
 //            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(WheelPosition.BACK_RIGHT).getWheelMotor();
-            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.BACK_LEFT).getWheelMotor();
+            final DcMotorEx forwardEncoderMotor = this.getDriveWheel(WheelPosition2020.BACK_LEFT).getWheelMotor();
 //            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(WheelPosition.FRONT_RIGHT).getWheelMotor();
-            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.FRONT_LEFT).getWheelMotor();
+            final DcMotorEx lateralEncoderMotor = this.getDriveWheel(WheelPosition2020.FRONT_LEFT).getWheelMotor();
             EncoderTracker e1 = new EncoderTracker(forwardEncoderMotor, RobotOrientation.FORWARD, encoderModel);
             e1.setEncoderCalibration(EncoderCalibration.FORWARD_LEFT);
 
@@ -637,7 +637,7 @@ public class EbotsRobot2020 {
 
             if (encoderSetup == EncoderSetup.THREE_WHEELS) {
                 //Create a second forward encoder
-                final DcMotorEx forward2EncoderMotor = this.getDriveWheel(DriveWheel.WheelPosition.FRONT_LEFT).getWheelMotor();
+                final DcMotorEx forward2EncoderMotor = this.getDriveWheel(WheelPosition2020.FRONT_LEFT).getWheelMotor();
                 EncoderTracker thirdEncoder = new EncoderTracker(forward2EncoderMotor, RobotOrientation.FORWARD, encoderModel);
                 thirdEncoder.setSpinBehavior(EncoderTracker.SpinBehavior.DECREASES_WITH_ANGLE);
                 thirdEncoder.setEncoderCalibration(EncoderCalibration.FORWARD_LEFT);

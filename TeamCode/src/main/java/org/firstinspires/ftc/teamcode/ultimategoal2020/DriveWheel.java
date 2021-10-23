@@ -21,52 +21,14 @@ public class DriveWheel {
     private DcMotorEx wheelMotor;
     private double calculatedPower;
     //private RobotSide robotSide;
-    private WheelPosition wheelPosition;
+    private WheelPosition2020 wheelPosition;
 
-    /**
-     * ENUMERATIONS
-     */
-    public enum WheelPosition{
-        //This enumeration captures the wheel configuration information so it can be referenced during
-        //construction of a DriveWheel object
-        FRONT_LEFT (45, "frontLeft", RobotSide.LEFT),
-        FRONT_RIGHT (-45, "frontRight", RobotSide.RIGHT),
-        BACK_LEFT (-45, "backLeft", RobotSide.LEFT),
-        BACK_RIGHT (45, "backRight", RobotSide.RIGHT);
-
-        private double wheelAngleRadEnum;   //Note:  Wheel angle value stored as radians (multiply by 180/pi for degrees)
-        private String motorName;
-        private RobotSide robotSide;
-        private double spinSign;
-
-        WheelPosition(double wheelAngleInDegrees, String motorName, RobotSide robotSide){
-            this.wheelAngleRadEnum = Math.toRadians(wheelAngleInDegrees);
-            this.motorName = motorName;
-            this.robotSide = robotSide;
-            // Positive spin means to turn to the left, meaning that right wheels spin forward and left wheels spin backwards
-            this.spinSign = (this.robotSide == RobotSide.RIGHT) ? 1.0 : -1.0;
-        }
-
-        public double getWheelAngleRadEnum(){
-            return this.wheelAngleRadEnum;
-        }
-
-        public String getMotorName(){
-            return this.motorName;
-        }
-
-        public RobotSide getRobotSide(){
-            return this.robotSide;
-        }
-
-        public double getSpinSign(){return this.spinSign;}
-    }
 
 
     /**
      * CONSTRUCTORS
      */
-    public DriveWheel(WheelPosition wheelPosition, HardwareMap hardwareMap){
+    public DriveWheel(WheelPosition2020 wheelPosition, HardwareMap hardwareMap){
         this.wheelPosition = wheelPosition;
         this.wheelDiameter = 4;     //Wheel diameter in inches
         this.wheelAngleRad = wheelPosition.getWheelAngleRadEnum();
@@ -96,7 +58,7 @@ public class DriveWheel {
 
     }
 
-    public WheelPosition getWheelPosition(){
+    public WheelPosition2020 getWheelPosition(){
         return wheelPosition;
     }
 
@@ -109,7 +71,7 @@ public class DriveWheel {
     /***************************************************
      * INSTANCE METHODS
      ****************************************************/
-    public DcMotorEx initializeDriveMotor(WheelPosition wheelPosition, HardwareMap hardwareMap){
+    public DcMotorEx initializeDriveMotor(WheelPosition2020 wheelPosition, HardwareMap hardwareMap){
         String motorName = wheelPosition.getMotorName();
         DcMotorEx myMotor = hardwareMap.get(DcMotorEx.class, motorName);
 

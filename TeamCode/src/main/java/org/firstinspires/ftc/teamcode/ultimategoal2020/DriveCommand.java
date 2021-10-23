@@ -232,9 +232,6 @@ class DriveCommand {
             sb.append("°");
             Log.d(logTag, sb.toString());
         }
-
-
-
     }
 
     public void setMagnitudeAndDriveAngle(double xDirDrive, double yDirDrive, double translateMaxSignal) {

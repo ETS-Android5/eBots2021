@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveAndSpin;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.EbotsMotionController;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.TankDrive;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -27,7 +28,7 @@ public class HotSwapMotionController extends LinearOpMode {
         Intake intake2021 = new Intake(hardwareMap);
         Carousel carousel = new Carousel(hardwareMap);
 
-        motionController = EbotsMotionController.getMotionController(DriveAndSpin.class, hardwareMap);
+        motionController = EbotsMotionController.get(DriveAndSpin.class, hardwareMap);
         DistanceSensor distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
 
         while (! this.isStarted()){
@@ -62,9 +63,11 @@ public class HotSwapMotionController extends LinearOpMode {
 
         if(gamepad.left_bumper && gamepad.right_stick_button){
             if(motionController instanceof DriveAndSpin){
-                motionController = EbotsMotionController.getMotionController(TankDrive.class, hardwareMap);
+                motionController = EbotsMotionController.get(TankDrive.class, hardwareMap);
             } else if (motionController instanceof TankDrive){
-                motionController = EbotsMotionController.getMotionController(DriveAndSpin.class, hardwareMap);
+                motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
+            } else if (motionController instanceof MecanumDrive){
+                motionController = EbotsMotionController.get(DriveAndSpin.class, hardwareMap);
             }
         }
         stopWatch.reset();

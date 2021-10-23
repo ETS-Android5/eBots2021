@@ -14,13 +14,13 @@ import java.util.List;
 
 public class StateObserveBarCode implements EbotsAutonState{
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Class Attributes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Class Attributes
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Instance Attributes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Attributes
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private LinearOpMode opMode;
     private enum BarCodePosition{
         LEFT,
@@ -53,30 +53,29 @@ Instance Attributes
     private TFObjectDetector tfod;
 
 
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Constructors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    Constructors
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateObserveBarCode(HardwareMap hardwareMap, LinearOpMode opMode){
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
+        this.telemetry.clearAll();
+        telemetry.addData("Current State", this.getClass().getSimpleName());
+
         initVuforia(opMode.hardwareMap);
         initTfod(opMode.hardwareMap);
-
-
-
     }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Getters & Setters
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Getters & Setters
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Class Methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Class Methods
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Instance Methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
         return opMode.isStarted();
@@ -84,39 +83,25 @@ Instance Methods
 
     @Override
     public void performStateActions() {
+        if(tfod == null) return;
         observation = BarCodePosition.RIGHT;
-/**
- * Activate TensorFlow Object Detection before we wait for the start command.
- * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
- **/
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel() == "Duck"){
-                        if(recognition.getLeft() >= dividingLine){
-                            observation = BarCodePosition.MIDDLE;
-                        } else {
-                            observation = BarCodePosition.LEFT;
-                        }
-
+        // getUpdatedRecognitions() will return null if no new information is available since
+        // the last time that call was made.
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (updatedRecognitions != null) {
+            // step through the list of recognitions and display boundary info.
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel() == "Duck"){
+                    if(recognition.getLeft() >= dividingLine){
+                        observation = BarCodePosition.MIDDLE;
+                    } else {
+                        observation = BarCodePosition.LEFT;
                     }
-
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                            recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
-                    i++;
                 }
-                telemetry.update();
             }
         }
+        telemetry.addData("Observation", observation.name());
+        telemetry.update();
     }
 
     @Override

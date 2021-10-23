@@ -2,10 +2,16 @@ package com.example.testlib;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MyClass {
+
+    public enum TestEnum{
+        VALUE1,
+        VALUE2
+    }
 
 
     public static void main(String[] args){
@@ -30,6 +36,9 @@ public class MyClass {
         lakeMichigan.receiveRainfall(100);
 
         System.out.println(lakeMichigan.toString());
+        System.out.println(TestEnum.VALUE1.name());
+        ArrayList<TestEnum> flaggedValues = new ArrayList<>(Arrays.asList(TestEnum.VALUE2));
+        System.out.println("Check if flagged values contains Value2: " + flaggedValues.contains(TestEnum.VALUE2));
 //        FunctionChaining();
 //        typeStudyPolymorphism();
     }

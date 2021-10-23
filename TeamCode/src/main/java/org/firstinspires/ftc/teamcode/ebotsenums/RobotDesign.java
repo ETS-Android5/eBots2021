@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.ebotsenums;
 
-import org.firstinspires.ftc.teamcode.ultimategoal2020.DriveWheel;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.WheelPosition2020;
 
 import java.util.Hashtable;
 
@@ -24,7 +24,7 @@ public enum RobotDesign {
     private EncoderModel encoderModel;
     private double wheelDiameter;
     private RobotOrientation thirdEncoderOrientation;
-    private Hashtable<String, DriveWheel.WheelPosition> encoderWheelPositions;
+    private Hashtable<String, WheelPosition2020> encoderWheelPositions;
 
 
 

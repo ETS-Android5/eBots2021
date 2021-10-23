@@ -15,6 +15,7 @@ public class AutonOpModeV1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         boolean stateComplete = false;
+
         waitForStart();
         EbotsAutonState currentState = EbotsAutonState.get(StateDriveToCarousel.class,hardwareMap, this);
 

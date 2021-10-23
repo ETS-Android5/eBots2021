@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.ebotsenums;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.ultimategoal2020.DriveWheel;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.WheelPosition2020;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,20 +20,20 @@ public enum EncoderConfig {
     private ArrayList<EncoderTracker> encoders;
 
 
-    private static final HashMap<String, DriveWheel.WheelPosition> ENC_POS_2019 = new HashMap<String, DriveWheel.WheelPosition>(){
+    private static final HashMap<String, WheelPosition2020> ENC_POS_2019 = new HashMap<String, WheelPosition2020>(){
         {
-            put("Forward", DriveWheel.WheelPosition.BACK_RIGHT);
-            put("Lateral", DriveWheel.WheelPosition.FRONT_RIGHT);
-            put("Third", DriveWheel.WheelPosition.FRONT_LEFT);
+            put("Forward", WheelPosition2020.BACK_RIGHT);
+            put("Lateral", WheelPosition2020.FRONT_RIGHT);
+            put("Third", WheelPosition2020.FRONT_LEFT);
 
         }
     };
 
-    private static final HashMap<String, DriveWheel.WheelPosition> ENC_POS_2020 = new HashMap<String, DriveWheel.WheelPosition>(){
+    private static final HashMap<String, WheelPosition2020> ENC_POS_2020 = new HashMap<String, WheelPosition2020>(){
         {
-            put("Forward", DriveWheel.WheelPosition.FRONT_LEFT);
-            put("Lateral", DriveWheel.WheelPosition.BACK_LEFT);
-            put("Third", DriveWheel.WheelPosition.FRONT_LEFT);      //there are only 2 on this robot, so repeat
+            put("Forward", WheelPosition2020.FRONT_LEFT);
+            put("Lateral", WheelPosition2020.BACK_LEFT);
+            put("Third", WheelPosition2020.FRONT_LEFT);      //there are only 2 on this robot, so repeat
 
         }
     };

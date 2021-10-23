@@ -10,12 +10,14 @@ public interface EbotsMotionController {
 
     public void handleUserInput(Gamepad gamepad);
 
-    public static EbotsMotionController getMotionController(Class targetClass, HardwareMap hardwareMap){
+    public static EbotsMotionController get(Class targetClass, HardwareMap hardwareMap){
         EbotsMotionController outputMotionController = null;
         if(targetClass == DriveAndSpin.class){
             outputMotionController = new DriveAndSpin(hardwareMap);
         } else if (targetClass == TankDrive.class){
             outputMotionController = new TankDrive(hardwareMap);
+        } else if(targetClass == MecanumDrive.class){
+            outputMotionController = new MecanumDrive(hardwareMap);
         }
         return outputMotionController;
     }
