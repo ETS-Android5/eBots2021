@@ -4,6 +4,8 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class MyClass {
@@ -39,6 +41,21 @@ public class MyClass {
         System.out.println(TestEnum.VALUE1.name());
         ArrayList<TestEnum> flaggedValues = new ArrayList<>(Arrays.asList(TestEnum.VALUE2));
         System.out.println("Check if flagged values contains Value2: " + flaggedValues.contains(TestEnum.VALUE2));
+
+        Random rnd = ThreadLocalRandom.current();
+        int randomIndex = rnd.nextInt(11);
+
+        ArrayList<String> ebotsMembers = new ArrayList<>();
+        ebotsMembers.add("jojo");
+        ebotsMembers.add("momo");
+        ebotsMembers.add("albert");
+
+        String member = ebotsMembers.remove(2);
+        System.out.println(member);
+
+        for(int i=0; i<10; i++){
+            System.out.println(rnd.nextInt(10+1));
+        }
 //        FunctionChaining();
 //        typeStudyPolymorphism();
     }

@@ -37,7 +37,8 @@ public class MecanumDrive implements EbotsMotionController {
 
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list
         ArrayList<WheelPosition> positionsWithNegativeAngle = new ArrayList<>(
-                Arrays.asList(WheelPosition.FRONT_RIGHT, WheelPosition.BACK_LEFT)
+//                Arrays.asList(WheelPosition.FRONT_RIGHT, WheelPosition.BACK_LEFT)  // O-CONFIG
+                Arrays.asList(WheelPosition.FRONT_LEFT, WheelPosition.BACK_RIGHT)  // X-Config
         );
 
         //Loop through each WheelPosition (e.b. FRONT_LEFT, FRONT_RIGHT)
