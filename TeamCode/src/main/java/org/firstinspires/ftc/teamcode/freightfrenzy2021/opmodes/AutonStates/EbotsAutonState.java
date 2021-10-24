@@ -13,6 +13,8 @@ public interface EbotsAutonState {
             newState = new StateDriveToCarousel(hardwareMap);
         } else if (targetState == StateDeliverDuck.class){
             newState = new StateDeliverDuck(hardwareMap);
+        } else if (targetState == StateObserveBarCode.class){
+            newState = new StateObserveBarCode(hardwareMap, opMode);
         }
         return newState;
     }

@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonOpModeV1;
 
 import java.util.List;
 
@@ -22,11 +24,6 @@ public class StateObserveBarCode implements EbotsAutonState{
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private LinearOpMode opMode;
-    private enum BarCodePosition{
-        LEFT,
-        MIDDLE,
-        RIGHT
-    }
     private BarCodePosition observation;
     private double dividingLine = 163;
     private Telemetry telemetry;
@@ -100,13 +97,19 @@ public class StateObserveBarCode implements EbotsAutonState{
                 }
             }
         }
+        new BarCodeObservation(observation);
+
         telemetry.addData("Observation", observation.name());
         telemetry.update();
     }
 
     @Override
     public void performTransitionalActions() {
-
+        BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
+        //reason for crash  :)
+        ((AutonOpModeV1)opMode).setBarCodePosition(barCodePosition);
+        telemetry.addData("Barcode Position ", barCodePosition);
+        telemetry.update();
     }
     /**
      * Initialize the Vuforia localization engine.

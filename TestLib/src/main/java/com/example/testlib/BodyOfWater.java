@@ -5,13 +5,16 @@ public class BodyOfWater {
     private double maxDepth;
     private double volume;
     private boolean isSalty;
+    private boolean bordersMichigan;
 
     //  Constructor
-    public BodyOfWater(String name, double depth, double volume, boolean isSalty){
+    public BodyOfWater(String name, double depth, double volume, boolean isSalty, boolean bordersMichigan){
         this.name = name;
         this.maxDepth = depth;
         this.volume = volume;
         this.isSalty = isSalty;
+        this.bordersMichigan = bordersMichigan;
+
     }
 
     public double getVolume(){
