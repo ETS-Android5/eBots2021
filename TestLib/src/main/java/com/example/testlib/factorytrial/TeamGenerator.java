@@ -1,16 +1,15 @@
 package com.example.testlib.factorytrial;
-
-import com.sun.deploy.appcontext.AppContext;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TeamGenerator {
     public static void main(String[] args) {
-        Random rnd = ThreadLocalRandom.current();
-        int randomIndex = rnd.nextInt(14);
+
+        int teamBuffer1 = 4;
+        int teamBuffer2 = 3;
         ArrayList<String> ebotsMembers = new ArrayList<>();
+        //3 teams of 4 and 1 team of 3
         ArrayList<String> team1 = new ArrayList<>();
         ArrayList<String> team2 = new ArrayList<>();
         ArrayList<String> team3 = new ArrayList<>();
@@ -31,8 +30,23 @@ public class TeamGenerator {
         ebotsMembers.add("Elanur");
         ebotsMembers.add("Riley W.");
         ebotsMembers.add("Zachary");
-
-        String member = ebotsMembers.remove(randomIndex);
-        ebotsMembers.
+        for (int i = 0; i >=16; i++) {
+            Random rnd = ThreadLocalRandom.current();
+            int randomIndex = rnd.nextInt(14);
+            team1.add(ebotsMembers.remove(randomIndex));
+            if (team1.size() >= teamBuffer1) {
+                team2.add(team1.remove(0));
+            }
+            if (team2.size() >= teamBuffer1) {
+                team3.add(team2.remove(0));
+            }
+            if (team3.size() >= teamBuffer1) {
+                team4.add(team3.remove(0));
+            }
+            System.out.println(team1);
+            System.out.println(team2);
+            System.out.println(team3);
+            System.out.println(team4);
+        }
     }
 }
