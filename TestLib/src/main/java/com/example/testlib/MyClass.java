@@ -4,6 +4,8 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import javax.xml.transform.SourceLocator;
@@ -17,49 +19,46 @@ public class MyClass {
 
 
     public static void main(String[] args) {
-        ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Thomas");
-        nameList.add("Michael");
-        nameList.add("Carter");
-        nameList.add("Sean");
-        ArrayList<String> lakeList = new ArrayList<>();
-        lakeList.add("Lake superior");
-        lakeList.add("lake michigan");
-        lakeList.add("lake ontario");
-        lakeList.add("lake huron");
-        lakeList.add("lake erie");
-        for (String programmer : nameList) {
-            if (programmer != "Michael") {
-                System.out.println("Hello " + programmer);
-            } else {
-                System.out.println("How was football " + programmer);
-            }
+        ArrayList<String> ebotsMembers = new ArrayList<>();
+        ebotsMembers.add("Thomas");
+        ebotsMembers.add("Christian");
+        ebotsMembers.add("Michael");
+        ebotsMembers.add("Carter");
+        ebotsMembers.add("Arjun");
+        ebotsMembers.add("Ishita");
+        ebotsMembers.add("Maria");
+        ebotsMembers.add("Ethan");
+        ebotsMembers.add("Christian");
+        ebotsMembers.add("Kenny");
+        ebotsMembers.add("Lyla");
+        ebotsMembers.add("Ryleigh M.");
+        ebotsMembers.add("Elanur");
+        ebotsMembers.add("Riley W.");
+        ebotsMembers.add("Zachary");
+
+
+        ArrayList<ArrayList<String>> teams = new ArrayList<>();
+        for(int i=0; i < 4; i++){
+            teams.add(new ArrayList<>());
         }
-            for (String lake : lakeList) {
-                if (lake != "lake ontario") {
-                    System.out.println(lake + " Borders Michigan.");
-                } else {
-                    System.out.println(lake + " Does not border Michigan.");
-                }
-            }
-            BodyOfWater lakeMichigan = new BodyOfWater("Lake Michigan", 922, 1180, false, true);
-            BodyOfWater lakeSuperior = new BodyOfWater("Lake Superior", 1332, 2903, false, true);
-            BodyOfWater lakeErie = new BodyOfWater("Lake Erie", 210, 115, false, true);
-            BodyOfWater lakeHuron = new BodyOfWater("Lake Huron", 751, 850 , false, true);
-            BodyOfWater lakeOntario = new BodyOfWater("Lake Ontario", 801, 393.5, false, false);
-            System.out.println(lakeMichigan.getVolume());
-            System.out.println(lakeMichigan.toString());
-            System.out.println(lakeOntario.toString());
-            System.out.println(lakeHuron.toString());
-            System.out.println(lakeErie.toString());
-            System.out.println(lakeSuperior.toString());
 
-            lakeMichigan.receiveRainfall(100);
+        Random rnd = ThreadLocalRandom.current();
+        while (ebotsMembers.size() > 0){
+            //Select target Team
+            int targetTeamIndex = ebotsMembers.size() % teams.size();
+            ArrayList<String> targetTeam = teams.get(targetTeamIndex);
 
-            System.out.println(lakeMichigan.toString());
-        System.out.println(TestEnum.VALUE1.name());
-        ArrayList<TestEnum> flaggedValues = new ArrayList<>(Arrays.asList(TestEnum.VALUE2));
-        System.out.println("Check if flagged values contains Value2: " + flaggedValues.contains(TestEnum.VALUE2));
+            int randomIndex = rnd.nextInt(ebotsMembers.size());
+            String currentMember = ebotsMembers.remove(randomIndex);
+
+            targetTeam.add(currentMember);
+        }
+
+        for(ArrayList<String> t: teams){
+            System.out.println(t);
+        }
+
+
 //        FunctionChaining();
 //        typeStudyPolymorphism();
         }
