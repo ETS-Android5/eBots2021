@@ -21,7 +21,7 @@ public class MyClass {
     public static void main(String[] args) {
         ArrayList<String> ebotsMembers = new ArrayList<>();
         ebotsMembers.add("Thomas");
-        ebotsMembers.add("Christian");
+        ebotsMembers.add("Sean");
         ebotsMembers.add("Michael");
         ebotsMembers.add("Carter");
         ebotsMembers.add("Arjun");

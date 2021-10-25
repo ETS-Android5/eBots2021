@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonOpModeV1;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private LinearOpMode opMode;
+    private EbotsAutonOpMode opMode;
     private BarCodePosition observation;
     private double dividingLine = 163;
     private Telemetry telemetry;
@@ -53,7 +54,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateObserveBarCode(HardwareMap hardwareMap, LinearOpMode opMode){
+    public StateObserveBarCode(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
         this.telemetry.clearAll();
@@ -107,7 +108,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     public void performTransitionalActions() {
         BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
         //reason for crash  :)
-        ((AutonOpModeV1)opMode).setBarCodePosition(barCodePosition);
+        opMode.setBarCodePosition(barCodePosition);
         telemetry.addData("Barcode Position ", barCodePosition);
         telemetry.update();
     }

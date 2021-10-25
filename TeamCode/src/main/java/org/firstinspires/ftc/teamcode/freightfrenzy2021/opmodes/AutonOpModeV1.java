@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
 
 @Autonomous
-public class AutonOpModeV1 extends LinearOpMode {
+public class AutonOpModeV1 extends EbotsAutonOpMode {
 
 
     private BarCodePosition barCodePosition;
