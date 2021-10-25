@@ -20,7 +20,10 @@ public interface EbotsMotionController {
             outputMotionController = new SeanMode(hardwareMap);
         } else if(targetClass == MecanumDrive.class){
             outputMotionController = new MecanumDrive(hardwareMap);
+        } else if(targetClass == FieldOrientedDrive.class){
+            outputMotionController = new FieldOrientedDrive(hardwareMap);
         }
+
         return outputMotionController;
     }
 
