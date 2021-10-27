@@ -32,7 +32,6 @@ public class FieldOrientedDrive implements EbotsMotionController {
     private double requestedTranslateMagnitude;
     private double translateAngleRad;
 
-
     // The IMU sensor object
     private BNO055IMU imu;
 
@@ -42,7 +41,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
 
     private double currentHeadingDeg;          // current field-heading of the robot
 
-    private double zeroHeadingDeg = 90;      // the field heading of the robot when imu was initialized (90 facing Y+)
+    private double zeroHeadingDeg = 0;      // the field heading of the robot when imu was initialized (90 facing Y+)
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -136,7 +135,6 @@ public class FieldOrientedDrive implements EbotsMotionController {
         gravity  = imu.getGravity();
         currentHeadingDeg = applyAngleBounds(angles.firstAngle + zeroHeadingDeg);
     }
-
 
     @Override
     public void stop() {
