@@ -48,7 +48,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public FieldOrientedDrive(HardwareMap hardwareMap){
         maxAllowedPower = 1.0;
-        spinScaleFactor = 0.65;
+        spinScaleFactor = 1.0;
 
         // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list

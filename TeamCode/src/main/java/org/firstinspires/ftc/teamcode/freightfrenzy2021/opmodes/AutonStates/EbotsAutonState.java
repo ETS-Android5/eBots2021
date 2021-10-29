@@ -17,6 +17,8 @@ public interface EbotsAutonState {
             newState = new StateDeliverDuck(hardwareMap);
         } else if (targetState == StateObserveBarCode.class){
             newState = new StateObserveBarCode(hardwareMap, opMode);
+        } else if (targetState == StateConfigureRoutine.class){
+            newState = new StateConfigureRoutine(hardwareMap, opMode);
         }
         return newState;
     }

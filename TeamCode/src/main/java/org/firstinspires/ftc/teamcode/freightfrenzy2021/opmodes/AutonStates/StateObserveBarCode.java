@@ -49,6 +49,8 @@ public class StateObserveBarCode implements EbotsAutonState{
      * Detection engine.
      */
     private TFObjectDetector tfod;
+    private boolean isDuckObserved = false;
+    private double leftPosition;
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +59,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     public StateObserveBarCode(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
-        this.telemetry.clearAll();
+//        this.telemetry.clearAll();
         telemetry.addData("Current State", this.getClass().getSimpleName());
 
         initVuforia(opMode.hardwareMap);
@@ -81,15 +83,20 @@ public class StateObserveBarCode implements EbotsAutonState{
 
     @Override
     public void performStateActions() {
+        isDuckObserved = false;
+        leftPosition = 0;
         if(tfod == null) return;
         observation = BarCodePosition.RIGHT;
         // getUpdatedRecognitions() will return null if no new information is available since
         // the last time that call was made.
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        List<Recognition> updatedRecognitions = tfod.getRecognitions();
         if (updatedRecognitions != null) {
+            telemetry.addData("number of items", updatedRecognitions.size());
             // step through the list of recognitions and display boundary info.
             for (Recognition recognition : updatedRecognitions) {
                 if (recognition.getLabel() == "Duck"){
+                    isDuckObserved = true;
+                    leftPosition = recognition.getLeft();
                     if(recognition.getLeft() >= dividingLine){
                         observation = BarCodePosition.MIDDLE;
                     } else {
@@ -99,6 +106,9 @@ public class StateObserveBarCode implements EbotsAutonState{
             }
         }
         new BarCodeObservation(observation);
+        telemetry.addData("Duck Observed", isDuckObserved);
+        telemetry.addData("LeftPosition", leftPosition);
+
 
         telemetry.addData("Observation", observation.name());
         telemetry.update();

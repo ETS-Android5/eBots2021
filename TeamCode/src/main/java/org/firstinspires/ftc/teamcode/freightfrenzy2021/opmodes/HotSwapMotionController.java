@@ -37,7 +37,7 @@ public class HotSwapMotionController extends LinearOpMode {
         intake = new Intake(hardwareMap);
         carousel = new Carousel(hardwareMap);
 
-        motionController = EbotsMotionController.get(DriveAndSpin.class, hardwareMap);
+        motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
 
         while (! this.isStarted()){

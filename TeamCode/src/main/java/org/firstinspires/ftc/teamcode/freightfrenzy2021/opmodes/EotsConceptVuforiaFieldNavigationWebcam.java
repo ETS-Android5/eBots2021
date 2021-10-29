@@ -77,7 +77,7 @@ import java.util.List;
 
 @TeleOp(name="Vuforia Field Nav Webcam", group ="Concept")
 //@Disabled
-public class EotsConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
+public class   EotsConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
