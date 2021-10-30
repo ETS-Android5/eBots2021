@@ -66,7 +66,7 @@ public class HotSwapMotionController extends LinearOpMode {
             return;
         }
 
-        if(gamepad.left_bumper && gamepad.right_stick_button){
+        if(gamepad.options){
             if(motionController instanceof DriveAndSpin){
                 motionController = EbotsMotionController.get(TankDrive.class, hardwareMap);
             } else if (motionController instanceof TankDrive){

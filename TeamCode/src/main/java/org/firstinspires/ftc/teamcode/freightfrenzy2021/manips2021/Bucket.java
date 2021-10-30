@@ -10,8 +10,8 @@ public class Bucket {
     Instance Attributes
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     Servo bucket;
-    private final double COLLECT = 0.75;
-    private final double DUMP = 0.25;
+    private final double COLLECT = 1.0;
+    private final double DUMP = 0.05;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
