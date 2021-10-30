@@ -19,6 +19,12 @@ public interface EbotsAutonState {
             newState = new StateObserveBarCode(hardwareMap, opMode);
         } else if (targetState == StateConfigureRoutine.class){
             newState = new StateConfigureRoutine(hardwareMap, opMode);
+        } else if (targetState == StatePushOff.class){
+            newState = new StatePushOff(hardwareMap);
+        } else if (targetState == StateMoveToHubX.class){
+            newState = new StateMoveToHubX(opMode);
+        } else if (targetState == StateReverseToHub.class){
+            newState = new StateReverseToHub(opMode);
         }
         return newState;
     }
