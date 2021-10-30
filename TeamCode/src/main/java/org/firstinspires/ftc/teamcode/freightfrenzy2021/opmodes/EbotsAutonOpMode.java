@@ -15,6 +15,12 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     public void setAllianceColor(Alliance color){
         this.allianceColor = color;
     }
+    public Alliance getAllianceColor() {
+        return allianceColor;
+    }
+    public StartingSide getStartingSide() {
+        return startingSide;
+    }
     public void setStartingSide(StartingSide startingSide){
         this.startingSide = startingSide;
     }
