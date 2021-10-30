@@ -55,8 +55,8 @@ public class Carousel {
 
     public void handleUserInput(Gamepad gamepad){
         double increment = 0.05;
-        long timeOut = 1000;
-      if(gamepad.start && stopWatch.getElapsedTimeMillis() > timeOut){
+        long timeOut = 400;
+      if(gamepad.right_bumper && stopWatch.getElapsedTimeMillis() > timeOut){
           startMotor();
           stopWatch.reset();
       } else if(gamepad.dpad_up && stopWatch.getElapsedTimeMillis() > timeOut){
@@ -65,7 +65,7 @@ public class Carousel {
       } else if(gamepad.dpad_down && stopWatch.getElapsedTimeMillis() > timeOut){
           setSpeed(-increment);
           stopWatch.reset();
-      }else if(gamepad.back){
+      }else if(gamepad.left_bumper){
           stopMotor();
       }
 
