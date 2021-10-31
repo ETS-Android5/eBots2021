@@ -20,7 +20,7 @@ Instance Attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     Carousel carousel;
     StopWatch stopWatch;
-    long spinCarousel;
+    long stateTimeLimit;
     private DcMotorEx frontLeft;
     private DcMotorEx frontRight;
     private DcMotorEx backLeft;
@@ -32,7 +32,7 @@ Constructors
     public StateDeliverDuck(HardwareMap hardwareMap){
         carousel = new Carousel(hardwareMap);
         stopWatch = new StopWatch();
-        spinCarousel = 3750;
+        stateTimeLimit = 3750;
 
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -61,7 +61,7 @@ Instance Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-    return stopWatch.getElapsedTimeMillis() >= spinCarousel;
+    return stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 }
 
     @Override

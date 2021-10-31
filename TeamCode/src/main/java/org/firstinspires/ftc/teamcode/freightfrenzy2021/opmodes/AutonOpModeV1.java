@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.EbotsMotionController;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.BarCodeObservation;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDeliverDuck;
@@ -24,20 +22,16 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 @Autonomous
 public class AutonOpModeV1 extends EbotsAutonOpMode {
 
+    // These are already included in the abstract class EbotsAutonOpMode
+    //private BarCodePosition barCodePosition;
+    //private BNO055IMU imu;
 
-    private BarCodePosition barCodePosition;
-
-    public void setBarCodePosition(BarCodePosition barCodePosition) {
-        this.barCodePosition = barCodePosition;
-    }
-
-
+    String logTag = "EBOTS";
+    int statesCreated = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // The IMU sensor object
-        BNO055IMU imu;
 
         // State used for updating telemetry
         Orientation angles;
@@ -59,8 +53,11 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+        Log.d(logTag, "About to start State Machine...");
         boolean stateComplete = false;
         EbotsAutonState currentState = EbotsAutonState.get(StateConfigureRoutine.class, hardwareMap, this);
+        logNewlyCreatedState(currentState);
+
         while (!stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -70,9 +67,13 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             }
 
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
+
 
         stateComplete = false;
         currentState = EbotsAutonState.get(StateObserveBarCode.class, hardwareMap, this);
+        logNewlyCreatedState(currentState);
+
         while (!stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -80,14 +81,16 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             } else {
                 currentState.performStateActions();
             }
-
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
 
         waitForStart();
 
+        stateComplete = false;
         currentState = EbotsAutonState.get(StatePushOff.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -97,11 +100,14 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 telemetry.addData("Current State", currentState.getClass().getSimpleName());
                 telemetry.update();
             }
-
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
+
+        stateComplete = false;
         currentState = EbotsAutonState.get(StateRotateToZeroDegrees.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -112,9 +118,13 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 telemetry.update();
             }
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
+
+        stateComplete = false;
         currentState = EbotsAutonState.get(StateDriveToCarousel.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -124,11 +134,14 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 telemetry.addData("Current State", currentState.getClass().getSimpleName());
                 telemetry.update();
             }
-
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
+
+        stateComplete = false;
         currentState = EbotsAutonState.get(StateDeliverDuck.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -137,12 +150,15 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 currentState.performStateActions();
                 telemetry.addData("Current State", currentState.getClass().getSimpleName());
                 telemetry.update();
-
             }
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
+
+        stateComplete = false;
         currentState = EbotsAutonState.get(StateMoveToHubX.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -152,11 +168,14 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 telemetry.addData("Current State", currentState.getClass().getSimpleName());
                 telemetry.update();
             }
-
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
 
+
+        stateComplete = false;
         currentState = EbotsAutonState.get(StateReverseToHub.class, hardwareMap, this);
-        stateComplete = false;
+        logNewlyCreatedState(currentState);
+
         while (opModeIsActive() && !stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
@@ -166,7 +185,25 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 telemetry.addData("Current State", currentState.getClass().getSimpleName());
                 telemetry.update();
             }
-
         }
+        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
+
+    }
+
+    private void logNewlyCreatedState(EbotsAutonState newState){
+
+        statesCreated++;
+        String intfmt = "%d";
+        String strStateCount = String.format(intfmt, statesCreated);
+
+        try{
+            Log.d(logTag, "State #" + strStateCount + " created type " + newState.getClass().getSimpleName());
+        } catch (NullPointerException e){
+                Log.d(logTag, "Error creating state #" + strStateCount + ".  Returned Null");
+                Log.d(logTag, e.getStackTrace().toString());
+        } catch (Exception e) {
+                Log.d(logTag, "Exception encountered " + e.getStackTrace().toString());
+        }
+
     }
 }

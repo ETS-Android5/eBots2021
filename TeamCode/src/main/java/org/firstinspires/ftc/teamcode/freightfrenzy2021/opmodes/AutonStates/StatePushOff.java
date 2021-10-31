@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Hardware;
 
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -11,9 +10,7 @@ import java.util.ArrayList;
 
 public class StatePushOff implements EbotsAutonState{
 
-    StopWatch stopWatch = new StopWatch();
-
-    private String name = this.getClass().getSimpleName();
+    StopWatch stopWatch;
 
     private DcMotorEx frontLeft;
     private DcMotorEx frontRight;
@@ -26,6 +23,7 @@ public class StatePushOff implements EbotsAutonState{
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -34,7 +32,7 @@ public class StatePushOff implements EbotsAutonState{
         motors.add(backRight);
         motors.add(backLeft);
 
-        stopWatch.reset();
+        stopWatch = new StopWatch();
     }
 
     @Override
@@ -42,7 +40,7 @@ public class StatePushOff implements EbotsAutonState{
         boolean shouldExit = false;
         long driveTime = 300;
 
-        if(driveTime >= stopWatch.getElapsedTimeMillis()){
+        if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;
         }
         return shouldExit;

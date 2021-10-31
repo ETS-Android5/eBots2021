@@ -28,9 +28,12 @@ Instance Attributes
     DistanceSensor distanceSensor;
     double currentDistance;
     double targetDistance;
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Constructors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    private long stateTimeLimit=2000;
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Constructors
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateDriveToCarousel(HardwareMap hardwareMap) {
         stopWatch = new StopWatch();
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
@@ -64,7 +67,10 @@ Instance Methods
     @Override
     public boolean shouldExit() {
         currentDistance = distanceSensor.getDistance(DistanceUnit.INCH);
-        return currentDistance <= 15.0;
+        boolean targetPositionAchieved = currentDistance <= targetDistance;
+        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
+
+        return targetPositionAchieved | stateTimedOut;
 
     }
 
@@ -73,11 +79,15 @@ Instance Methods
 
         double currentError = currentDistance - targetDistance;
         double power = currentError / 20;
-        power = Math.min(power, 0.6);
+        double maxAllowedSpeed = 0.6;
+
+        // Now make sure that the power doesn't exceed our maxAllowedSpeed, and preserve sign
+        double powerSign = Math.signum(power);
+        double powerMagnitude = Math.min(Math.abs(power), maxAllowedSpeed);
+        power = powerSign * powerMagnitude;
 
         for(DcMotorEx m : motors) {
             m.setPower(-power);
-
         }
     }
 

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
 
@@ -38,10 +39,15 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
     ArrayList<DcMotorEx> rightMotors = new ArrayList<>();
 
+    long stateTimeLimit = 2000;
+    StopWatch stopWatch = new StopWatch();
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateRotateToZeroDegrees(HardwareMap hardwareMap, BNO055IMU imu, EbotsAutonOpMode opMode){
+    public StateRotateToZeroDegrees(EbotsAutonOpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
+
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -53,8 +59,8 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         this.opMode = opMode;
-        this.imu = imu;
-        if (opMode.getAllianceColor() == Alliance.RED){
+        this.imu = opMode.getImu();
+        if (opMode.getAlliance() == Alliance.RED){
             initialHeadingDeg = 90;
         } else {
             initialHeadingDeg = -90;
@@ -76,13 +82,17 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     @Override
     public boolean shouldExit() {
         updateHeading();
-        boolean shouldExit = false;
-        double currentError = currentHeadingDeg - targetHeadingDeg;
+        boolean targetHeadingAchieved = false;
         double acceptableError = 3;
+
+        double currentError = currentHeadingDeg - targetHeadingDeg;
         if (Math.abs(currentError)  <= acceptableError){
-            shouldExit = true;
+            targetHeadingAchieved = true;
         }
-        return shouldExit;
+
+        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
+
+        return targetHeadingAchieved | stateTimedOut;
     }
 
     private void updateHeading(){

@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
@@ -73,7 +71,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
         if (opMode.gamepad1.left_bumper && opMode.gamepad1.right_bumper){
            shouldExit = true;
         }
-        return shouldExit;
+        return opMode.isStarted() | shouldExit;
     }
 // if blue set heading to -heading
     @Override
@@ -101,7 +99,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
 
     @Override
     public void performTransitionalActions() {
-        opMode.setAllianceColor(this.alliance);
+        opMode.setAlliance(this.alliance);
         opMode.setStartingSide(this.startingSide);
 
 

@@ -43,7 +43,6 @@ public class StateMoveToHubX implements EbotsAutonState{
 
         stopWatch.reset();
 
-
         if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
             driveTime = 1067;
             speed = 1.0;
@@ -59,7 +58,7 @@ public class StateMoveToHubX implements EbotsAutonState{
 
         boolean shouldExit = false;
 
-        if(driveTime >= stopWatch.getElapsedTimeMillis()){
+        if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;
         }
         return shouldExit;
@@ -72,7 +71,6 @@ public class StateMoveToHubX implements EbotsAutonState{
         for(DcMotorEx motor: motors) {
             motor.setPower(speed);
         }
-
     }
 
     @Override
@@ -82,7 +80,4 @@ public class StateMoveToHubX implements EbotsAutonState{
             }
 
     }
-
 }
-//created by Sean
-//100% totaly legit

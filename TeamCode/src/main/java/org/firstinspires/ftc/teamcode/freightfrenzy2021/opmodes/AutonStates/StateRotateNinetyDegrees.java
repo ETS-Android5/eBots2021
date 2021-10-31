@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
 
@@ -37,11 +38,17 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     BNO055IMU imu;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
     ArrayList<DcMotorEx> rightMotors = new ArrayList<>();
+    long stateTimeLimit = 2000;
+    StopWatch stopWatch = new StopWatch();
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateRotateNinetyDegrees(HardwareMap hardwareMap, BNO055IMU imu, EbotsAutonOpMode opMode){
+    public StateRotateNinetyDegrees(EbotsAutonOpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
+        this.opMode = opMode;
+        this.imu = opMode.getImu();
+
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -52,9 +59,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.opMode = opMode;
-        this.imu = imu;
-        if (opMode.getAllianceColor() == Alliance.RED){
+        if (opMode.getAlliance() == Alliance.RED){
             targetHeadingDeg = -90;
         } else {
             targetHeadingDeg = 90;
@@ -76,16 +81,18 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     @Override
     public boolean shouldExit() {
         updateHeading();
-        boolean shouldExit = false;
-        double currentError = currentHeadingDeg - targetHeadingDeg;
-        if(currentError <= -180){
-            currentError = currentError + 360;
-        }
+
         double acceptableError = 3;
+        boolean targetHeadingAchieved = false;
+
+        double currentError = applyAngleBound(currentHeadingDeg - targetHeadingDeg);
         if (Math.abs(currentError)  <= acceptableError){
-            shouldExit = true;
+            targetHeadingAchieved = true;
         }
-        return shouldExit;
+
+        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
+
+        return targetHeadingAchieved | stateTimedOut;
     }
 
     //double check this should exit
@@ -98,14 +105,15 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     public void performStateActions() {
         double currentError = currentHeadingDeg - targetHeadingDeg;
         double power = currentError * 0.03;
-        if (opMode.getAllianceColor() == Alliance.RED){
+
+        if (opMode.getAlliance() == Alliance.RED){
             for(DcMotorEx m : leftMotors) {
                 m.setPower(power);
              }
             for(DcMotorEx m : rightMotors) {
                 m.setPower(-power);
-        }
-    } else {
+            }
+        } else {
             for(DcMotorEx m : leftMotors) {
                 m.setPower(-power);
             }
@@ -123,5 +131,15 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         for (DcMotorEx m : rightMotors) {
             m.setPower(0.0);
         }
+    }
+
+    private double applyAngleBound (double inputAngle){
+        while (inputAngle > 180){
+            inputAngle -= 360;
+        }
+        while (inputAngle <= -180){
+            inputAngle += 360;
+        }
+        return inputAngle;
     }
 }
