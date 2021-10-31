@@ -92,7 +92,7 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-        return targetHeadingAchieved | stateTimedOut;
+        return targetHeadingAchieved | stateTimedOut | !opMode.opModeIsActive();
     }
 
     private void updateHeading(){

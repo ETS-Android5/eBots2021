@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class StateReverseToHub implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
+    EbotsAutonOpMode autonOpMode;
 
 
     private DcMotorEx frontLeft;
@@ -29,6 +30,7 @@ public class StateReverseToHub implements EbotsAutonState{
 
 
     public StateReverseToHub(EbotsAutonOpMode autonOpMode) {
+        this.autonOpMode = autonOpMode;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -55,7 +57,7 @@ public class StateReverseToHub implements EbotsAutonState{
         currentDistance = distanceSensor.getDistance(DistanceUnit.INCH);
         boolean targetPositionAchieved = currentDistance <= targetDistance;
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
-        return targetPositionAchieved | stateTimedOut;
+        return targetPositionAchieved | stateTimedOut | !autonOpMode.opModeIsActive();
     }
 
     @Override

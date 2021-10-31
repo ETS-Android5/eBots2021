@@ -29,7 +29,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     private DcMotorEx frontRight;
     private DcMotorEx backLeft;
     private DcMotorEx backRight;
-    private EbotsAutonOpMode opMode;
+    private EbotsAutonOpMode autonOpMode;
     // State used for updating telemetry
     private Orientation angles;
     private double initialHeadingDeg;
@@ -44,10 +44,10 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateRotateNinetyDegrees(EbotsAutonOpMode opMode){
-        HardwareMap hardwareMap = opMode.hardwareMap;
-        this.opMode = opMode;
-        this.imu = opMode.getImu();
+    public StateRotateNinetyDegrees(EbotsAutonOpMode autonOpMode){
+        HardwareMap hardwareMap = autonOpMode.hardwareMap;
+        this.autonOpMode = autonOpMode;
+        this.imu = autonOpMode.getImu();
 
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -59,7 +59,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (opMode.getAlliance() == Alliance.RED){
+        if (autonOpMode.getAlliance() == Alliance.RED){
             targetHeadingDeg = -90;
         } else {
             targetHeadingDeg = 90;
@@ -92,7 +92,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-        return targetHeadingAchieved | stateTimedOut;
+        return targetHeadingAchieved | stateTimedOut | !autonOpMode.opModeIsActive();
     }
 
     //double check this should exit
@@ -106,7 +106,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         double currentError = currentHeadingDeg - targetHeadingDeg;
         double power = currentError * 0.03;
 
-        if (opMode.getAlliance() == Alliance.RED){
+        if (autonOpMode.getAlliance() == Alliance.RED){
             for(DcMotorEx m : leftMotors) {
                 m.setPower(power);
              }

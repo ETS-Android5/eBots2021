@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class StateMoveToHubX implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
+    EbotsAutonOpMode autonOpMode;
 
     private String name = this.getClass().getSimpleName();
 
@@ -28,6 +29,7 @@ public class StateMoveToHubX implements EbotsAutonState{
 
 
     public StateMoveToHubX(EbotsAutonOpMode autonOpMode){
+        this.autonOpMode = autonOpMode;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -61,7 +63,7 @@ public class StateMoveToHubX implements EbotsAutonState{
         if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;
         }
-        return shouldExit;
+        return shouldExit | !autonOpMode.opModeIsActive();
 
     }
 

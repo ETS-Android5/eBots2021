@@ -103,6 +103,12 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performTransitionalActions() {
         opMode.setAlliance(this.alliance);
         opMode.setStartingSide(this.startingSide);
+
+        double initialHeadingDeg = (alliance == Alliance.BLUE) ? -90 : 90;
+        opMode.setInitialHeadingDeg(initialHeadingDeg);
+        opMode.setCurrentHeadingDeg(initialHeadingDeg);
+        opMode.initImu();
+
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();
         opMode.appendStatesToRoutine(routine);
