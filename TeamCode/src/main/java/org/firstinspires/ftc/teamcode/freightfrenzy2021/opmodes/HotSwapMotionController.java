@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveAndSpin;
@@ -26,6 +27,7 @@ public class HotSwapMotionController extends LinearOpMode {
     private Telemetry.Item zeroHeadingItem = null;
     private Intake intake;
     private Carousel carousel;
+    private Bucket bucket;
     private DistanceSensor distanceSensor;
     private boolean endGameRumbleIssued;
 
@@ -36,6 +38,7 @@ public class HotSwapMotionController extends LinearOpMode {
         endGameRumbleIssued = false;
         intake = new Intake(hardwareMap);
         carousel = new Carousel(hardwareMap);
+        bucket = new Bucket(hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
@@ -58,6 +61,7 @@ public class HotSwapMotionController extends LinearOpMode {
             motionController.handleUserInput(gamepad1);
             intake.handleUserInput(gamepad2);
             carousel.handleUserInput(gamepad2);
+            bucket.handleUserInput(gamepad2);
 
             updateTelemetry();
         }

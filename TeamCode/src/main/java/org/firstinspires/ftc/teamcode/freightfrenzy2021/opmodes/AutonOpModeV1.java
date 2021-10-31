@@ -15,7 +15,11 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Ebot
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDeliverDuck;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDriveToCarousel;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubX;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOff;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegrees;
 
 @Autonomous
 public class AutonOpModeV1 extends EbotsAutonOpMode {
@@ -42,11 +46,11 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -56,8 +60,8 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         imu.initialize(parameters);
 
         boolean stateComplete = false;
-        EbotsAutonState currentState = EbotsAutonState.get(StateConfigureRoutine.class,hardwareMap, this);
-        while (!stateComplete){
+        EbotsAutonState currentState = EbotsAutonState.get(StateConfigureRoutine.class, hardwareMap, this);
+        while (!stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
                 stateComplete = true;
@@ -66,9 +70,10 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             }
 
         }
+
         stateComplete = false;
-        currentState = EbotsAutonState.get(StateObserveBarCode.class,hardwareMap, this);
-        while (!stateComplete){
+        currentState = EbotsAutonState.get(StateObserveBarCode.class, hardwareMap, this);
+        while (!stateComplete) {
             if (currentState.shouldExit()) {
                 currentState.performTransitionalActions();
                 stateComplete = true;
@@ -80,32 +85,88 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
 
 
         waitForStart();
-//        currentState = EbotsAutonState.get(StateDriveToCarousel.class,hardwareMap, this);
-//        stateComplete = false;
-//        while (opModeIsActive() && !stateComplete) {
-//            if (currentState.shouldExit()) {
-//                currentState.performTransitionalActions();
-//                stateComplete = true;
-//            } else {
-//                currentState.performStateActions();
-//                telemetry.addData("Current State", currentState.getClass().getSimpleName());
-//                telemetry.update();
-//            }
-//
-//        }
-//        currentState = EbotsAutonState.get(StateDeliverDuck.class, hardwareMap,this);
-//        stateComplete = false;
-//        while (opModeIsActive() && !stateComplete) {
-//            if (currentState.shouldExit()) {
-//                currentState.performTransitionalActions();
-//                stateComplete = true;
-//            } else {
-//                currentState.performStateActions();
-//                telemetry.addData("Current State", currentState.getClass().getSimpleName());
-//                telemetry.update();
-//
-//            }
-//
-//        }
+
+        currentState = EbotsAutonState.get(StatePushOff.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+            }
+
+        }
+
+        currentState = EbotsAutonState.get(StateRotateToZeroDegrees.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+            }
+        }
+
+        currentState = EbotsAutonState.get(StateDriveToCarousel.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+            }
+
+        }
+
+        currentState = EbotsAutonState.get(StateDeliverDuck.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+
+            }
+        }
+
+        currentState = EbotsAutonState.get(StateMoveToHubX.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+            }
+
+        }
+
+        currentState = EbotsAutonState.get(StateReverseToHub.class, hardwareMap, this);
+        stateComplete = false;
+        while (opModeIsActive() && !stateComplete) {
+            if (currentState.shouldExit()) {
+                currentState.performTransitionalActions();
+                stateComplete = true;
+            } else {
+                currentState.performStateActions();
+                telemetry.addData("Current State", currentState.getClass().getSimpleName());
+                telemetry.update();
+            }
+
+        }
     }
 }

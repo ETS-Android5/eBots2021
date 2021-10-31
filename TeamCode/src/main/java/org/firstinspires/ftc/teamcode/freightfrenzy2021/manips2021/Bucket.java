@@ -11,7 +11,7 @@ public class Bucket {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     Servo bucket;
     private final double COLLECT = 1.0;
-    private final double DUMP = 0.05;
+    private final double DUMP = -1;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

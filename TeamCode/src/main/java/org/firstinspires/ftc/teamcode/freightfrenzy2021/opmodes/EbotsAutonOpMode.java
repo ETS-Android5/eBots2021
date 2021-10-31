@@ -28,7 +28,4 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.barCodePosition = barCodePosition;
     }
 
-    public StartingSide getStartingSide() {
-        return startingSide;
-    }
 }
