@@ -78,7 +78,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        return opMode.isStarted();
+        return opMode.isStarted() | opMode.isStopRequested();
     }
 
     @Override

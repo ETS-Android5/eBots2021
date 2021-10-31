@@ -7,6 +7,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineCarousel;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineWarehouse;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class StateConfigureRoutine implements EbotsAutonState{
@@ -32,19 +35,18 @@ public class StateConfigureRoutine implements EbotsAutonState{
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateConfigureRoutine(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
-        allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");
-        startingSideTouchSensor = hardwareMap.get(DigitalChannel.class, "startingSideTouchSensor");
-        alliance = Alliance.BLUE;
-        startingSide = StartingSide.CAROUSEL;
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
-        stopWatch = new StopWatch();
-        touchSensorTimer  = 500;
+        alliance = opMode.getAlliance();
+        startingSide = opMode.getStartingSide();
+
+        allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");
+        startingSideTouchSensor = hardwareMap.get(DigitalChannel.class, "startingSideTouchSensor");
         startingSideTouchSensor.setMode(DigitalChannel.Mode.INPUT);
         allianceTouchSensor.setMode(DigitalChannel.Mode.INPUT);
 
-
-
+        stopWatch = new StopWatch();
+        touchSensorTimer  = 500;
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +73,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
         if (opMode.gamepad1.left_bumper && opMode.gamepad1.right_bumper){
            shouldExit = true;
         }
-        return opMode.isStarted() | shouldExit;
+        return opMode.isStarted() | shouldExit | opMode.isStopRequested();
     }
 // if blue set heading to -heading
     @Override
@@ -101,6 +103,9 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performTransitionalActions() {
         opMode.setAlliance(this.alliance);
         opMode.setStartingSide(this.startingSide);
+        EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
+                new RoutineCarousel() : new RoutineWarehouse();
+        opMode.appendStatesToRoutine(routine);
 
 
     }
