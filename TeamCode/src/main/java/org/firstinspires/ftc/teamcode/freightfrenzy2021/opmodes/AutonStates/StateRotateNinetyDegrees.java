@@ -32,8 +32,6 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     // State used for updating telemetry
     private Orientation angles;
-    private double initialHeadingDeg;
-    private double currentHeadingDeg;
     private double targetHeadingDeg;
     BNO055IMU imu;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
@@ -59,13 +57,6 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (autonOpMode.getAlliance() == Alliance.RED){
-            targetHeadingDeg = -90;
-        } else {
-            targetHeadingDeg = 90;
-        }
-        updateHeading();
-        initialHeadingDeg = 0;
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -80,12 +71,12 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        updateHeading();
+        autonOpMode.updateHeading();
 
         double acceptableError = 3;
         boolean targetHeadingAchieved = false;
 
-        double currentError = applyAngleBound(currentHeadingDeg - targetHeadingDeg);
+        double currentError = applyAngleBound(autonOpMode.getCurrentHeadingDeg() - targetHeadingDeg);
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
         }
@@ -95,15 +86,9 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         return targetHeadingAchieved | stateTimedOut | !autonOpMode.opModeIsActive();
     }
 
-    //double check this should exit
-    private void updateHeading(){
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        currentHeadingDeg = angles.firstAngle + initialHeadingDeg;
-    }
-
     @Override
     public void performStateActions() {
-        double currentError = currentHeadingDeg - targetHeadingDeg;
+        double currentError = autonOpMode.getCurrentHeadingDeg() - targetHeadingDeg;
         double power = currentError * 0.03;
 
         if (autonOpMode.getAlliance() == Alliance.RED){

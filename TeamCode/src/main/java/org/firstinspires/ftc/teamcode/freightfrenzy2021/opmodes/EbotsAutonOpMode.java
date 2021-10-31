@@ -56,6 +56,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return imu;
     }
 
+    public double getInitialHeadingDeg() {
+        return initialHeadingDeg;
+    }
+
     public double getCurrentHeadingDeg() {
         if (imu == null) return 0;
 
@@ -106,7 +110,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         updateHeading();
     }
 
-    private void updateHeading(){
+    public void updateHeading(){
         double imuReading = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         currentHeadingDeg = imuReading + initialHeadingDeg;
         stopWatchHeading.reset();

@@ -32,8 +32,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     private EbotsAutonOpMode opMode;
     // State used for updating telemetry
     private Orientation angles;
-    private double initialHeadingDeg;
-    private double currentHeadingDeg;
     private double targetHeadingDeg;
     BNO055IMU imu;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
@@ -47,6 +45,8 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateRotateToZeroDegrees(EbotsAutonOpMode opMode){
         HardwareMap hardwareMap = opMode.hardwareMap;
+        this.opMode = opMode;
+        this.imu = opMode.getImu();
 
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -58,14 +58,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.opMode = opMode;
-        this.imu = opMode.getImu();
-        if (opMode.getAlliance() == Alliance.RED){
-            initialHeadingDeg = 90;
-        } else {
-            initialHeadingDeg = -90;
-        }
-        updateHeading();
         targetHeadingDeg = 0;
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,28 +73,23 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        updateHeading();
+        opMode.updateHeading();
         boolean targetHeadingAchieved = false;
         double acceptableError = 3;
 
-        double currentError = currentHeadingDeg - targetHeadingDeg;
+        double currentError = opMode.getCurrentHeadingDeg() - targetHeadingDeg;
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
         }
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-        return targetHeadingAchieved | stateTimedOut | !opMode.opModeIsActive();
-    }
-
-    private void updateHeading(){
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        currentHeadingDeg = angles.firstAngle + initialHeadingDeg;
+        return targetHeadingAchieved  | stateTimedOut | !opMode.opModeIsActive();
     }
 
     @Override
     public void performStateActions() {
-        double currentError = currentHeadingDeg - targetHeadingDeg;
+        double currentError = opMode.getCurrentHeadingDeg() - targetHeadingDeg;
         double power = currentError * 0.03;
         for(DcMotorEx m : leftMotors) {
             m.setPower(power);
