@@ -34,7 +34,6 @@ public class StateCollectFreight implements EbotsAutonState{
     BNO055IMU imu;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
     ArrayList<DcMotorEx> rightMotors = new ArrayList<>();
-    ArrayList<DcMotorEx> motors = new ArrayList<>();
 
     long runningIntake = 3500;
     StopWatch stopWatch = new StopWatch();
