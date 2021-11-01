@@ -56,14 +56,16 @@ public class StateObserveBarCode implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateObserveBarCode(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
-        this.opMode = opMode;
-        this.telemetry = opMode.telemetry;
+    public StateObserveBarCode(HardwareMap hardwareMap, EbotsAutonOpMode autonOpMode){
+        this.opMode = autonOpMode;
+        this.telemetry = autonOpMode.telemetry;
 //        this.telemetry.clearAll();
         telemetry.addData("Current State", this.getClass().getSimpleName());
 
-        initVuforia(opMode.hardwareMap);
-        initTfod(opMode.hardwareMap);
+        if (!autonOpMode.isStarted() && !autonOpMode.isStopRequested()) {
+            initVuforia(autonOpMode.hardwareMap);
+            initTfod(autonOpMode.hardwareMap);
+        }
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

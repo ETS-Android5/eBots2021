@@ -12,28 +12,29 @@ public interface EbotsAutonState {
 
     public void performTransitionalActions();
 
-    public static EbotsAutonState get(Class targetState, HardwareMap hardwareMap, EbotsAutonOpMode opMode){
+    public static EbotsAutonState get(Class targetState, HardwareMap hardwareMap, EbotsAutonOpMode autonOpMode){
         EbotsAutonState newState = null;
         if (targetState == StateDriveToCarousel.class){
             newState = new StateDriveToCarousel(hardwareMap);
         } else if (targetState == StateDeliverDuck.class){
             newState = new StateDeliverDuck(hardwareMap);
         } else if (targetState == StateObserveBarCode.class){
-            newState = new StateObserveBarCode(hardwareMap, opMode);
+            newState = new StateObserveBarCode(hardwareMap, autonOpMode);
         } else if (targetState == StateConfigureRoutine.class){
-            newState = new StateConfigureRoutine(hardwareMap, opMode);
-        } else if (targetState == StateNavigateToWareHouse.class){
-            newState = new StateNavigateToWareHouse(hardwareMap);
+            newState = new StateConfigureRoutine(hardwareMap, autonOpMode);
+        } else if (targetState == StateNavigateToWarehouse.class){
+            newState = new StateNavigateToWarehouse(autonOpMode);
         } else if (targetState == StateMoveToHubX.class){
-            newState = new StateMoveToHubX(opMode);
+            newState = new StateMoveToHubX(autonOpMode);
         } else if (targetState == StateReverseToHub.class){
-            newState = new StateReverseToHub(opMode);
-        } else if (targetState == StateCollectFreight.class){
-            newState = new StateCollectFreight(opMode);
-        } else if (targetState == StateCollectFreight.class){
-            newState = new StateCollectFreight(opMode);
+            newState = new StateReverseToHub(autonOpMode);
+        } else if (targetState == StatePushOff.class){
+            newState = new StatePushOff(autonOpMode);
+        } else if (targetState == StateRotateNinetyDegrees.class){
+            newState = new StateRotateNinetyDegrees(autonOpMode);
+        } else if (targetState == StateRotateToZeroDegrees.class){
+            newState = new StateRotateToZeroDegrees(autonOpMode);
         }
-
         //StatePushOff.class.equals(targetState)
         return newState;
     }

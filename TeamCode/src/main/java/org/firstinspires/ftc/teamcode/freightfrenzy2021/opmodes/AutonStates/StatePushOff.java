@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class StatePushOff implements EbotsAutonState{
     private DcMotorEx backRight;
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
 
-    public StatePushOff(HardwareMap hardwareMap){
+    public StatePushOff(EbotsAutonOpMode autonOpMode){
+        HardwareMap hardwareMap = autonOpMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
