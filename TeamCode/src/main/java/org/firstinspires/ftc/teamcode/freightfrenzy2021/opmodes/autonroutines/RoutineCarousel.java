@@ -22,7 +22,7 @@ public class RoutineCarousel extends EbotsAutonRoutine{
         routine.add(StateMoveToHubX.class);
         routine.add(StateRotateNinetyDegrees.class);
         routine.add(StateReverseToHub.class);
-        //routine.add(StateMoveToWarehouseY.class);
+        routine.add(StateMoveToWarehouseY.class);
         routine.add(StateRotateToZeroDegrees.class);
         routine.add(StateNavigateToWarehouse.class);
     }

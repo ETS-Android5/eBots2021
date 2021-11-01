@@ -42,7 +42,7 @@ public class StateNavigateToWarehouse implements EbotsAutonState{
         boolean shouldExit = false;
         long driveTime = 1750;
 
-        if(stopWatch.getElapsedTimeMillis() <= driveTime){
+        if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;
         }
         return shouldExit;

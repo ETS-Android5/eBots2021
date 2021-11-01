@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -27,6 +29,7 @@ public class StateReverseToHub implements EbotsAutonState{
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
     private double speed;
     private long stateTimeLimit=2000;
+    private Bucket bucket;
 
 
     public StateReverseToHub(EbotsAutonOpMode autonOpMode) {
@@ -50,6 +53,8 @@ public class StateReverseToHub implements EbotsAutonState{
         stateTimeLimit = 2000;
 
         stopWatch.reset();
+
+        bucket = new Bucket(hardwareMap);
     }
 
     @Override
@@ -81,5 +86,12 @@ public class StateReverseToHub implements EbotsAutonState{
         for (DcMotorEx m : motors) {
             m.setPower(0.0);
         }
+
+        StopWatch stopWatchDumpFreight = new StopWatch();
+        long dumpTime = 2000;
+        while(stopWatchDumpFreight.getElapsedTimeMillis() < dumpTime){
+            bucket.setState(BucketState.DUMP);
+        }
+        bucket.setState(BucketState.COLLECT);
     }
 }

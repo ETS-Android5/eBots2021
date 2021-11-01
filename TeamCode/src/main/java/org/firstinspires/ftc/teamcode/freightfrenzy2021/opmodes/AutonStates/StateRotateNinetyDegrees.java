@@ -57,6 +57,11 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (autonOpMode.getAlliance() == Alliance.BLUE){
+            targetHeadingDeg = 90;
+        } else {
+            targetHeadingDeg = -90;
+        }
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

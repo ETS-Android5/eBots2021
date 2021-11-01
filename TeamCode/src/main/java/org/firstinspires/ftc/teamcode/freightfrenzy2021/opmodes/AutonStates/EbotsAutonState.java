@@ -34,8 +34,9 @@ public interface EbotsAutonState {
             newState = new StateRotateNinetyDegrees(autonOpMode);
         } else if (targetState == StateRotateToZeroDegrees.class){
             newState = new StateRotateToZeroDegrees(autonOpMode);
+        } else if (targetState == StateMoveToWarehouseY.class){
+            newState = new StateMoveToWarehouseY(autonOpMode);
         }
-        //StatePushOff.class.equals(targetState)
         return newState;
     }
 

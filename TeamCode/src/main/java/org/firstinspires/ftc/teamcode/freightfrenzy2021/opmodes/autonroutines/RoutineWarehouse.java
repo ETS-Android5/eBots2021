@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines;
 
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDeliverDuck;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDriveToCarousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubX;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToWarehouseY;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
@@ -20,6 +18,7 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
         routine.add(StateMoveToHubX.class);
         routine.add(StateRotateNinetyDegrees.class);
         routine.add(StateReverseToHub.class);
+        routine.add(StateRotateToZeroDegrees.class);
         routine.add(StateMoveToWarehouseY.class);
         routine.add(StateRotateToZeroDegrees.class);
         routine.add(StateNavigateToWarehouse.class);
