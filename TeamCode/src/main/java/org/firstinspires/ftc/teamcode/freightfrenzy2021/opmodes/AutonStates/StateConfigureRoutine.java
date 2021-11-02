@@ -96,7 +96,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
         }
         telemetry.addData("alliance color: ", alliance);
         telemetry.addData("starting side: ", startingSide);
-        telemetry.update();
     }
 
     @Override
@@ -105,14 +104,12 @@ public class StateConfigureRoutine implements EbotsAutonState{
         opMode.setStartingSide(this.startingSide);
 
         double initialHeadingDeg = (alliance == Alliance.BLUE) ? -90 : 90;
-        opMode.setInitialHeadingDeg(initialHeadingDeg);
-        opMode.setCurrentHeadingDeg(initialHeadingDeg);
         opMode.initEbotsImu();
+        opMode.setInitialHeadingDeg(initialHeadingDeg);
 
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();
         opMode.appendStatesToRoutineItinerary(routine);
-
 
     }
 }

@@ -49,26 +49,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return startingSide;
     }
 
-    public double getInitialHeadingDeg() {
-        return initialHeadingDeg;
-    }
-
-    /**
-     * getCurrentHeadingDeg() is a time-buffered value cache for the hardware reading
-     * if a hardware read is necessary, call updateHeading first
-     * @return
-     * @param forceHardwareRead
-     */
-    public double getCurrentHeadingDeg(boolean forceHardwareRead) {
-        if (ebotsImu == null) return 0;
-
-        long headingRefreshRateMillis = 500;
-        boolean timeBufferExpired = stopWatchHeading.getElapsedTimeMillis() > headingRefreshRateMillis;
-
-        if (timeBufferExpired | forceHardwareRead){
-            updateHeading();
-        }
-        return currentHeadingDeg;
+    public double getCurrentHeadingDeg(boolean forceHardwareRead){
+        return ebotsImu.getCurrentFieldHeadingDeg(forceHardwareRead);
     }
 
     public void setStartingSide(StartingSide startingSide){
@@ -79,16 +61,14 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.barCodePosition = barCodePosition;
     }
 
+    public void setInitialHeadingDeg(double initialHeadingDeg) {
+        // initial heading is managed by the imu
+        if (ebotsImu == null) ebotsImu = EbotsImu.getInstance(hardwareMap, true);
+        this.ebotsImu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
+    }
+
     public void appendStatesToRoutineItinerary(EbotsAutonRoutine routine){
         this.itinerary.addAll(routine.getRoutineItinerary());
-    }
-
-    public void setInitialHeadingDeg(double initialHeadingDeg) {
-        this.initialHeadingDeg = initialHeadingDeg;
-    }
-
-    public void setCurrentHeadingDeg(double currentHeadingDeg) {
-        this.currentHeadingDeg = currentHeadingDeg;
     }
 
 

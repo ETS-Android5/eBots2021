@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,11 +34,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
     private double translateAngleRad;
 
     // The IMU sensor object
-    private BNO055IMU imu;
-
-    // State used for updating telemetry
-    private Orientation angles;
-    private Acceleration gravity;
+    private EbotsImu ebotsImu;
 
     private double currentHeadingDeg;          // current field-heading of the robot
 
@@ -49,6 +46,8 @@ public class FieldOrientedDrive implements EbotsMotionController {
     public FieldOrientedDrive(HardwareMap hardwareMap){
         maxAllowedPower = 1.0;
         spinScaleFactor = 1.0;
+
+        ebotsImu = EbotsImu.getInstance(hardwareMap, false);
 
         // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list
@@ -72,23 +71,6 @@ public class FieldOrientedDrive implements EbotsMotionController {
             MecanumWheel mecanumWheel = new MecanumWheel(wheelAngleDeg, pos, motor);
             mecanumWheels.add(mecanumWheel);
         }
-
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,34 +89,10 @@ public class FieldOrientedDrive implements EbotsMotionController {
         return zeroHeadingDeg;
     }
 
-    public void setZeroHeadingDeg() {
-        this.zeroHeadingDeg = applyAngleBounds(zeroHeadingDeg + 90);
-    }
 
-
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Class Methods
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private static double applyAngleBounds(double inputAngle){
-        double outputAngle = inputAngle;
-
-        while(outputAngle > 180) {
-            outputAngle -= 360;
-        }
-        while (outputAngle <=-180){
-            outputAngle += 360;
-        }
-        return outputAngle;
-    }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    public void performImuHardwareRead(){
-        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        gravity  = imu.getGravity();
-        currentHeadingDeg = applyAngleBounds(angles.firstAngle + zeroHeadingDeg);
-    }
 
     @Override
     public void stop() {
@@ -176,7 +134,6 @@ public class FieldOrientedDrive implements EbotsMotionController {
         double forwardInput = -gamepad.left_stick_y;  //reversing sign because up on gamepad is negative
         double lateralInput = -gamepad.left_stick_x;  //reversing sign because right on gamepad is positive
         double spinInput = -gamepad.right_stick_x * spinScaleFactor;    //Positive means to spin to the left (counterclockwise (CCW) when looking down on robot)
-        performImuHardwareRead();
 
         //  Step 1:  Calculate the magnitude for drive signal (hypotenuse of xDirDrive and yDirDrive signal)
         //  Step 2:  Calculate the translate angle (based on X & Y signals, robot heading is not a consideration)
@@ -191,7 +148,8 @@ public class FieldOrientedDrive implements EbotsMotionController {
         //  Step 2:  Calculate the translate angle (based on X & Y signals, robot heading is not a consideration)
         translateAngleRad = Math.atan2(lateralInput, forwardInput);
 
-        //  Step 3:  Calculate the robot angle, which adjusts for robot orientation
+        //  Step 3:  Calculate the robot driveAngle, which adjusts for robot orientation
+        currentHeadingDeg = ebotsImu.getCurrentFieldHeadingDeg(true);
         double driveAngleRad = translateAngleRad - Math.toRadians(currentHeadingDeg);
         // overflow of angle is OK here, the calculation isn't affected
         //driveAngleRad=Math.toRadians(applyAngleBounds(Math.toDegrees(driveAngleRad)));

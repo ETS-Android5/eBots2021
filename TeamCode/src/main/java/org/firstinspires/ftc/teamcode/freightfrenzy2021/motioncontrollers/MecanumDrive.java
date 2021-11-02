@@ -32,9 +32,9 @@ public class MecanumDrive implements EbotsMotionController {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public MecanumDrive(HardwareMap hardwareMap){
         maxAllowedPower = 1.0;
-        spinScaleFactor = 0.65;
-        // Create a list of mecanum wheels and store in mecanumWheels
+        spinScaleFactor = 1.0;
 
+        // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list
         ArrayList<WheelPosition> positionsWithNegativeAngle = new ArrayList<>(
 //                Arrays.asList(WheelPosition.FRONT_RIGHT, WheelPosition.BACK_LEFT)  // O-CONFIG

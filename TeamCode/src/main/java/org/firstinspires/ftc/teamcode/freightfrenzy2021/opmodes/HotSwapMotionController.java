@@ -99,21 +99,13 @@ public class HotSwapMotionController extends LinearOpMode {
 
 
         if(gamepad.left_bumper && gamepad.right_stick_button){
-//            if(motionController instanceof DriveAndSpin){
-//                motionController = EbotsMotionController.get(TankDrive.class, hardwareMap);
-//            } else if (motionController instanceof TankDrive){
-//                motionController = EbotsMotionController.get(SeanMode.class, hardwareMap);
-//            } else if (motionController instanceof SeanMode){
-//                motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
             if (motionController instanceof MecanumDrive){
                 motionController = EbotsMotionController.get(FieldOrientedDrive.class, hardwareMap);
             } else if (motionController instanceof FieldOrientedDrive){
                 motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
             }
-            gamepad.rumble(0.9, 0, 200);  // 200 mSec burst on left motor.
-        } else if (gamepad.back && motionController instanceof FieldOrientedDrive){
-            ((FieldOrientedDrive) motionController).setZeroHeadingDeg();
 
+            gamepad.rumble(0.9, 0, 200);  // 200 mSec burst on left motor.
         }
 
         lockoutStopWatch.reset();

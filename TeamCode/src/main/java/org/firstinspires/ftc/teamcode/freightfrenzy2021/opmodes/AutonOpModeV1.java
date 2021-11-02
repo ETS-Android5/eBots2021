@@ -22,6 +22,8 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateObserveBarCode.class);
 
+        // prevent auto-clear of telemetry
+
         Log.d(logTag, "About to start State Machine...");
         // Execute the pre-match state machine
         while (!isStarted()) {
@@ -83,7 +85,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", getCurrentHeadingDeg(false));
+        telemetry.addData("Current heading", ebotsImu.getCurrentFieldHeadingDeg(false));
         telemetry.update();
     }
 }

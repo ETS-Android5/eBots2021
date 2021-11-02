@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class EbotsImu {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,6 +20,9 @@ public class EbotsImu {
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private BNO055IMU imuSensor;
+    private double fieldHeadingWhenInitializedDeg = 0;
+    private double currentFieldHeading = 0;
+    private StopWatch stopWatchReading = new StopWatch();
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -43,9 +48,13 @@ public class EbotsImu {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
+    public void setFieldHeadingWhenInitializedDeg(double fieldHeadingWhenInitializedDeg) {
+        this.fieldHeadingWhenInitializedDeg = fieldHeadingWhenInitializedDeg;
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Class Methods
+        Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public static EbotsImu getInstance(HardwareMap hardwareMap, boolean forceNew){
         boolean alreadyExists = (ebotsImu != null);
@@ -59,7 +68,37 @@ public class EbotsImu {
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public double performHardwareRead(){
+        stopWatchReading.reset();
         return imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
+
+    private void updateFieldHeading(){
+        if (ebotsImu == null) {
+            currentFieldHeading = 0;
+        } else {
+            double imuReading = ebotsImu.performHardwareRead();
+            currentFieldHeading = UtilFuncs.applyAngleBounds(imuReading + fieldHeadingWhenInitializedDeg);
+        }
+    }
+    /**
+     * getCurrentHeadingDeg() is a time-buffered value cache for the hardware reading
+     * if a hardware read is necessary, call updateHeading first
+     * @return
+     * @param forceHardwareRead
+     */
+
+    public double getCurrentFieldHeadingDeg(boolean forceHardwareRead) {
+        if (ebotsImu == null) return 0;
+
+        long headingRefreshRateMillis = 500;
+        boolean timeBufferExpired = stopWatchReading.getElapsedTimeMillis() > headingRefreshRateMillis;
+
+        if (timeBufferExpired | forceHardwareRead){
+            updateFieldHeading();
+        }
+        return currentFieldHeading;
+    }
+
+
 
 }
