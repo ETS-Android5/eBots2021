@@ -11,10 +11,6 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 @Autonomous
 public class AutonOpModeV1 extends EbotsAutonOpMode {
 
-    // These are already included in the abstract class EbotsAutonOpMode
-    //private BarCodePosition barCodePosition;
-    //private BNO055IMU imu;
-
     String logTag = "EBOTS";
     int statesCreated = 0;
     private EbotsAutonState currentState;
@@ -33,7 +29,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             executeStateMachine();
         }
 
-        if (imu == null) initImu();
+        if (ebotsImu == null) initEbotsImu();
 
         waitForStart();
 
@@ -87,7 +83,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", getCurrentHeadingDeg());
+        telemetry.addData("Current heading", getCurrentHeadingDeg(false));
         telemetry.update();
     }
 }

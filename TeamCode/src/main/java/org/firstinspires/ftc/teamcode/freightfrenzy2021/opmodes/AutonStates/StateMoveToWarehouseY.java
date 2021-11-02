@@ -33,7 +33,7 @@ public class StateMoveToWarehouseY implements EbotsAutonState{
     private DistanceSensor distanceSensor;
     private double targetDistance;
     private RobotSide travelDirection;
-    private long stateTimeLimit=2000;
+    private long stateTimeLimit=1250;
 
 
 
@@ -64,9 +64,9 @@ public class StateMoveToWarehouseY implements EbotsAutonState{
         }
 
         if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
-            targetDistance = 20;
+            targetDistance = 6;
         } else{
-            targetDistance = 10;
+            targetDistance = 3;
         }
     }
 
@@ -87,15 +87,15 @@ public class StateMoveToWarehouseY implements EbotsAutonState{
     @Override
     public void performStateActions() {
         if (travelDirection == RobotSide.RIGHT) {
+            frontRight.setPower(-speed);
+            backLeft.setPower(-speed);
+            frontLeft.setPower(+speed);
+            backRight.setPower(+speed);
+        } else{
             frontRight.setPower(speed);
             backLeft.setPower(speed);
             frontLeft.setPower(-speed);
             backRight.setPower(-speed);
-        } else{
-            frontRight.setPower(-speed);
-            backLeft.setPower(-speed);
-            frontLeft.setPower(speed);
-            backRight.setPower(speed);
         }
     }
 

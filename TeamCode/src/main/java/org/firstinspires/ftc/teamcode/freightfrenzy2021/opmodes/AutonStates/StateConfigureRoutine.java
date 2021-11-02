@@ -107,11 +107,11 @@ public class StateConfigureRoutine implements EbotsAutonState{
         double initialHeadingDeg = (alliance == Alliance.BLUE) ? -90 : 90;
         opMode.setInitialHeadingDeg(initialHeadingDeg);
         opMode.setCurrentHeadingDeg(initialHeadingDeg);
-        opMode.initImu();
+        opMode.initEbotsImu();
 
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();
-        opMode.appendStatesToRoutine(routine);
+        opMode.appendStatesToRoutineItinerary(routine);
 
 
     }

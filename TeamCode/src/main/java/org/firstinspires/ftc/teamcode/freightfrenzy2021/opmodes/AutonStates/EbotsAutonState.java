@@ -17,7 +17,7 @@ public interface EbotsAutonState {
         if (targetState == StateDriveToCarousel.class){
             newState = new StateDriveToCarousel(hardwareMap);
         } else if (targetState == StateDeliverDuck.class){
-            newState = new StateDeliverDuck(hardwareMap);
+            newState = new StateDeliverDuck(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){
             newState = new StateObserveBarCode(hardwareMap, autonOpMode);
         } else if (targetState == StateConfigureRoutine.class){

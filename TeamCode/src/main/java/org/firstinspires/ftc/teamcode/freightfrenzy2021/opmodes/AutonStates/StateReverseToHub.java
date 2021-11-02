@@ -50,7 +50,7 @@ public class StateReverseToHub implements EbotsAutonState{
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
         targetDistance = 2;
 
-        stateTimeLimit = 2000;
+        stateTimeLimit = 500;
 
         stopWatch.reset();
 

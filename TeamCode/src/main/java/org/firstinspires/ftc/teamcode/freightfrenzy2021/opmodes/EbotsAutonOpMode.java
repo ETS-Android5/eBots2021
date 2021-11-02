@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -27,11 +24,11 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     protected StartingSide startingSide = StartingSide.CAROUSEL;
 
-    protected BNO055IMU imu;
+    protected EbotsImu ebotsImu;
 
     protected ArrayList<Class> itinerary = new ArrayList<>();
 
-    protected double initialHeadingDeg = -90;
+    protected double initialHeadingDeg = -90;  // gets revised in transition of StateConfigureRoutine
     protected double currentHeadingDeg;
     protected StopWatch stopWatchHeading = new StopWatch();
 
@@ -52,19 +49,23 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return startingSide;
     }
 
-    public BNO055IMU getImu() {
-        return imu;
-    }
-
     public double getInitialHeadingDeg() {
         return initialHeadingDeg;
     }
 
-    public double getCurrentHeadingDeg() {
-        if (imu == null) return 0;
+    /**
+     * getCurrentHeadingDeg() is a time-buffered value cache for the hardware reading
+     * if a hardware read is necessary, call updateHeading first
+     * @return
+     * @param forceHardwareRead
+     */
+    public double getCurrentHeadingDeg(boolean forceHardwareRead) {
+        if (ebotsImu == null) return 0;
 
         long headingRefreshRateMillis = 500;
-        if (stopWatchHeading.getElapsedTimeMillis() > headingRefreshRateMillis){
+        boolean timeBufferExpired = stopWatchHeading.getElapsedTimeMillis() > headingRefreshRateMillis;
+
+        if (timeBufferExpired | forceHardwareRead){
             updateHeading();
         }
         return currentHeadingDeg;
@@ -78,8 +79,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.barCodePosition = barCodePosition;
     }
 
-    public void appendStatesToRoutine(EbotsAutonRoutine routine){
-        this.itinerary.addAll(routine.getRoutine());
+    public void appendStatesToRoutineItinerary(EbotsAutonRoutine routine){
+        this.itinerary.addAll(routine.getRoutineItinerary());
     }
 
     public void setInitialHeadingDeg(double initialHeadingDeg) {
@@ -90,30 +91,19 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.currentHeadingDeg = currentHeadingDeg;
     }
 
-    public void initImu(){
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        updateHeading();
+    public void initEbotsImu(){
+        ebotsImu = EbotsImu.getInstance(hardwareMap, true);
     }
 
     public void updateHeading(){
-        double imuReading = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        currentHeadingDeg = imuReading + initialHeadingDeg;
-        stopWatchHeading.reset();
+        if (ebotsImu == null) {
+            currentHeadingDeg = 0;
+        } else {
+            double imuReading = ebotsImu.performHardwareRead();
+            currentHeadingDeg = UtilFuncs.applyAngleBounds(imuReading + initialHeadingDeg);
+            stopWatchHeading.reset();
+        }
     }
 
 

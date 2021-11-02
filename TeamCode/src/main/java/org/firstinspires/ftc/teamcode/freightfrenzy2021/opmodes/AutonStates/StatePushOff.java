@@ -40,7 +40,7 @@ public class StatePushOff implements EbotsAutonState{
     @Override
     public boolean shouldExit() {
         boolean shouldExit = false;
-        long driveTime = 300;
+        long driveTime = 100;
 
         if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;

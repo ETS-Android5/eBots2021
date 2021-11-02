@@ -15,16 +15,19 @@ public class RoutineCarousel extends EbotsAutonRoutine{
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public RoutineCarousel(){
-        routine.add(StatePushOff.class);
-        routine.add(StateRotateToZeroDegrees.class);
-        routine.add(StateDriveToCarousel.class);
-        routine.add(StateDeliverDuck.class);
-        routine.add(StateMoveToHubX.class);
-        routine.add(StateRotateNinetyDegrees.class);
-        routine.add(StateReverseToHub.class);
-        routine.add(StateMoveToWarehouseY.class);
-        routine.add(StateRotateToZeroDegrees.class);
-        routine.add(StateNavigateToWarehouse.class);
+        itinerary.add(StatePushOff.class);
+        itinerary.add(StateRotateToZeroDegrees.class);
+        itinerary.add(StateDriveToCarousel.class);
+        itinerary.add(StateDeliverDuck.class);
+        itinerary.add(StatePushOff.class);
+        itinerary.add(StateRotateToZeroDegrees.class);
+        itinerary.add(StateMoveToHubX.class);
+        itinerary.add(StateRotateNinetyDegrees.class);
+        itinerary.add(StateReverseToHub.class);
+        itinerary.add(StatePushOff.class);
+        itinerary.add(StateRotateToZeroDegrees.class);
+        itinerary.add(StateMoveToWarehouseY.class);
+        itinerary.add(StateNavigateToWarehouse.class);
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

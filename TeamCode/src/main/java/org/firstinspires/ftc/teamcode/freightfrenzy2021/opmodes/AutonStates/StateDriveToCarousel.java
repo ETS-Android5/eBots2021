@@ -50,7 +50,7 @@ Instance Attributes
         motors.add(backLeft);
 
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
-        targetDistance = 15.0;
+        targetDistance = 10;
     }
 
 

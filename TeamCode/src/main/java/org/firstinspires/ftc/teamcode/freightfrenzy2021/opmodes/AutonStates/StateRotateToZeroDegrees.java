@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -33,7 +29,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     // State used for updating telemetry
     private Orientation angles;
     private double targetHeadingDeg;
-    BNO055IMU imu;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
     ArrayList<DcMotorEx> rightMotors = new ArrayList<>();
 
@@ -46,7 +41,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     public StateRotateToZeroDegrees(EbotsAutonOpMode opMode){
         HardwareMap hardwareMap = opMode.hardwareMap;
         this.opMode = opMode;
-        this.imu = opMode.getImu();
 
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -73,11 +67,11 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        opMode.updateHeading();
         boolean targetHeadingAchieved = false;
         double acceptableError = 3;
 
-        double currentError = opMode.getCurrentHeadingDeg() - targetHeadingDeg;
+        double currentError = opMode.getCurrentHeadingDeg(true) - targetHeadingDeg;
+        currentError = UtilFuncs.applyAngleBounds(currentError);
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
         }
@@ -89,8 +83,11 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
 
     @Override
     public void performStateActions() {
-        double currentError = opMode.getCurrentHeadingDeg() - targetHeadingDeg;
-        double power = currentError * 0.03;
+        // note that this uses getCurrentHeadingDeg function, which is a time-buffered value cache
+        // the hardware read occurs during shouldExit
+        double currentError = opMode.getCurrentHeadingDeg(false) - targetHeadingDeg;
+        double power = currentError * 0.01;
+
         for(DcMotorEx m : leftMotors) {
             m.setPower(power);
         }
