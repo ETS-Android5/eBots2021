@@ -25,9 +25,6 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     protected StartingSide startingSide = StartingSide.CAROUSEL;
 
-    // EbotsImu is managed as a Singleton so it can be passed to Teleop for FieldOrientedDrive
-    protected EbotsImu ebotsImu;
-
     protected ArrayList<Class> itinerary = new ArrayList<>();
 
     protected double initialHeadingDeg = -90;  // gets revised in transition of StateConfigureRoutine
@@ -56,7 +53,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     }
 
     public double getCurrentHeadingDeg(boolean forceHardwareRead){
-        return ebotsImu.getCurrentFieldHeadingDeg(forceHardwareRead);
+        return EbotsImu.getCurrentFieldHeadingDeg(forceHardwareRead);
     }
 
     public void setStartingSide(StartingSide startingSide){
@@ -69,8 +66,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public void setInitialHeadingDeg(double initialHeadingDeg) {
         // initial heading is managed by the imu
-        if (ebotsImu == null) ebotsImu = EbotsImu.getInstance(hardwareMap, true);
-        this.ebotsImu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
+        EbotsImu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
     }
 
     public void appendStatesToRoutineItinerary(EbotsAutonRoutine routine){
@@ -79,18 +75,9 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
 
     public void initEbotsImu(){
-        ebotsImu = EbotsImu.getInstance(hardwareMap, true);
+        EbotsImu.getInstance(hardwareMap, true);
     }
 
-    public void updateHeading(){
-        if (ebotsImu == null) {
-            currentHeadingDeg = 0;
-        } else {
-            double imuReading = ebotsImu.performHardwareRead();
-            currentHeadingDeg = UtilFuncs.applyAngleBounds(imuReading + initialHeadingDeg);
-            stopWatchHeading.reset();
-        }
-    }
 
 
 

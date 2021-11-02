@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
@@ -30,8 +31,6 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             transitionToNextState();
             executeStateMachine();
         }
-
-        if (ebotsImu == null) initEbotsImu();
 
         waitForStart();
 
@@ -85,9 +84,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        if(ebotsImu != null) {
-            telemetry.addData("Current heading", ebotsImu.getCurrentFieldHeadingDeg(false));
-        }
+        telemetry.addData("Current heading", EbotsImu.getCurrentFieldHeadingDeg(false));
         telemetry.update();
     }
 }

@@ -43,18 +43,22 @@ public class EbotsImu {
         // and named "imu".
         imuSensor = hardwareMap.get(BNO055IMU.class, "imu");
         imuSensor.initialize(parameters);
+
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    public double getFieldHeadingWhenInitializedDeg() {
-        return fieldHeadingWhenInitializedDeg;
+    public static double getFieldHeadingWhenInitializedDeg() {
+        double value = (ebotsImu != null) ? ebotsImu.fieldHeadingWhenInitializedDeg : 0;
+        return value;
     }
 
-    public void setFieldHeadingWhenInitializedDeg(double fieldHeadingWhenInitializedDeg) {
-        this.fieldHeadingWhenInitializedDeg = fieldHeadingWhenInitializedDeg;
+    public static void setFieldHeadingWhenInitializedDeg(double fieldHeadingWhenInitializedDeg) {
+        if (ebotsImu != null) {
+            ebotsImu.fieldHeadingWhenInitializedDeg = fieldHeadingWhenInitializedDeg;
+        }
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,22 +70,24 @@ public class EbotsImu {
             ebotsImu = new EbotsImu(hardwareMap);
         }
         return ebotsImu;
-
     }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public double performHardwareRead(){
-        stopWatchReading.reset();
-        return imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+    public static double performHardwareRead(){
+        double readingDeg = 0;
+        if (ebotsImu != null) {
+            ebotsImu.stopWatchReading.reset();
+            readingDeg = ebotsImu.imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        }
+        return readingDeg;
     }
 
-    private void updateFieldHeading(){
-        if (ebotsImu == null) {
-            currentFieldHeading = 0;
-        } else {
+    private static void updateFieldHeading(){
+        if (ebotsImu != null) {
             double imuReading = ebotsImu.performHardwareRead();
-            currentFieldHeading = UtilFuncs.applyAngleBounds(imuReading + fieldHeadingWhenInitializedDeg);
+            ebotsImu.currentFieldHeading = UtilFuncs.applyAngleBounds(imuReading + ebotsImu.fieldHeadingWhenInitializedDeg);
         }
     }
     /**
@@ -91,16 +97,16 @@ public class EbotsImu {
      * @param forceHardwareRead
      */
 
-    public double getCurrentFieldHeadingDeg(boolean forceHardwareRead) {
+    public static double getCurrentFieldHeadingDeg(boolean forceHardwareRead) {
         if (ebotsImu == null) return 0;
 
         long headingRefreshRateMillis = 500;
-        boolean timeBufferExpired = stopWatchReading.getElapsedTimeMillis() > headingRefreshRateMillis;
+        boolean timeBufferExpired = ebotsImu.stopWatchReading.getElapsedTimeMillis() > headingRefreshRateMillis;
 
         if (timeBufferExpired | forceHardwareRead){
             updateFieldHeading();
         }
-        return currentFieldHeading;
+        return ebotsImu.currentFieldHeading;
     }
 
 

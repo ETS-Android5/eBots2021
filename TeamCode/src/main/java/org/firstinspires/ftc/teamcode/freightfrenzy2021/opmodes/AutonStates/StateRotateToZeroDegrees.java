@@ -34,6 +34,7 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
 
     long stateTimeLimit = 2000;
     StopWatch stopWatch = new StopWatch();
+    private double currentError;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -70,8 +71,9 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
         boolean targetHeadingAchieved = false;
         double acceptableError = 3;
 
-        double currentError = opMode.getCurrentHeadingDeg(true) - targetHeadingDeg;
+        currentError = opMode.getCurrentHeadingDeg(true) - targetHeadingDeg;
         currentError = UtilFuncs.applyAngleBounds(currentError);
+
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
         }
@@ -85,7 +87,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     public void performStateActions() {
         // note that this uses getCurrentHeadingDeg function, which is a time-buffered value cache
         // the hardware read occurs during shouldExit
-        double currentError = opMode.getCurrentHeadingDeg(false) - targetHeadingDeg;
         double power = currentError * 0.01;
 
         for(DcMotorEx m : leftMotors) {
@@ -94,7 +95,6 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
         for(DcMotorEx m : rightMotors) {
             m.setPower(-power);
         }
-
     }
 
     @Override

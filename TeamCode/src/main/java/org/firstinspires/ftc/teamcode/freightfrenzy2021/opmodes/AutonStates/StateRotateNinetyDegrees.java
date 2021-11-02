@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -27,12 +28,13 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     private DcMotorEx backRight;
     private EbotsAutonOpMode autonOpMode;
     // State used for updating telemetry
-    private Orientation angles;
     private double targetHeadingDeg;
+    private double currentHeading;
     ArrayList<DcMotorEx> leftMotors = new ArrayList<>();
     ArrayList<DcMotorEx> rightMotors = new ArrayList<>();
     long stateTimeLimit = 2000;
     StopWatch stopWatch = new StopWatch();
+    private double currentError;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -70,12 +72,11 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        autonOpMode.updateHeading();
-
         double acceptableError = 3;
         boolean targetHeadingAchieved = false;
 
-        double currentError = autonOpMode.getCurrentHeadingDeg(false) - targetHeadingDeg;
+        currentHeading = EbotsImu.getCurrentFieldHeadingDeg(true);
+        currentError = currentHeading - targetHeadingDeg;
 
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
@@ -88,7 +89,6 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
 
     @Override
     public void performStateActions() {
-        double currentError = autonOpMode.getCurrentHeadingDeg(false) - targetHeadingDeg;
         double power = currentError * 0.01;
 
         if (autonOpMode.getAlliance() == Alliance.RED){
