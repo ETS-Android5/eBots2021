@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineCarousel;
@@ -23,7 +24,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     StopWatch stopWatch;
     long touchSensorTimer;
-    Alliance alliance;
     StartingSide startingSide;
     private Telemetry telemetry;
     private DigitalChannel allianceTouchSensor;
@@ -37,7 +37,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public StateConfigureRoutine(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
-        alliance = opMode.getAlliance();
         startingSide = opMode.getStartingSide();
 
         allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");
@@ -53,13 +52,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    public Alliance getAlliance() {
-        return alliance;
-    }
-
-    public void setAlliance(Alliance alliance) {
-        this.alliance = alliance;
-    }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -80,10 +72,10 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performStateActions() {
         if (!allianceTouchSensor.getState() && stopWatch.getElapsedTimeMillis() >= touchSensorTimer) {
             stopWatch.reset();
-            if (this.alliance == Alliance.BLUE) {
-                alliance = Alliance.RED;
+            if (AllianceSingleton.getAlliance() == Alliance.BLUE) {
+                AllianceSingleton.setAlliance(Alliance.RED);
             } else {
-                alliance = Alliance.BLUE;
+                AllianceSingleton.setAlliance(Alliance.BLUE);
             }
         }
         if (!startingSideTouchSensor.getState() && stopWatch.getElapsedTimeMillis() >= touchSensorTimer) {
@@ -94,22 +86,20 @@ public class StateConfigureRoutine implements EbotsAutonState{
                 startingSide = StartingSide.CAROUSEL;
             }
         }
-        telemetry.addData("alliance color: ", alliance);
+        telemetry.addData("alliance color: ", AllianceSingleton.getAlliance());
         telemetry.addData("starting side: ", startingSide);
     }
 
     @Override
     public void performTransitionalActions() {
-        opMode.setAlliance(this.alliance);
         opMode.setStartingSide(this.startingSide);
 
-        double initialHeadingDeg = (alliance == Alliance.BLUE) ? -90 : 90;
+        double initialHeadingDeg = (AllianceSingleton.getAlliance() == Alliance.BLUE) ? -90 : 90;
         opMode.initEbotsImu();
         opMode.setInitialHeadingDeg(initialHeadingDeg);
 
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();
         opMode.appendStatesToRoutineItinerary(routine);
-
     }
 }
