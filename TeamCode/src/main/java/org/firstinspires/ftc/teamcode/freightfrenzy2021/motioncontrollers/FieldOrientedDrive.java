@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,27 +23,31 @@ public class FieldOrientedDrive implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    Telemetry telemetry;
     private ArrayList<MecanumWheel> mecanumWheels = new ArrayList<>();
     private double maxAllowedPower;     // between 0-1
     private double spinScaleFactor;     // between 0-1 to reduce spin power
     private double requestedTranslateMagnitude;
-    private double translateAngleRad;
+    private double translateFieldAngleRad;
 
     // The IMU sensor object
     private EbotsImu ebotsImu;
 
     private double currentHeadingDeg;          // current field-heading of the robot
-
-    private double zeroHeadingDeg = 0;      // the field heading of the robot when imu was initialized (90 facing Y+)
-
+    private double driverFieldHeadingRad;   // Direction of the drive based on alliance side of field
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public FieldOrientedDrive(HardwareMap hardwareMap){
+    public FieldOrientedDrive(LinearOpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
+        telemetry = opMode.telemetry;
+
         maxAllowedPower = 1.0;
         spinScaleFactor = 1.0;
 
         ebotsImu = EbotsImu.getInstance(hardwareMap, false);
+
+        driverFieldHeadingRad = Math.toRadians(AllianceSingleton.getDriverFieldHeadingDeg());
 
         // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list
@@ -86,7 +86,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
     }
 
     public double getZeroHeadingDeg() {
-        return zeroHeadingDeg;
+        return ebotsImu.getFieldHeadingWhenInitializedDeg();
     }
 
 
@@ -145,12 +145,12 @@ public class FieldOrientedDrive implements EbotsMotionController {
         //  Step 1:  Calculate the magnitude for drive signal (hypotenuse of xDirDrive and yDirDrive signal)
         requestedTranslateMagnitude = Math.hypot(forwardInput, lateralInput);
 
-        //  Step 2:  Calculate the translate angle (based on X & Y signals, robot heading is not a consideration)
-        translateAngleRad = Math.atan2(lateralInput, forwardInput);
+        //  Step 2:  Calculate the translate angle (based on X & Y signals, considering driver orientation)
+        translateFieldAngleRad = Math.atan2(lateralInput, forwardInput) + driverFieldHeadingRad;
 
         //  Step 3:  Calculate the robot driveAngle, which adjusts for robot orientation
         currentHeadingDeg = ebotsImu.getCurrentFieldHeadingDeg(true);
-        double driveAngleRad = translateAngleRad - Math.toRadians(currentHeadingDeg);
+        double driveAngleRad = translateFieldAngleRad - Math.toRadians(currentHeadingDeg);
         // overflow of angle is OK here, the calculation isn't affected
         //driveAngleRad=Math.toRadians(applyAngleBounds(Math.toDegrees(driveAngleRad)));
 

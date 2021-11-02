@@ -113,7 +113,6 @@ public class StateObserveBarCode implements EbotsAutonState{
 
 
         telemetry.addData("Observation", observation.name());
-        telemetry.update();
     }
 
     @Override

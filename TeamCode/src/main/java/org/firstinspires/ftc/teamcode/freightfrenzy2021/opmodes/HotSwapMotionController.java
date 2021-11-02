@@ -40,14 +40,12 @@ public class HotSwapMotionController extends LinearOpMode {
         carousel = new Carousel(hardwareMap);
         bucket = new Bucket(hardwareMap);
 
-        motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
+        motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
 
         while (! this.isStarted()){
             handleUserInput(gamepad1);
-            telemetry.addData("Motion Controller", motionController.getName());
-            telemetry.addData("Current Distance", distanceSensor.getDistance(DistanceUnit.INCH));
-            telemetry.update();
+            updateTelemetry();
         }
 
         waitForStart();
@@ -83,9 +81,8 @@ public class HotSwapMotionController extends LinearOpMode {
         telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getSpeed()));
         telemetry.addData("Intake Speed", String.format(twoDecimals, intake.getSpeed()));
         if (motionController instanceof FieldOrientedDrive){
-            zeroHeadingItem = telemetry.addData("Initial Heading Offset", ((FieldOrientedDrive) motionController).getZeroHeadingDeg());
-        } else {
-            if (zeroHeadingItem != null) telemetry.removeItem(zeroHeadingItem);
+            telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));
+            telemetry.addData("Initial Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getZeroHeadingDeg()));
         }
         telemetry.update();
     }
@@ -100,15 +97,15 @@ public class HotSwapMotionController extends LinearOpMode {
 
         if(gamepad.left_bumper && gamepad.right_stick_button){
             if (motionController instanceof MecanumDrive){
-                motionController = EbotsMotionController.get(FieldOrientedDrive.class, hardwareMap);
+                motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
             } else if (motionController instanceof FieldOrientedDrive){
-                motionController = EbotsMotionController.get(MecanumDrive.class, hardwareMap);
+                motionController = EbotsMotionController.get(MecanumDrive.class, this);
             }
 
-            gamepad.rumble(0.9, 0, 200);  // 200 mSec burst on left motor.
+            gamepad.rumble(1.0, 1.0, 400);  // 200 mSec burst on left motor.
+            lockoutStopWatch.reset();
         }
 
-        lockoutStopWatch.reset();
     }
 }
 

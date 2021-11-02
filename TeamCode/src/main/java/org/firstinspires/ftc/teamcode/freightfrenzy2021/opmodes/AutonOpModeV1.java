@@ -85,7 +85,9 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", ebotsImu.getCurrentFieldHeadingDeg(false));
+        if(ebotsImu != null) {
+            telemetry.addData("Current heading", ebotsImu.getCurrentFieldHeadingDeg(false));
+        }
         telemetry.update();
     }
 }

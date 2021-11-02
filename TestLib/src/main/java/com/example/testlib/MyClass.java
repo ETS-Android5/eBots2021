@@ -19,44 +19,50 @@ public class MyClass {
 
 
     public static void main(String[] args) {
-        ArrayList<String> ebotsMembers = new ArrayList<>();
-        ebotsMembers.add("Thomas");
-        ebotsMembers.add("Sean");
-        ebotsMembers.add("Michael");
-        ebotsMembers.add("Carter");
-        ebotsMembers.add("Arjun");
-        ebotsMembers.add("Ishita");
-        ebotsMembers.add("Maria");
-        ebotsMembers.add("Ethan");
-        ebotsMembers.add("Christian");
-        ebotsMembers.add("Kenny");
-        ebotsMembers.add("Lyla");
-        ebotsMembers.add("Ryleigh M.");
-        ebotsMembers.add("Elanur");
-        ebotsMembers.add("Riley W.");
-        ebotsMembers.add("Zachary");
+        String twoDec = "%.2f";
+        System.out.println("aTan 1/0: " + String.format(twoDec, Math.toDegrees(Math.atan2(1,0))));
+        System.out.println("aTan 0/1: " + String.format(twoDec, Math.toDegrees(Math.atan2(0,1))));
+        System.out.println("aTan -1/0: " + String.format(twoDec, Math.toDegrees(Math.atan2(-1,0))));
+        System.out.println("aTan 0/-1: " + String.format(twoDec, Math.toDegrees(Math.atan2(0,-1))));
 
-
-        ArrayList<ArrayList<String>> teams = new ArrayList<>();
-        for(int i=0; i < 4; i++){
-            teams.add(new ArrayList<>());
-        }
-
-        Random rnd = ThreadLocalRandom.current();
-        while (ebotsMembers.size() > 0){
-            //Select target Team
-            int targetTeamIndex = ebotsMembers.size() % teams.size();
-            ArrayList<String> targetTeam = teams.get(targetTeamIndex);
-
-            int randomIndex = rnd.nextInt(ebotsMembers.size());
-            String currentMember = ebotsMembers.remove(randomIndex);
-
-            targetTeam.add(currentMember);
-        }
-
-        for(ArrayList<String> t: teams){
-            System.out.println(t);
-        }
+//        ArrayList<String> ebotsMembers = new ArrayList<>();
+//        ebotsMembers.add("Thomas");
+//        ebotsMembers.add("Sean");
+//        ebotsMembers.add("Michael");
+//        ebotsMembers.add("Carter");
+//        ebotsMembers.add("Arjun");
+//        ebotsMembers.add("Ishita");
+//        ebotsMembers.add("Maria");
+//        ebotsMembers.add("Ethan");
+//        ebotsMembers.add("Christian");
+//        ebotsMembers.add("Kenny");
+//        ebotsMembers.add("Lyla");
+//        ebotsMembers.add("Ryleigh M.");
+//        ebotsMembers.add("Elanur");
+//        ebotsMembers.add("Riley W.");
+//        ebotsMembers.add("Zachary");
+//
+//
+//        ArrayList<ArrayList<String>> teams = new ArrayList<>();
+//        for(int i=0; i < 4; i++){
+//            teams.add(new ArrayList<>());
+//        }
+//
+//        Random rnd = ThreadLocalRandom.current();
+//        while (ebotsMembers.size() > 0){
+//            //Select target Team
+//            int targetTeamIndex = ebotsMembers.size() % teams.size();
+//            ArrayList<String> targetTeam = teams.get(targetTeamIndex);
+//
+//            int randomIndex = rnd.nextInt(ebotsMembers.size());
+//            String currentMember = ebotsMembers.remove(randomIndex);
+//
+//            targetTeam.add(currentMember);
+//        }
+//
+//        for(ArrayList<String> t: teams){
+//            System.out.println(t);
+//        }
 
 
 //        FunctionChaining();

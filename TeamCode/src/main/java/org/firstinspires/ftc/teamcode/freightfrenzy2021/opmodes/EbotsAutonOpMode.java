@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
@@ -20,10 +21,11 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     protected BarCodePosition barCodePosition;
 
-    protected Alliance alliance = Alliance.BLUE;
+    // AllianceSingleton is managed so it can be passed to Teleop for FieldOrientedDrive
 
     protected StartingSide startingSide = StartingSide.CAROUSEL;
 
+    // EbotsImu is managed as a Singleton so it can be passed to Teleop for FieldOrientedDrive
     protected EbotsImu ebotsImu;
 
     protected ArrayList<Class> itinerary = new ArrayList<>();
@@ -37,12 +39,16 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    /**
+     * Sets the AllianceSingleton to desired Alliance color
+     * @param alliance enum value of alliance color
+     */
     public void setAlliance(Alliance alliance){
-        this.alliance = alliance;
+        AllianceSingleton.setAlliance(alliance);
     }
 
     public Alliance getAlliance() {
-        return alliance;
+        return AllianceSingleton.getAlliance();
     }
 
     public StartingSide getStartingSide() {

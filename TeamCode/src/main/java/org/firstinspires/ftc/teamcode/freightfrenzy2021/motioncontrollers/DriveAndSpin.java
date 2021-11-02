@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -28,7 +29,8 @@ public class DriveAndSpin implements EbotsMotionController{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public DriveAndSpin(HardwareMap hardwareMap) {
+    public DriveAndSpin(LinearOpMode opMode) {
+        HardwareMap hardwareMap = opMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx .class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");

@@ -49,6 +49,10 @@ public class EbotsImu {
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    public double getFieldHeadingWhenInitializedDeg() {
+        return fieldHeadingWhenInitializedDeg;
+    }
+
     public void setFieldHeadingWhenInitializedDeg(double fieldHeadingWhenInitializedDeg) {
         this.fieldHeadingWhenInitializedDeg = fieldHeadingWhenInitializedDeg;
     }

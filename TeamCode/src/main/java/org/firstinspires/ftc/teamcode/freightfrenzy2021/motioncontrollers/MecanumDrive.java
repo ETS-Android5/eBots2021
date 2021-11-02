@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -30,7 +31,8 @@ public class MecanumDrive implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public MecanumDrive(HardwareMap hardwareMap){
+    public MecanumDrive(LinearOpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
         maxAllowedPower = 1.0;
         spinScaleFactor = 1.0;
 
