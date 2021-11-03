@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 public class Carousel {
@@ -49,12 +51,22 @@ public class Carousel {
          speed = carouselMotor.getPower();
     }
 
-    public void startMotor (){carouselMotor.setPower(0.35);}
+    public void startMotor (){
+        int spinSign = 1;
+        if(AllianceSingleton.getAlliance() == Alliance.BLUE){
+            spinSign = -1;
+        }
+        carouselMotor.setPower(0.35 * spinSign);
+    }
 
     public void stopMotor (){carouselMotor.setPower(0);}
 
     public void handleUserInput(Gamepad gamepad){
-        double increment = 0.05;
+        int spinSign = 1;
+        if(AllianceSingleton.getAlliance() == Alliance.BLUE){
+            spinSign = -1;
+        }
+        double increment = 0.05 * spinSign;
         long timeOut = 400;
       if(gamepad.right_bumper && stopWatch.getElapsedTimeMillis() > timeOut){
           startMotor();

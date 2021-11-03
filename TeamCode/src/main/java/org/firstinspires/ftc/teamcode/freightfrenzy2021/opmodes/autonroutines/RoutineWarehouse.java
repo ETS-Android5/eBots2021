@@ -20,7 +20,6 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
         itinerary.add(StateReverseToHub.class);
         itinerary.add(StatePushOff.class);
         itinerary.add(StateRotateToZeroDegrees.class);
-        itinerary.add(StateMoveToWarehouseY.class);
         itinerary.add(StateNavigateToWarehouse.class);
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

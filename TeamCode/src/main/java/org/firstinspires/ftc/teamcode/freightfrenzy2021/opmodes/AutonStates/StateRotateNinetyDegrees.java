@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
@@ -77,6 +78,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
 
         currentHeading = EbotsImu.getCurrentFieldHeadingDeg(true);
         currentError = currentHeading - targetHeadingDeg;
+        currentError = UtilFuncs.applyAngleBounds(currentError);
 
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
@@ -91,21 +93,20 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
     public void performStateActions() {
         double power = currentError * 0.01;
 
-        if (autonOpMode.getAlliance() == Alliance.RED){
-            for(DcMotorEx m : leftMotors) {
-                m.setPower(power);
-             }
-            for(DcMotorEx m : rightMotors) {
-                m.setPower(-power);
-            }
-        } else {
-            for(DcMotorEx m : leftMotors) {
-                m.setPower(-power);
-            }
-            for(DcMotorEx m : rightMotors) {
-                m.setPower(power);
-            }
+        for (DcMotorEx m : leftMotors) {
+            m.setPower(power);
         }
+        for (DcMotorEx m : rightMotors) {
+            m.setPower(-power);
+        }
+//        } else {
+//            for(DcMotorEx m : leftMotors) {
+//                m.setPower(-power);
+//            }
+//            for(DcMotorEx m : rightMotors) {
+//                m.setPower(power);
+//            }
+//        }
     }
 
     @Override

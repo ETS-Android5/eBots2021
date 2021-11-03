@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -35,6 +37,7 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
     long stateTimeLimit = 2000;
     StopWatch stopWatch = new StopWatch();
     private double currentError;
+    private String logTag = "EBOTS";
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -77,7 +80,8 @@ public class StateRotateToZeroDegrees implements EbotsAutonState{
         if (Math.abs(currentError)  <= acceptableError){
             targetHeadingAchieved = true;
         }
-
+        Log.d(logTag, "Heading achieved: " + targetHeadingAchieved + " Current Error: " + String.format("%.2f", currentError));
+        Log.d(logTag, stopWatch.toString());
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
         return targetHeadingAchieved  | stateTimedOut | !opMode.opModeIsActive();

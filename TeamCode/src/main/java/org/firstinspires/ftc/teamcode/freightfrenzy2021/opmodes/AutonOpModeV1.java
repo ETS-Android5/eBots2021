@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCodeMarkers;
 
 @Autonomous
 public class AutonOpModeV1 extends EbotsAutonOpMode {
@@ -51,7 +52,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
                 updateTelemetry();
             }
         }
-        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
+//        Log.d(logTag, "....Completed state " + currentState.getClass().getSimpleName());
     }
 
     private void transitionToNextState(){
@@ -63,7 +64,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             logNewlyCreatedState(currentState);
             telemetry.clearAll();
         } else {
-            Log.d(logTag, "No more states in routine!!!");
+//            Log.d(logTag, "No more states in routine!!!");
         }
     }
 
