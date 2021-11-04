@@ -34,9 +34,10 @@ public class StateConfigureRoutine implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateConfigureRoutine(HardwareMap hardwareMap, EbotsAutonOpMode opMode){
+    public StateConfigureRoutine(EbotsAutonOpMode opMode){
         this.opMode = opMode;
         this.telemetry = opMode.telemetry;
+        HardwareMap hardwareMap = opMode.hardwareMap;
         startingSide = opMode.getStartingSide();
 
         allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");

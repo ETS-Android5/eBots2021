@@ -34,6 +34,7 @@ Constructors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateDeliverDuck(EbotsAutonOpMode autonOpMode){
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
+        this.autonOpMode = autonOpMode;
         carousel = new Carousel(hardwareMap);
         stopWatch = new StopWatch();
         stateTimeLimit = 5000;
@@ -65,7 +66,9 @@ Instance Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-    return stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
+        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
+
+    return stateTimedOut | !autonOpMode.opModeIsActive();
 }
 
     @Override

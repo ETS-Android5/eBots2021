@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
@@ -30,11 +31,14 @@ Instance Attributes
     double targetDistance;
 
     private long stateTimeLimit=2000;
+    private EbotsAutonOpMode autonOpMode;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateDriveToCarousel(HardwareMap hardwareMap) {
+    public StateDriveToCarousel(EbotsAutonOpMode autonOpMode) {
+        HardwareMap hardwareMap = autonOpMode.hardwareMap;
+        this.autonOpMode = autonOpMode;
         stopWatch = new StopWatch();
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -70,7 +74,8 @@ Instance Methods
         boolean targetPositionAchieved = currentDistance <= targetDistance;
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-        return targetPositionAchieved | stateTimedOut;
+
+        return targetPositionAchieved | stateTimedOut | !autonOpMode.opModeIsActive();
 
     }
 

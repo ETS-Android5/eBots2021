@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCodeMarkers;
 
 @Autonomous
 public class AutonOpModeV1 extends EbotsAutonOpMode {
@@ -60,7 +59,7 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         if (itinerary.size() > 0){
             stateComplete = false;
             Class nextStateClass = itinerary.remove(0);
-            currentState = EbotsAutonState.get(nextStateClass, hardwareMap, this);
+            currentState = EbotsAutonState.get(nextStateClass, this);
             logNewlyCreatedState(currentState);
             telemetry.clearAll();
         } else {

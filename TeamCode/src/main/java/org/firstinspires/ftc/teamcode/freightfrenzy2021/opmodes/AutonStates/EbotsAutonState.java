@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public interface EbotsAutonState {
@@ -12,16 +10,16 @@ public interface EbotsAutonState {
 
     public void performTransitionalActions();
 
-    public static EbotsAutonState get(Class targetState, HardwareMap hardwareMap, EbotsAutonOpMode autonOpMode){
+    public static EbotsAutonState get(Class targetState, EbotsAutonOpMode autonOpMode){
         EbotsAutonState newState = null;
         if (targetState == StateDriveToCarousel.class){
-            newState = new StateDriveToCarousel(hardwareMap);
+            newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateDeliverDuck.class){
             newState = new StateDeliverDuck(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){
-            newState = new StateObserveBarCode(hardwareMap, autonOpMode);
+            newState = new StateObserveBarCode(autonOpMode);
         } else if (targetState == StateConfigureRoutine.class){
-            newState = new StateConfigureRoutine(hardwareMap, autonOpMode);
+            newState = new StateConfigureRoutine(autonOpMode);
         } else if (targetState == StateNavigateToWarehouse.class){
             newState = new StateNavigateToWarehouse(autonOpMode);
         } else if (targetState == StateMoveToHubX.class){

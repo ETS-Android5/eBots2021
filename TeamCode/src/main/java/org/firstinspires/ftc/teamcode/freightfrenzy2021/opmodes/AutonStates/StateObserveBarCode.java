@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -10,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonOpModeV1;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.List;
@@ -56,7 +54,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateObserveBarCode(HardwareMap hardwareMap, EbotsAutonOpMode autonOpMode){
+    public StateObserveBarCode(EbotsAutonOpMode autonOpMode){
         this.opMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
 //        this.telemetry.clearAll();
