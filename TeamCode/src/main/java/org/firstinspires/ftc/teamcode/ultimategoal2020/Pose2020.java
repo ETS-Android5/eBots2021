@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal2020;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.PlayField;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements.PlayField;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.TowerGoal;
 
@@ -62,7 +62,7 @@ public class Pose2020 {
         private static double calculateXCoord(){
             //Start on the bottom wall, heading = 0
             double wallX = -new PlayField().getFieldHeight()/2;
-            double robotX = EbotsRobot2020.RobotSize.xSize.getSizeValue()/2;
+            double robotX = EbotsRobot2020.RobotSize2020.xSize.getSizeValue()/2;
             return (wallX + robotX);
         }
 
@@ -70,7 +70,7 @@ public class Pose2020 {
             //Assumed blue alliance, robot heading 0, right wheels on start line
             double startLineY = linePosition.getyCenter();
             double colorSensorYInset = 2.5;
-            double robotY = (EbotsRobot2020.RobotSize.ySize.getSizeValue()/2 - colorSensorYInset);
+            double robotY = (EbotsRobot2020.RobotSize2020.ySize.getSizeValue()/2 - colorSensorYInset);
             return (startLineY + robotY);
         }
 
@@ -118,9 +118,9 @@ public class Pose2020 {
 
     // When using a StartLine.LinePosition
     public Pose2020(StartLine.LinePosition linePosition, Alliance alliance){
-        double xPosition = -new PlayField().getFieldHeight()/2 + EbotsRobot2020.RobotSize.xSize.getSizeValue()/2;
+        double xPosition = -new PlayField().getFieldHeight()/2 + EbotsRobot2020.RobotSize2020.xSize.getSizeValue()/2;
         //Assumed blue alliance, robot heading 0, right wheels on start line
-        double yPosition = linePosition.getyCenter() + EbotsRobot2020.RobotSize.ySize.getSizeValue()/2;
+        double yPosition = linePosition.getyCenter() + EbotsRobot2020.RobotSize2020.ySize.getSizeValue()/2;
         this.fieldPosition2020 = new FieldPosition2020(xPosition, yPosition);
         this.headingDeg = 0;
         this.newHeadingReadingDeg = headingDeg;

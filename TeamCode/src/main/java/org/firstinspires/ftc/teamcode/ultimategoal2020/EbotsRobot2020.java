@@ -160,7 +160,7 @@ public class EbotsRobot2020 {
     /*****************************************************************
      //******    Enumerations
      //****************************************************************/
-    public enum RobotSize{
+    public enum RobotSize2020 {
         xSize(CsysDirection.X, 18.0),
         ySize(CsysDirection.Y, 18.0),
         zSize(CsysDirection.Z, 18.0);
@@ -168,7 +168,7 @@ public class EbotsRobot2020 {
         CsysDirection csysDirection;
         double sizeValue;
 
-        RobotSize(CsysDirection csysDirectionIn, double sizeValueIn){
+        RobotSize2020(CsysDirection csysDirectionIn, double sizeValueIn){
             this.csysDirection = csysDirectionIn;
             this.sizeValue = sizeValueIn;
         }
@@ -192,7 +192,7 @@ public class EbotsRobot2020 {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(EbotsRobot2020.RobotSize rs: EbotsRobot2020.RobotSize.values()){
+        for(RobotSize2020 rs: RobotSize2020.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 
@@ -216,7 +216,7 @@ public class EbotsRobot2020 {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(EbotsRobot2020.RobotSize rs: EbotsRobot2020.RobotSize.values()){
+        for(RobotSize2020 rs: RobotSize2020.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 
@@ -269,7 +269,7 @@ public class EbotsRobot2020 {
 
         //Build the robot physical dimensions
         robotSizeCoordinates = new ArrayList<>();
-        for(EbotsRobot2020.RobotSize rs: EbotsRobot2020.RobotSize.values()){
+        for(RobotSize2020 rs: RobotSize2020.values()){
             robotSizeCoordinates.add(new SizeCoordinate(rs.getCsysDirection(), rs.getSizeValue()));
         }
 

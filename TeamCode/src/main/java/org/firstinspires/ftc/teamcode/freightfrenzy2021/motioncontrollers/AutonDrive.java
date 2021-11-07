@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +33,9 @@ public class AutonDrive implements EbotsMotionController {
 
 
     // The IMU sensor object
-    private EbotsImu imu;
+    //private EbotsImu imu; // use singleton
 
     private double currentHeadingDeg;       // current field-heading of the robot
-
-    private double zeroHeadingDeg;          // the field heading of the robot when imu was initialized (90 facing Y+)
 
     private PoseError poseError;
     private double xSignal;
@@ -75,9 +72,6 @@ public class AutonDrive implements EbotsMotionController {
             MecanumWheel mecanumWheel = new MecanumWheel(wheelAngleDeg, pos, motor);
             mecanumWheels.add(mecanumWheel);
         }
-
-        imu = autonOpMode.getImu();
-        zeroHeadingDeg = autonOpMode.getZeroHeadingDeg();
 
     }
 
@@ -138,7 +132,7 @@ public class AutonDrive implements EbotsMotionController {
     }
 
     public void performImuHardwareRead(){
-        currentHeadingDeg = applyAngleBounds(imu.performHardwareRead() + zeroHeadingDeg);
+        currentHeadingDeg = EbotsImu.getCurrentFieldHeadingDeg(true);
     }
 
 

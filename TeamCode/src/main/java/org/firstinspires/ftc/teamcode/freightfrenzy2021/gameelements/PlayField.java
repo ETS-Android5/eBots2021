@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020;
+package org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements;
 
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
@@ -19,9 +19,9 @@ public class PlayField {
     public double getYCoordTouchingWall(double headingAngle){
         double yCoord = -fieldHeight / 2;
         if(headingAngle == 0 | headingAngle == 180){
-            yCoord += (EbotsRobot2020.RobotSize.xSize.getSizeValue()/2);
+            yCoord += (EbotsRobot2020.RobotSize2020.xSize.getSizeValue()/2);
         } else if(yCoord == 90 | yCoord == -90){
-            yCoord += (EbotsRobot2020.RobotSize.ySize.getSizeValue()/2);
+            yCoord += (EbotsRobot2020.RobotSize2020.ySize.getSizeValue()/2);
         }
         return yCoord;
     }

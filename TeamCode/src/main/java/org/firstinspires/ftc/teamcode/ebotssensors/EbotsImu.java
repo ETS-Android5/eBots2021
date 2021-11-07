@@ -22,7 +22,7 @@ public class EbotsImu {
     private BNO055IMU imuSensor;
     private double fieldHeadingWhenInitializedDeg = 0;
     private double currentFieldHeading = 0;
-    private StopWatch stopWatchReading = new StopWatch();
+    private StopWatch stopWatchReading = new StopWatch();   // time since last hardware read
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -78,7 +78,7 @@ public class EbotsImu {
     public static double performHardwareRead(){
         double readingDeg = 0;
         if (ebotsImu != null) {
-            ebotsImu.stopWatchReading.reset();
+            ebotsImu.stopWatchReading.reset();  // reset timer that keeps track of time since last hardware read
             readingDeg = ebotsImu.imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         }
         return readingDeg;

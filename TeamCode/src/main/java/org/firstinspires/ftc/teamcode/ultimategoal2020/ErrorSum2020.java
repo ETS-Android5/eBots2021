@@ -38,10 +38,7 @@ public class ErrorSum2020 {
 
         //Check if the integrator is active for the current direction
         // (X or Y look at translate Integrator coefficient k_i, heading looks at Spin s_i)
-        boolean isIntegratorOn = speed.isTranslateIntegratorOn();  //assume translate
-        if(this.csysDirection == CsysDirection.Heading){
-            isIntegratorOn = speed.isSpinIntegratorOn();        //update value if heading
-        }
+        boolean isIntegratorOn = speed.isIntegratorOn(this.csysDirection);  //assume translate
 
         //Set the value to zero if duration is 0 or integrator is off
         if (loopDuration <= 0 | !isIntegratorOn) {

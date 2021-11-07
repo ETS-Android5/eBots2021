@@ -18,6 +18,10 @@ public enum Speed {
     private double s_p;  //for spin proportional
     private double s_i;  //for spin integrator
     private double s_d;  //for spin derivative
+
+    private final double measuredTranslateSpeed = 45.26; // in / s
+    private final double measuredAngularSpeedDeg = 282.11;;  //  degrees / s
+
     /**  CONSTRUCTOR    **************/
     Speed(double speed, double turnSpeed, double pGain, double iGain, double dGain, double spinPGain, double spinIGain, double spinDGain){
         this.maxSpeed = speed;
@@ -36,6 +40,18 @@ public enum Speed {
     public double getK_i(){return this.k_i;}
     public double getS_p(){return this.s_p;}
     public double getS_i(){return this.s_i;}
+
+    public double getMeasuredTranslateSpeed() {
+        return measuredTranslateSpeed;
+    }
+
+    public double getMeasuredAngularSpeedDeg() {
+        return measuredAngularSpeedDeg;
+    }
+    public double getMeasuredAngularSpeedRad() {
+        return Math.toRadians(measuredAngularSpeedDeg);
+    }
+
 
     public void setK_i(double inputK_i){
         this.k_i = inputK_i;
@@ -60,21 +76,17 @@ public enum Speed {
         return  coefficient;
     }
 
-    public boolean isTranslateIntegratorOn(){
-        boolean isTranslateIntegratorOn = false;
-        if(this.k_i > 0){
-            isTranslateIntegratorOn = true;
+
+    public boolean isIntegratorOn(CsysDirection csysDirection){
+        boolean isIntegratorOn = false;
+        if(csysDirection == CsysDirection.Heading){
+            isIntegratorOn = this.s_i > 0;
+        } else if (csysDirection == CsysDirection.X || csysDirection == CsysDirection.Y){
+            isIntegratorOn = this.k_i > 0;
         }
-        return isTranslateIntegratorOn;
+        return isIntegratorOn;
     }
 
-    public boolean isSpinIntegratorOn(){
-        boolean isSpinIntegratorOn = false;
-        if(this.s_i > 0){
-            isSpinIntegratorOn = true;
-        }
-        return isSpinIntegratorOn;
-    }
 
     @Override
     public String toString(){
