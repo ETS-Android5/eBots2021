@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StarterStackObservation;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.TargetZone;
@@ -35,8 +35,8 @@ public class StateMoveToTargetZone extends AbstractAutonState {
         //set target positionSDF
         TargetZone.Zone observedTarget = StarterStackObservation.getObservedTarget();
         TargetZone targetZone = new TargetZone(robot.getAlliance(), observedTarget);
-        Pose targetPose = new Pose(targetZone.getFieldPosition(), 0);
-        robot.setTargetPose(targetPose);
+        Pose2020 targetPose2020 = new Pose2020(targetZone.getFieldPosition(), 0);
+        robot.setTargetPose(targetPose2020);
         double craneXOffset = 24;
         double craneYOffset = -1;
 
@@ -46,9 +46,9 @@ public class StateMoveToTargetZone extends AbstractAutonState {
         double xOffset = targetZoneQ1XCenter - craneXOffset;
         double yOffset = targetZoneQ1YCenter - craneYOffset;
 
-        Pose offsetTargetPose = new Pose(targetPose.getX() + xOffset, targetPose.getY() + yOffset,
-                targetPose.getHeadingDeg());
-        robot.setTargetPose(offsetTargetPose);
+        Pose2020 offsetTargetPose2020 = new Pose2020(targetPose2020.getX() + xOffset, targetPose2020.getY() + yOffset,
+                targetPose2020.getHeadingDeg());
+        robot.setTargetPose(offsetTargetPose2020);
         if(debugOn){
             Log.d(logTag, "Entering state: " + currentAutonState.getSimpleName());
             Log.d(logTag, "Actual " + robot.getActualPose().toString());

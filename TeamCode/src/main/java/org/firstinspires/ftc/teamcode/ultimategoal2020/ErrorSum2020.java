@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 
-public class ErrorSum {
+public class ErrorSum2020 {
     /**
      * Error sum represents the cumulative error value used in the integrator control
      * of the PID controller.  Each coordinate (X, Y, Heading) has its own ErrorSum
@@ -14,7 +14,7 @@ public class ErrorSum {
     private CsysDirection csysDirection;
     private CoordinateSystem coordinateSystem;
 
-    public ErrorSum(CsysDirection dir){
+    public ErrorSum2020(CsysDirection dir){
         this.value = 0;
         this.csysDirection = dir;
         this.coordinateSystem = CoordinateSystem.FIELD;

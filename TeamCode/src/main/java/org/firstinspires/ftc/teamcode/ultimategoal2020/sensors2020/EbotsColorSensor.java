@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition2020;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 
 import java.util.ArrayList;
@@ -89,18 +89,18 @@ public class EbotsColorSensor implements EbotsSensor, EbotsSensorReading<EbotsCo
 
         //Enum (class) variables
         private String deviceName;
-        private FieldPosition sensorRobotPosition;
+        private FieldPosition2020 sensorRobotPosition;
 
         //Enum Constructor
         SensorLocation(String deviceNameIn, double robotXPosition, double robotYPosition) {
             deviceName = deviceNameIn;
-            sensorRobotPosition = new FieldPosition(robotXPosition, robotYPosition, CoordinateSystem.ROBOT);
+            sensorRobotPosition = new FieldPosition2020(robotXPosition, robotYPosition, CoordinateSystem.ROBOT);
         }
         //Enum Getters
         public String getDeviceName() {
             return deviceName;
         }
-        public FieldPosition getSensorRobotPosition(){return sensorRobotPosition;}
+        public FieldPosition2020 getSensorRobotPosition(){return sensorRobotPosition;}
     }
 
     /***************************************************************

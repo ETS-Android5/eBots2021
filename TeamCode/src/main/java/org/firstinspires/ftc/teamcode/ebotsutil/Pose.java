@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.ultimategoal2020;
+package org.firstinspires.ftc.teamcode.ebotsutil;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.PlayField;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements.PlayField;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.TowerGoal;
 
@@ -18,7 +19,7 @@ import static java.lang.String.format;
 public class Pose {
 
     /****************************************************************
-    //******    CLASS VARIABLES
+    //******    INSTANCE VARIABLES
     //***************************************************************/
 
     private double headingDeg;         // Degrees, 0 inline with x-axis, positive CCW when viewed from top
@@ -62,7 +63,7 @@ public class Pose {
         private static double calculateXCoord(){
             //Start on the bottom wall, heading = 0
             double wallX = -new PlayField().getFieldHeight()/2;
-            double robotX = EbotsRobot2020.RobotSize.xSize.getSizeValue()/2;
+            double robotX = RobotSize.xSize.getSizeValue()/2;
             return (wallX + robotX);
         }
 
@@ -70,13 +71,11 @@ public class Pose {
             //Assumed blue alliance, robot heading 0, right wheels on start line
             double startLineY = linePosition.getyCenter();
             double colorSensorYInset = 2.5;
-            double robotY = (EbotsRobot2020.RobotSize.ySize.getSizeValue()/2 - colorSensorYInset);
+            double robotY = (RobotSize.ySize.getSizeValue()/2 - colorSensorYInset);
             return (startLineY + robotY);
         }
 
     }
-
-    //***************************************************************88
 
     /*****************************************************************
     //******    CONSTRUCTORS
@@ -118,9 +117,9 @@ public class Pose {
 
     // When using a StartLine.LinePosition
     public Pose(StartLine.LinePosition linePosition, Alliance alliance){
-        double xPosition = -new PlayField().getFieldHeight()/2 + EbotsRobot2020.RobotSize.xSize.getSizeValue()/2;
+        double xPosition = -new PlayField().getFieldHeight()/2 + RobotSize.xSize.getSizeValue()/2;
         //Assumed blue alliance, robot heading 0, right wheels on start line
-        double yPosition = linePosition.getyCenter() + EbotsRobot2020.RobotSize.ySize.getSizeValue()/2;
+        double yPosition = linePosition.getyCenter() + RobotSize.ySize.getSizeValue()/2;
         this.fieldPosition = new FieldPosition(xPosition, yPosition);
         this.headingDeg = 0;
         this.newHeadingReadingDeg = headingDeg;
@@ -178,7 +177,7 @@ public class Pose {
 
 
     /***************************************************************88
-    //******    Class METHODS
+    //******    Instance Methods
     //***************************************************************/
 
     public void updateHeadingWithReading(){
@@ -209,7 +208,7 @@ public class Pose {
     }
 
     /***************************************************************88
-     //******    Static METHODS
+     //******    Class METHODS
      //***************************************************************/
     public static double applyAngleBound (double inputAngle){
         while (inputAngle > 180){

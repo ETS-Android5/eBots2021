@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.SizeCoordinate;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class StartLine {
     /****************************************************************
      * *******      CLASS VARIABLES
      /****************************************************************/
-    private FieldPosition fieldPosition;
+    private FieldPosition2020 fieldPosition2020;
     private ArrayList<SizeCoordinate> sizeCoordinates = new ArrayList<>();
 
     /****************************************************************
@@ -40,7 +40,7 @@ public class StartLine {
         //Resolve the correct X position based on alliance and line position
         double allianceSign = (alliance == Alliance.BLUE) ? 1 : -1;  //Flip sign if red
         double yCenter = linePosition.getyCenter() * allianceSign;
-        this.fieldPosition = new FieldPosition(-60.0, yCenter, CoordinateSystem.FIELD);
+        this.fieldPosition2020 = new FieldPosition2020(-60.0, yCenter, CoordinateSystem.FIELD);
 
         //Create the size coordinates
         this.sizeCoordinates.add(new SizeCoordinate(CsysDirection.X, 24.0));
@@ -59,7 +59,7 @@ public class StartLine {
         return sizeValue;
     }
 
-    public FieldPosition getFieldPosition() {
-        return fieldPosition;
+    public FieldPosition2020 getFieldPosition() {
+        return fieldPosition2020;
     }
 }

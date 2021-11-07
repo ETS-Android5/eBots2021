@@ -5,19 +5,19 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 
 import java.util.Formatter;
 
-public class FieldPosition {
+public class FieldPosition2020 {
     private double yPosition;
     private double xPosition;
     private double zPosition;
     private CoordinateSystem coordinateSystem;  //Default csys is FIELD
 
-    public FieldPosition(){
+    public FieldPosition2020(){
         this.xPosition = 0.0;
         this.yPosition = 0.0;
         this.zPosition = 0.0;
         this.coordinateSystem = CoordinateSystem.FIELD;
     }
-    public FieldPosition(double x,double y){
+    public FieldPosition2020(double x, double y){
         this.xPosition = x;
         this.yPosition = y;
         this.zPosition = 0.0;
@@ -25,7 +25,7 @@ public class FieldPosition {
 
     }
 
-    public FieldPosition(double x,double y, CoordinateSystem csys){
+    public FieldPosition2020(double x, double y, CoordinateSystem csys){
         this.xPosition = x;
         this.yPosition = y;
         this.zPosition = 0.0;
@@ -33,12 +33,12 @@ public class FieldPosition {
 
     }
 
-    public FieldPosition(double x,double y, double z){
+    public FieldPosition2020(double x, double y, double z){
         this(x,y);
         this.zPosition = z;
     }
 
-    public FieldPosition(double x,double y, double z, CoordinateSystem csys){
+    public FieldPosition2020(double x, double y, double z, CoordinateSystem csys){
         this(x,y);
         this.zPosition = z;
         this.coordinateSystem = csys;

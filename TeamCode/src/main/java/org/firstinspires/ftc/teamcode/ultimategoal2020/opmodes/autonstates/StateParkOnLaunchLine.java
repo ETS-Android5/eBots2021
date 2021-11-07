@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.autonstates;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
 
@@ -22,8 +22,8 @@ public class StateParkOnLaunchLine extends AbstractAutonState {
 
         //Set the target Pose
         double xPosition = (new LaunchLine()).getX();
-        Pose targetPose = new Pose(xPosition, robot.getActualPose().getY(), 0);
-        robot.setTargetPose(targetPose);
+        Pose2020 targetPose2020 = new Pose2020(xPosition, robot.getActualPose().getY(), 0);
+        robot.setTargetPose(targetPose2020);
         stateTimeLimit = robot.getEbotsMotionController().calculateTimeLimitMillis(robot);
         stateStopWatch = new StopWatch();
     }

@@ -78,8 +78,8 @@ public class EbotsRobot2020 {
     // private TFObjectDetector tfod;
 
     // Field position
-    private Pose actualPose;       //Current Pose, which consists of Field Position and Heading
-    private Pose targetPose;        //Intended destination of the robot
+    private Pose2020 actualPose2020;       //Current Pose, which consists of Field Position and Heading
+    private Pose2020 targetPose2020;        //Intended destination of the robot
 
     //These are robot limitations which should be set using test opmodes to collect data
     private final double topSpeed = 50.0;            //  in / s
@@ -96,7 +96,7 @@ public class EbotsRobot2020 {
     private Alliance alliance;
 
     private DriveCommand driveCommand;
-    private PoseError poseError;
+    private PoseError2020 poseError2020;
     //private EncoderSetup encoderSetup;
     private EbotsMotionController ebotsMotionController;
 
@@ -199,10 +199,10 @@ public class EbotsRobot2020 {
         //Assumes blue alliance if none stated
         this.alliance = Alliance.BLUE;
         //Assumes a default starting position if none specified
-        this.actualPose = new Pose(Pose.PresetPose.INNER_START_LINE, alliance);     //Defaults to INNER and BLUE
+        this.actualPose2020 = new Pose2020(Pose2020.PresetPose.INNER_START_LINE, alliance);     //Defaults to INNER and BLUE
         //When no target pose is given, assume Power Shot Launch position
-        this.targetPose = new Pose(Pose.PresetPose.LAUNCH_POWER_SHOT, alliance);
-        this.poseError = new PoseError(this);
+        this.targetPose2020 = new Pose2020(Pose2020.PresetPose.LAUNCH_POWER_SHOT, alliance);
+        this.poseError2020 = new PoseError2020(this);
 
         this.ebotsMotionController = new EbotsMotionController();
 //        this.encoderSetup = EncoderSetup.TWO_WHEELS;    //Default value if none provided
@@ -223,10 +223,10 @@ public class EbotsRobot2020 {
         //Assumes blue alliance if none stated
         this.alliance = Alliance.BLUE;
         //Assumes a default starting position if none specified
-        this.actualPose = new Pose(Pose.PresetPose.INNER_START_LINE, alliance);     //Defaults to INNER and BLUE
+        this.actualPose2020 = new Pose2020(Pose2020.PresetPose.INNER_START_LINE, alliance);     //Defaults to INNER and BLUE
         //When no target pose is given, assume Power Shot Launch position
-        this.targetPose = new Pose(Pose.PresetPose.LAUNCH_POWER_SHOT, alliance);
-        this.poseError = new PoseError(this);
+        this.targetPose2020 = new Pose2020(Pose2020.PresetPose.LAUNCH_POWER_SHOT, alliance);
+        this.poseError2020 = new PoseError2020(this);
 
         this.ebotsMotionController = new EbotsMotionController();
 
@@ -241,14 +241,14 @@ public class EbotsRobot2020 {
     }
 
 
-    public EbotsRobot2020(Pose actualPose){
+    public EbotsRobot2020(Pose2020 actualPose2020){
         this();     //Call the default constructor
-        this.actualPose = actualPose;     //Set the input pose
-        this.poseError = new PoseError(this);   //recalculate error
+        this.actualPose2020 = actualPose2020;     //Set the input pose
+        this.poseError2020 = new PoseError2020(this);   //recalculate error
     }
 
-    public EbotsRobot2020(Pose pose, Alliance alliance){
-        this(pose);     //Set the input pose by calling the above constructor with argument (Pose pose)
+    public EbotsRobot2020(Pose2020 pose2020, Alliance alliance){
+        this(pose2020);     //Set the input pose by calling the above constructor with argument (Pose pose)
         this.alliance = alliance;
     }
 
@@ -258,13 +258,13 @@ public class EbotsRobot2020 {
 //        this.encoderSetup = autonParameters.getEncoderSetup();  //Set the encoderSetup class variable
     }
 
-    public EbotsRobot2020(Pose pose, Alliance alliance, AutonParameters autonParameters){
-        this(pose, alliance);     //chain to constructor with arguments (Pose pose, Alliance alliance)
+    public EbotsRobot2020(Pose2020 pose2020, Alliance alliance, AutonParameters autonParameters){
+        this(pose2020, alliance);     //chain to constructor with arguments (Pose pose, Alliance alliance)
         this.ebotsMotionController = new EbotsMotionController(autonParameters);
 //        this.encoderSetup = autonParameters.getEncoderSetup();  //Set the encoderSetup class variable
     }
 
-    public EbotsRobot2020(Pose actualPose, Alliance alliance, AutonParameters autonParameters, HardwareMap hardwareMap){
+    public EbotsRobot2020(Pose2020 actualPose2020, Alliance alliance, AutonParameters autonParameters, HardwareMap hardwareMap){
         this.driveCommand = new DriveCommand();
 
         //Build the robot physical dimensions
@@ -275,11 +275,11 @@ public class EbotsRobot2020 {
 
         //Assumes blue alliance if none stated
         this.alliance = alliance;
-        this.actualPose = actualPose;     //Set the input pose
+        this.actualPose2020 = actualPose2020;     //Set the input pose
 
         //When no target pose is given, assume Power Shot Launch position
-        this.targetPose = new Pose(Pose.PresetPose.LAUNCH_POWER_SHOT, alliance);
-        this.poseError = new PoseError(this);
+        this.targetPose2020 = new Pose2020(Pose2020.PresetPose.LAUNCH_POWER_SHOT, alliance);
+        this.poseError2020 = new PoseError2020(this);
 
         this.ebotsMotionController = new EbotsMotionController(autonParameters);
 
@@ -314,12 +314,12 @@ public class EbotsRobot2020 {
 
     }
 
-    public EbotsRobot2020(Pose.PresetPose presetPose, Alliance alliance){
-        this(new Pose(presetPose,alliance), alliance);  //chained to constructor with arguments (Pose pose, Alliance alliance)
+    public EbotsRobot2020(Pose2020.PresetPose presetPose, Alliance alliance){
+        this(new Pose2020(presetPose,alliance), alliance);  //chained to constructor with arguments (Pose pose, Alliance alliance)
     }
 
-    public EbotsRobot2020(Pose.PresetPose presetPose, Alliance alliance, AutonParameters autonParameters){
-        this(new Pose(presetPose,alliance), alliance, autonParameters);  //chained to constructor with arguments (Pose, Alliance, AutonParameters)
+    public EbotsRobot2020(Pose2020.PresetPose presetPose, Alliance alliance, AutonParameters autonParameters){
+        this(new Pose2020(presetPose,alliance), alliance, autonParameters);  //chained to constructor with arguments (Pose, Alliance, AutonParameters)
     }
 
     /*****************************************************************
@@ -356,9 +356,9 @@ public class EbotsRobot2020 {
     // public TFObjectDetector getTfod(){return this.tfod;}
 
     public Alliance getAlliance(){return this.alliance;}
-    public Pose getActualPose(){return this.actualPose;}
-    public Pose getTargetPose(){return this.targetPose;}
-    public PoseError getPoseError(){return this.poseError;}
+    public Pose2020 getActualPose(){return this.actualPose2020;}
+    public Pose2020 getTargetPose(){return this.targetPose2020;}
+    public PoseError2020 getPoseError(){return this.poseError2020;}
     public BNO055IMU getImu(){return this.imu;}
     public EncoderSetup getEncoderSetup() {return this.ebotsMotionController.getAutonParameters().getEncoderSetup();}
     public EbotsMotionController getEbotsMotionController(){return this.ebotsMotionController;}
@@ -408,28 +408,28 @@ public class EbotsRobot2020 {
     }
 
 
-    public void setActualPose(Pose pose) {
+    public void setActualPose(Pose2020 pose2020) {
         boolean debugOn = true;
         if(debugOn) {
-            Log.d(logTag, "Robot::setActualPose just set to Actual: " + actualPose.toString());
-            Log.d(logTag, "Robot::setActualPose it was Actual: " + this.actualPose.toString());
+            Log.d(logTag, "Robot::setActualPose just set to Actual: " + actualPose2020.toString());
+            Log.d(logTag, "Robot::setActualPose it was Actual: " + this.actualPose2020.toString());
         }
 
-        this.actualPose = pose;
+        this.actualPose2020 = pose2020;
         //Recalculate error after setting target pose
-        this.poseError = new PoseError(this);
+        this.poseError2020 = new PoseError2020(this);
     }
 
-    public void setTargetPose(Pose targetPose) {
+    public void setTargetPose(Pose2020 targetPose2020) {
         boolean debugOn = true;
         if(debugOn) {
-            Log.d(logTag, "Robot::setTargetPose just set to Target: " + targetPose.toString());
-            Log.d(logTag, "Robot::setTargetPose it was Target: " + this.targetPose.toString());
-            Log.d(logTag, "Robot::Actual: " + this.actualPose.toString());
+            Log.d(logTag, "Robot::setTargetPose just set to Target: " + targetPose2020.toString());
+            Log.d(logTag, "Robot::setTargetPose it was Target: " + this.targetPose2020.toString());
+            Log.d(logTag, "Robot::Actual: " + this.actualPose2020.toString());
         }
-        this.targetPose = targetPose;
+        this.targetPose2020 = targetPose2020;
         //Recalculate error after setting target pose
-        this.poseError = new PoseError(this);
+        this.poseError2020 = new PoseError2020(this);
     }
 
     public void setDriveCommand(DriveCommand driveCommandIn){
@@ -483,29 +483,29 @@ public class EbotsRobot2020 {
      //******    CLASS INSTANCE METHODS
      //****************************************************************/
     public void updateStartPose(StartLine.LinePosition startLinePosition){
-        Pose startingPose = calculateStartingPose(startLinePosition);     //robot object exists at this point
-        this.setActualPose(startingPose);
+        Pose2020 startingPose2020 = calculateStartingPose(startLinePosition);     //robot object exists at this point
+        this.setActualPose(startingPose2020);
     }
 
-    private Pose calculateStartingPose(StartLine.LinePosition startLinePosition){
+    private Pose2020 calculateStartingPose(StartLine.LinePosition startLinePosition){
         //Starting poses are handled in an enumeration within Pose
 
-        Pose.PresetPose presetPose;
+        Pose2020.PresetPose presetPose;
         if(startLinePosition == StartLine.LinePosition.INNER){
-            presetPose = Pose.PresetPose.INNER_START_LINE;
+            presetPose = Pose2020.PresetPose.INNER_START_LINE;
         } else{
-            presetPose = Pose.PresetPose.OUTER_START_LINE;
+            presetPose = Pose2020.PresetPose.OUTER_START_LINE;
         }
 
-        Pose startingPose = new Pose(presetPose, this.getAlliance());
-        return startingPose;
+        Pose2020 startingPose2020 = new Pose2020(presetPose, this.getAlliance());
+        return startingPose2020;
     }
 
     public void setInitialGyroOffset(double gyroReading){
         //  This is run right after creating the robot during initialization
         //  This captures the rotation required to bring the field coordinates frame in line with the
         //  the robot coordinate system
-        initialGyroOffset = this.actualPose.getHeadingDeg() - gyroReading;
+        initialGyroOffset = this.actualPose2020.getHeadingDeg() - gyroReading;
     }
 
     public void initializeImu(HardwareMap hardwareMap){
@@ -774,8 +774,8 @@ public class EbotsRobot2020 {
 
             } else{
                 // Set newHeadingReadingDeg based on best estimate
-                double estimatedNewHeading = this.actualPose.getHeadingDeg() + estimateHeadingChangeDeg(loopDuration);
-                this.actualPose.setNewHeadingReadingDeg(estimatedNewHeading);
+                double estimatedNewHeading = this.actualPose2020.getHeadingDeg() + estimateHeadingChangeDeg(loopDuration);
+                this.actualPose2020.setNewHeadingReadingDeg(estimatedNewHeading);
             }
         }
 
@@ -849,8 +849,8 @@ public class EbotsRobot2020 {
                 this.setNewHeadingReadingDegFromGyro(gyroReading);
             } else{
                 // Set newHeadingReadingDeg based on best estimate
-                double estimatedNewHeading = this.actualPose.getHeadingDeg() + estimateHeadingChangeDeg(loopDuration);
-                this.actualPose.setNewHeadingReadingDeg(estimatedNewHeading);
+                double estimatedNewHeading = this.actualPose2020.getHeadingDeg() + estimateHeadingChangeDeg(loopDuration);
+                this.actualPose2020.setNewHeadingReadingDeg(estimatedNewHeading);
             }
         }
         if(debugOn) splitTimeMillis = stopWatch.logSplitTime(logTag, operation, splitTimeMillis, loopCount);
@@ -1339,22 +1339,22 @@ public class EbotsRobot2020 {
         boolean debugOn = false;
         if(debugOn) {
             Log.d(logTag,"Entering Robot:updateActualPose...");
-            Log.d(logTag, "Actual: " + actualPose.toString());
+            Log.d(logTag, "Actual: " + actualPose2020.toString());
         }
         // Calculate move since last loop
         PoseChange poseChange = new PoseChange(this);
 
         //First update heading
-        actualPose.setHeadingDeg(poseChange.getSpinAngleDeg() + poseChange.getSpinAngleDeg());
-        actualPose.setX(actualPose.getX() + poseChange.getIncrementalFieldMovement().getxPosition());
-        actualPose.setY(actualPose.getY() + poseChange.getIncrementalFieldMovement().getyPosition());
+        actualPose2020.setHeadingDeg(poseChange.getSpinAngleDeg() + poseChange.getSpinAngleDeg());
+        actualPose2020.setX(actualPose2020.getX() + poseChange.getIncrementalFieldMovement().getxPosition());
+        actualPose2020.setY(actualPose2020.getY() + poseChange.getIncrementalFieldMovement().getyPosition());
         if(debugOn) {
             Log.d(logTag,"Exiting Robot:updateActualPose...");
             Log.d(logTag, "Incremental Field Movement (x, y): (" +
                     String.format("%.2f", poseChange.getIncrementalFieldMovement().getxPosition()) +
                     ", " +String.format("%.2f", poseChange.getIncrementalFieldMovement().getyPosition()) +
                     ")");
-            Log.d(logTag, "Actual: " + actualPose.toString());
+            Log.d(logTag, "Actual: " + actualPose2020.toString());
         }
 
     }
@@ -1388,12 +1388,12 @@ public class EbotsRobot2020 {
 
     public void setHeadingFromGyro(double gyroHeading){
         double fieldHeading = calculateHeadingFromGyro(gyroHeading);
-        this.actualPose.setHeadingDeg(fieldHeading);
+        this.actualPose2020.setHeadingDeg(fieldHeading);
     }
 
     public void setNewHeadingReadingDegFromGyro(double gyroHeading){
         double fieldHeading = calculateHeadingFromGyro(gyroHeading);
-        this.actualPose.setNewHeadingReadingDeg(fieldHeading);
+        this.actualPose2020.setNewHeadingReadingDeg(fieldHeading);
     }
 
     private double calculateHeadingFromGyro(double gyroHeading){
@@ -1401,7 +1401,7 @@ public class EbotsRobot2020 {
     }
 
     public void logSensorData(String logTag){
-        Log.d(logTag, "Actual " + this.actualPose.toString());
+        Log.d(logTag, "Actual " + this.actualPose2020.toString());
         Log.d(logTag, EbotsRev2mDistanceSensor.printAll(this.getEbotsRev2mDistanceSensors()));
         Log.d(logTag, EbotsColorSensor.printColorsObserved(this.getEbotsColorSensors()));
         Log.d(logTag, EncoderTracker.printAll(this.getEncoderTrackers()));
@@ -1417,7 +1417,7 @@ public class EbotsRobot2020 {
         if(debugOn) Log.d(logTag,"Entering robot.ToString...");
 
         StringBuilder outString = new StringBuilder();
-        if(actualPose != null) outString.append("Actual " + actualPose.toString());
-        if(targetPose != null) outString.append("\n" + "Target " + targetPose.toString());
+        if(actualPose2020 != null) outString.append("Actual " + actualPose2020.toString());
+        if(targetPose2020 != null) outString.append("\n" + "Target " + targetPose2020.toString());
         return outString.toString();
     }}

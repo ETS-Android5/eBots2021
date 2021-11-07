@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.ultimategoal2020;
+package org.firstinspires.ftc.teamcode.ebotsutil;
+
+import static java.lang.String.format;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
 import java.util.ArrayList;
-
-import static java.lang.String.format;
 
 public class PoseError {
     //  PoseError represents the difference in position and heading
@@ -16,12 +18,14 @@ public class PoseError {
     //  This class provides a method to transform the error into the ROBOT's coordinate system
 
     /***************************************************************
-    ******    CLASS VARIABLES
+    ******    INSTANCE VARIABLES
     ***************************************************************/
     private double headingErrorDeg;     //Error in which way the robot is facing
     private FieldPosition positionError;    //Field position object for X,Y error from robot's targetPose
 
     private ArrayList<ErrorSum> errorSums;      //Arraylist of all error Sums (X, Y, Spin)
+
+    private EbotsAutonOpMode opMode;
 
     /***************************************************************
      ******    SIMPLE GETTERS AND SETTERS
@@ -29,6 +33,7 @@ public class PoseError {
 
     public double getXError() {return this.getErrorComponent(CsysDirection.X);}
     public double getYError() {return this.getErrorComponent(CsysDirection.Y);}
+
     public double getErrorComponent(CsysDirection dir){
         double errorValue = 0;
 
@@ -73,37 +78,38 @@ public class PoseError {
         initializeErrorSums();
     }
 
-    public PoseError(EbotsRobot2020 robot) {
+    public PoseError(Pose currentPose, Pose targetPose, EbotsAutonOpMode opMode) {
+        this.opMode = opMode;
         //  Set the errorSum to zero when instantiated
         resetErrorSums();
-        initializeError(robot);
+        initializeError(currentPose, targetPose);
     }
 
     /***************************************************************
-    ******    CLASS INSTANCE METHODS
+    ******    INSTANCE METHODS
     ***************************************************************/
 
     public void resetErrorSums(){
         this.initializeErrorSums();
     }
 
-    public void initializeError(EbotsRobot2020 robot){
+    public void initializeError(Pose currentPose, Pose targetPose){
         //Initialize error
         this.positionError = new FieldPosition();
-        calculateError(robot,0, Speed.SLOW);
+        calculateError(currentPose, targetPose,0);
         initializeErrorSums();
     }
 
-    public void calculateError(EbotsRobot2020 robot, long loopDuration, Speed speed){
-        double xError = robot.getTargetPose().getX() - robot.getActualPose().getX();
-        double yError = robot.getTargetPose().getY() - robot.getActualPose().getY();
-        this.headingErrorDeg = Pose.applyAngleBound(robot.getTargetPose().getHeadingDeg() - robot.getActualPose().getHeadingDeg());
+    public void calculateError(Pose currentPose, Pose targetPose, long loopDuration){
+        double xError = targetPose.getX() - currentPose.getX();
+        double yError = targetPose.getY() - currentPose.getY();
+        this.headingErrorDeg = Pose.applyAngleBound(targetPose.getHeadingDeg() - currentPose.getHeadingDeg());
         this.positionError.setxPosition(xError);
         this.positionError.setyPosition(yError);
 
-        //Now add the integrator if the loop duration is greater than 0
+        // Now add the integrator if the loop duration is greater than 0
         if(loopDuration > 0) {
-            updateErrorSums(robot, loopDuration, speed);
+            updateErrorSums(loopDuration);
         }
     }
 
@@ -119,9 +125,27 @@ public class PoseError {
         }
     }
 
-    private void updateErrorSums(EbotsRobot2020 robot, long loopDuration, Speed speed){
+    private void updateErrorSums(long loopDuration){
+        Speed speed = this.opMode.getMotionController().getSpeed();
         for(ErrorSum errorSum:errorSums){
-            errorSum.update(robot, loopDuration, speed);
+            CsysDirection dir = errorSum.getCsysDirection();
+            boolean isIntegratorOn = speed.isIntegratorOn(dir);
+
+            // if integrator is off for current direction then skip the rest of the loop and move to next one
+            if (! isIntegratorOn) continue;
+
+            boolean isSignalSaturated = opMode.getMotionController().isSignalSaturated(dir);
+            double currentError = this.getErrorComponent(dir);
+            boolean sameSign = Math.signum(currentError) == Math.signum(errorSum.getValue());
+
+            // only update the errorSum for a given direction if either
+            // --> the signal is NOT saturated
+            // --> the error and saturated signal are opposite sign
+            if(!isSignalSaturated  | !sameSign){
+                // loop duration is in ms, initially this code multiplied loopDuration * 1000
+                // this should probaly be divided by 1000 so the unit is
+                errorSum.update(loopDuration, currentError);
+            }
         }
     }
 
@@ -130,7 +154,7 @@ public class PoseError {
 
         //Note: the positionErrorVector is the distance between robot and target pose in FIELD coordinate system
         //Step 1:  Call the Coordinate System routine to perform the rotation transformation
-        FieldPosition positionErrorInRobotCoordinateSystem = CoordinateSystem.transformCoordinateSystem(this.positionError,CoordinateSystem.ROBOT,robot);
+        FieldPosition positionErrorInRobotCoordinateSystem = CoordinateSystem.transformCoordinateSystem(this.positionError,CoordinateSystem.ROBOT,opMode.getCurrentPose().getHeadingDeg());
         return positionErrorInRobotCoordinateSystem;
     }
 

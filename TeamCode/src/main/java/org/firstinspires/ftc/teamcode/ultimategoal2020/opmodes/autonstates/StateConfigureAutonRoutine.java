@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.AutonEbotsV1;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRevBlinkinLedDriver;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsDigitalTouch;
@@ -81,8 +81,8 @@ public class StateConfigureAutonRoutine extends AbstractAutonState {
     @Override
     public void performStateSpecificTransitionActions() {
         // Reset the staring pose for the robot
-        Pose newStartPose = new Pose(autonEbotsV1.getStartLinePosition(), robot.getAlliance());
-        robot.setActualPose(newStartPose);
+        Pose2020 newStartPose2020 = new Pose2020(autonEbotsV1.getStartLinePosition(), robot.getAlliance());
+        robot.setActualPose(newStartPose2020);
     }
 
         @Override

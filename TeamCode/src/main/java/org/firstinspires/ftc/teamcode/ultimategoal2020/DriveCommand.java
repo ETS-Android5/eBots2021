@@ -65,14 +65,14 @@ class DriveCommand {
 
         //  Step 1:  Use the poseError object to calculate X & Y signals based on PID coefficients from speed settings
         //           Note:  These use the FIELD coordinate system, they indicate the direction the robot should move (regardless of robot's heading)
-        PoseError poseError = robot.getPoseError();
+        PoseError2020 poseError2020 = robot.getPoseError();
 
-        double xDirFieldSignal = poseError.getXError() * speed.getK_p() + poseError.getXErrorSum() * speed.getK_i();
-        double yDirFieldSignal = poseError.getYError() * speed.getK_p() + poseError.getYErrorSum() * speed.getK_i();
+        double xDirFieldSignal = poseError2020.getXError() * speed.getK_p() + poseError2020.getXErrorSum() * speed.getK_i();
+        double yDirFieldSignal = poseError2020.getYError() * speed.getK_p() + poseError2020.getYErrorSum() * speed.getK_i();
 
 
         //  Step 2:  Calculate the spin signal using PID coefficients from speed settings
-        double spinSignal = robot.getPoseError().getHeadingErrorDeg() * speed.getS_p() + poseError.getHeadingErrorDegSum() * speed.getS_i();
+        double spinSignal = robot.getPoseError().getHeadingErrorDeg() * speed.getS_p() + poseError2020.getHeadingErrorDegSum() * speed.getS_i();
 
         if(debugOn) {
             StringBuilder sb = new StringBuilder();

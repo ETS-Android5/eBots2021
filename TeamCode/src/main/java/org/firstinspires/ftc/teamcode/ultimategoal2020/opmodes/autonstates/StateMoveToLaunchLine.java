@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
 
@@ -36,8 +36,8 @@ public class StateMoveToLaunchLine extends AbstractAutonState {
         if (robot.getAlliance()== Alliance.RED){
             yCoord *= -1;
         }
-        Pose targetPose = new Pose(xCoord, yCoord, -14);
-        robot.setTargetPose(targetPose);
+        Pose2020 targetPose2020 = new Pose2020(xCoord, yCoord, -14);
+        robot.setTargetPose(targetPose2020);
         stateTimeLimit = robot.getEbotsMotionController().calculateTimeLimitMillis(robot);
         stateStopWatch = new StopWatch();
     }

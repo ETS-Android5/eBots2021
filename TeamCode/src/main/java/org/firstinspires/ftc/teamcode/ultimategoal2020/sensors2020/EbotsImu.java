@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 
 public class EbotsImu implements EbotsSensor, EbotsSensorReading<Double>{
 
     private BNO055IMU imu;
     private double gyroReadingDegrees;
 
-    public EbotsImu(HardwareMap hardwareMap, Pose pose){
+    public EbotsImu(HardwareMap hardwareMap, Pose2020 pose2020){
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.

@@ -1,35 +1,35 @@
 package org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition;
+import org.firstinspires.ftc.teamcode.ultimategoal2020.FieldPosition2020;
 
 public class TowerGoal {
     //public double xPosition;
     //public double yPosition;
     public Alliance alliance;
-    private FieldPosition fieldPosition;
+    private FieldPosition2020 fieldPosition2020;
 
     public TowerGoal(){
         this.alliance = Alliance.BLUE;
-        this.fieldPosition = new FieldPosition(76, 36);
-        this.fieldPosition.setyPosition(-this.fieldPosition.getyPosition());
+        this.fieldPosition2020 = new FieldPosition2020(76, 36);
+        this.fieldPosition2020.setyPosition(-this.fieldPosition2020.getyPosition());
     }
 
     public TowerGoal(Alliance a){
-        this.fieldPosition = new FieldPosition(76, 36);
+        this.fieldPosition2020 = new FieldPosition2020(76, 36);
        this.alliance = a;
        if (a == Alliance.RED){
-           this.fieldPosition.setyPosition(-this.fieldPosition.getyPosition());
+           this.fieldPosition2020.setyPosition(-this.fieldPosition2020.getyPosition());
        }
     }
 
-    public FieldPosition getFieldPosition() {
-        return fieldPosition;
+    public FieldPosition2020 getFieldPosition() {
+        return fieldPosition2020;
     }
     public double getX(){
-        return this.fieldPosition.getxPosition();
+        return this.fieldPosition2020.getxPosition();
     }
     public double getY(){
-        return this.fieldPosition.getyPosition();
+        return this.fieldPosition2020.getyPosition();
     }
 }
