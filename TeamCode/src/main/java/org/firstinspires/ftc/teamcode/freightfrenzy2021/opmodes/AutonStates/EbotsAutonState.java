@@ -36,7 +36,10 @@ public interface EbotsAutonState {
             newState = new StateMoveToWarehouseY(autonOpMode);
         } else if (targetState == StateObserveBarCodeMarkers.class){
             newState = new StateObserveBarCodeMarkers(autonOpMode);
-        }        return newState;
+        } else if (targetState == StateTestVuforiaNav.class){
+            newState = new StateTestVuforiaNav(autonOpMode);
+        }
+        return newState;
     }
 
 

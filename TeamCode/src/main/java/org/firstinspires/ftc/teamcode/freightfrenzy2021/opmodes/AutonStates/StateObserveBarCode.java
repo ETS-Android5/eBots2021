@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode
 import java.util.List;
 
 public class StateObserveBarCode implements EbotsAutonState{
-
+    //TODO: Update logic if BLUE Warehouse
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -78,7 +78,8 @@ public class StateObserveBarCode implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        return opMode.isStarted() | opMode.isStopRequested();
+        boolean shouldExit = (opMode.gamepad1.left_bumper && opMode.gamepad1.right_bumper);
+        return shouldExit | opMode.isStarted() | opMode.isStopRequested();
     }
 
     @Override

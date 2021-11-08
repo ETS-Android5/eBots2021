@@ -20,7 +20,7 @@ public enum Speed {
     private double s_d;  //for spin derivative
 
     private final double measuredTranslateSpeed = 45.26; // in / s
-    private final double measuredAngularSpeedDeg = 282.11;;  //  degrees / s
+    private final double measuredAngularSpeedDeg = 233.6;;  //  degrees / s
 
     /**  CONSTRUCTOR    **************/
     Speed(double speed, double turnSpeed, double pGain, double iGain, double dGain, double spinPGain, double spinIGain, double spinDGain){

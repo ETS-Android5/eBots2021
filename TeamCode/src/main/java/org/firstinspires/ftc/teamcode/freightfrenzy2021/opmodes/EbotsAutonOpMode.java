@@ -6,9 +6,13 @@ import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
@@ -22,15 +26,19 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     protected BarCodePosition barCodePosition;
 
     // AllianceSingleton is managed so it can be passed to Teleop for FieldOrientedDrive
+    protected EbotsWebcam frontWebcam;
+
 
     protected StartingSide startingSide = StartingSide.CAROUSEL;
 
     protected ArrayList<Class> itinerary = new ArrayList<>();
 
-    protected double initialHeadingDeg = -90;  // gets revised in transition of StateConfigureRoutine
-    protected double currentHeadingDeg;
-    protected StopWatch stopWatchHeading = new StopWatch();
+    // motion controller
+    protected AutonDrive motionController;
 
+    protected Pose currentPose;
+
+    protected NavigatorVuforia navigatorVuforia;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -56,6 +64,25 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return EbotsImu.getCurrentFieldHeadingDeg(forceHardwareRead);
     }
 
+    public Pose getCurrentPose() {
+        if (currentPose==null) currentPose = new Pose();    // null protect the getter
+        return currentPose;
+    }
+
+
+    public EbotsWebcam getFrontWebcam() {
+        return frontWebcam;
+    }
+
+    public AutonDrive getMotionController() {
+        return motionController;
+    }
+
+    public NavigatorVuforia getNavigatorVuforia() {
+        return navigatorVuforia;
+    }
+
+
     public void setStartingSide(StartingSide startingSide){
         this.startingSide = startingSide;
     }
@@ -69,10 +96,19 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         EbotsImu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
     }
 
+    public void setCurrentPose(Pose currentPose) {
+        this.currentPose = currentPose;
+    }
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    public abstract void initAutonOpMode();
+
     public void appendStatesToRoutineItinerary(EbotsAutonRoutine routine){
         this.itinerary.addAll(routine.getRoutineItinerary());
     }
-
 
     public void initEbotsImu(){
         EbotsImu.getInstance(hardwareMap, true);

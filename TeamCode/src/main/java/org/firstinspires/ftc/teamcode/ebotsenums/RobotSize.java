@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.ebotsenums;
 
 public enum RobotSize {
     xSize(CsysDirection.X, 18.0),
-    ySize(CsysDirection.Y, 18.0),
+    ySize(CsysDirection.Y, 13.0),
     zSize(CsysDirection.Z, 18.0);
 
     CsysDirection csysDirection;

@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 
 import java.util.ArrayList;
 
@@ -149,14 +148,6 @@ public class PoseError {
         }
     }
 
-    public FieldPosition getPositionErrorInRobotCoordinateSystem(EbotsRobot2020 robot){
-        //this is used in auton to determine how the robot must drive to achieve target pose
-
-        //Note: the positionErrorVector is the distance between robot and target pose in FIELD coordinate system
-        //Step 1:  Call the Coordinate System routine to perform the rotation transformation
-        FieldPosition positionErrorInRobotCoordinateSystem = CoordinateSystem.transformCoordinateSystem(this.positionError,CoordinateSystem.ROBOT,opMode.getCurrentPose().getHeadingDeg());
-        return positionErrorInRobotCoordinateSystem;
-    }
 
     @Override
     public String toString(){

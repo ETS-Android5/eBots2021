@@ -100,17 +100,7 @@ public class AutonDrive implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private static double applyAngleBounds(double inputAngle){
-        double outputAngle = inputAngle;
 
-        while(outputAngle > 180) {
-            outputAngle -= 360;
-        }
-        while (outputAngle <=-180){
-            outputAngle += 360;
-        }
-        return outputAngle;
-    }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

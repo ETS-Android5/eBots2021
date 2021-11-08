@@ -4,13 +4,20 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateTestVuforiaNav;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
 @Autonomous
-public class AutonOpModeV1 extends EbotsAutonOpMode {
+public class AutonOpModeV2 extends EbotsAutonOpMode {
 
     String logTag = "EBOTS";
     int statesCreated = 0;
@@ -35,6 +42,34 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
             transitionToNextState();
             executeStateMachine();
         }
+    }
+
+    @Override
+    public void initAutonOpMode() {
+        // must initialize the following
+        // touchSensors for configuration
+        // imu and zeroHeadingDeg (start with assumption that starting pose is Blue Carousel)
+        // currentPose
+        // front web cam
+        // initialize Navigator(s) (optional) and Arbitrator if more than 1
+        // motion controller
+
+        // front web cam
+//        frontWebcam = new EbotsWebcam(hardwareMap, "Webcam 1", RobotSide.FRONT, (float) RobotSize.xSize.getSizeValue() / 2,-3.25f, 9.0f);
+        // TODO: figure out if changing these values is beneficial
+        frontWebcam = new EbotsWebcam(hardwareMap, "Webcam 1", RobotSide.FRONT, 0,-3.25f, 9.0f);
+
+        // initialize Navigator(s) (optional) and Arbitrator if more than 1
+        navigatorVuforia = new NavigatorVuforia(frontWebcam, hardwareMap);
+
+        // motion controller
+        this.motionController = new AutonDrive(this);
+
+        // Setup the pre-match autonStates
+        itinerary.add(StateConfigureRoutine.class);
+        itinerary.add(StateTestVuforiaNav.class);
+        itinerary.add(StateObserveBarCode.class);
+
     }
 
     private void executeStateMachine(){
@@ -71,10 +106,10 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
         try{
             Log.d(logTag, "State #" + strStateCount + " created type " + newState.getClass().getSimpleName());
         } catch (NullPointerException e){
-                Log.d(logTag, "Error creating state #" + strStateCount + ".  Returned Null");
-                Log.d(logTag, e.getStackTrace().toString());
+            Log.d(logTag, "Error creating state #" + strStateCount + ".  Returned Null");
+            Log.d(logTag, e.getStackTrace().toString());
         } catch (Exception e) {
-                Log.d(logTag, "Exception encountered " + e.getStackTrace().toString());
+            Log.d(logTag, "Exception encountered " + e.getStackTrace().toString());
         }
     }
 
@@ -85,12 +120,4 @@ public class AutonOpModeV1 extends EbotsAutonOpMode {
     }
 
 
-    @Override
-    public void initAutonOpMode() {
-        // Setup the pre-match autonStates
-        itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateObserveBarCode.class);
-
-
-    }
 }

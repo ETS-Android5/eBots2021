@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineCarousel;
@@ -94,10 +95,13 @@ public class StateConfigureRoutine implements EbotsAutonState{
     @Override
     public void performTransitionalActions() {
         opMode.setStartingSide(this.startingSide);
-
         double initialHeadingDeg = (AllianceSingleton.getAlliance() == Alliance.BLUE) ? -90 : 90;
         opMode.initEbotsImu();
         opMode.setInitialHeadingDeg(initialHeadingDeg);
+
+        // Note that IMU and Alliance must be set prior to initializing pose
+        Pose startingPose = new Pose(AllianceSingleton.getAlliance(), startingSide);
+        opMode.setCurrentPose(startingPose);
 
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();

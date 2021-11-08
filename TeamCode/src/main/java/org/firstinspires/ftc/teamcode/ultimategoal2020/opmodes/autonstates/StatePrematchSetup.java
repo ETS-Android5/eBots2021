@@ -189,7 +189,7 @@ public class StatePrematchSetup extends AbstractAutonState {
         boolean isCorrectStartLine = false;
 
         //calculate expected distance from the wall the distance sensor to the wall
-        double playFieldHalfWidth = new PlayField().getFieldWidth() /2;
+        double playFieldHalfWidth = new PlayField().getFieldXSize() /2;
 
         // this is refactored to use the robot's currentPose, which was set based on the startLine
         // double nominalDistance = playFieldHalfWidth - Math.abs(startLineY) - robotWidth;

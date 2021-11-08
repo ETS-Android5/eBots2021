@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.ebotsutil;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
+import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements.FieldTile;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.LaunchLine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements.PlayField;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.StartLine;
@@ -23,8 +25,10 @@ public class Pose {
     //***************************************************************/
 
     private double headingDeg;         // Degrees, 0 inline with x-axis, positive CCW when viewed from top
-    private double newHeadingReadingDeg;   //New incoming reading for heading
     private FieldPosition fieldPosition;    // x, y and z position on field in inches.  0 is center of field.  x+ towards target goals.  y+ towards blue alliance side.
+
+    @Deprecated
+    private double newHeadingReadingDeg;   //New incoming reading for heading
     /***************************************************************
     //******    STATIC VARIABLES
     //****************************************************************/
@@ -33,10 +37,11 @@ public class Pose {
     /***************************************************************
     //******    ENUMERATIONS
     //***************************************************************/
+    @Deprecated
     public enum PresetPose {
         //These starting poses assume BLUE Alliance
-        INNER_START_LINE(calculateXCoord(), calculateYCoord(StartLine.LinePosition.INNER), 0.0)
-        , OUTER_START_LINE(calculateXCoord(), calculateYCoord(StartLine.LinePosition.OUTER), 0.0)
+        INNER_START_LINE(calculateXCoord(StartingSide.CAROUSEL), calculateYCoord(), 0.0)
+        , OUTER_START_LINE(calculateXCoord(StartingSide.CAROUSEL), calculateYCoord(), 0.0)
         , LAUNCH_TARGET_GOAL(new LaunchLine().getX(), new TowerGoal().getY(), 0.0)
         , LAUNCH_POWER_SHOT(new LaunchLine().getX(), new TowerGoal().getY(), 0.0);
 
@@ -60,19 +65,22 @@ public class Pose {
             return headingStart;
         }
 
-        private static double calculateXCoord(){
+        private static double calculateXCoord(StartingSide startingSide){
             //Start on the bottom wall, heading = 0
-            double wallX = -new PlayField().getFieldHeight()/2;
-            double robotX = RobotSize.xSize.getSizeValue()/2;
-            return (wallX + robotX);
+            double robotHalfWidth = RobotSize.ySize.getSizeValue()/2;
+            int numTiles = 0;
+            if (startingSide == StartingSide.CAROUSEL) {
+                numTiles = (AllianceSingleton.getAlliance()==Alliance.RED) ? 2 : 1;
+            }
+            double xCenter = (-FieldTile.getSize() * numTiles) + robotHalfWidth;
+
+            return xCenter;
         }
 
-        private static double calculateYCoord(StartLine.LinePosition linePosition){
+        private static double calculateYCoord(){
             //Assumed blue alliance, robot heading 0, right wheels on start line
-            double startLineY = linePosition.getyCenter();
-            double colorSensorYInset = 2.5;
-            double robotY = (RobotSize.ySize.getSizeValue()/2 - colorSensorYInset);
-            return (startLineY + robotY);
+            double robotY = (PlayField.getSideLength()/2 - RobotSize.xSize.getSizeValue()/2);
+            return robotY;
         }
 
     }
@@ -105,7 +113,30 @@ public class Pose {
 
     }
 
+    public Pose(Alliance alliance, StartingSide startingSide){
+        //Start on the bottom wall, heading = 0
+        double robotHalfWidth = RobotSize.ySize.getSizeValue()/2;
+        int numTiles = 0;
+        if (startingSide == StartingSide.CAROUSEL) {
+            numTiles = (AllianceSingleton.getAlliance()==Alliance.RED) ? 2 : 1;
+        }
+        double xCenter = (-FieldTile.getSize() * numTiles) + robotHalfWidth;
+
+
+        double yCenter = (PlayField.getSideLength()/2 - RobotSize.xSize.getSizeValue()/2);  //assumes blue
+        int allianceSign = (alliance == Alliance.BLUE) ? 1 : -1;
+        yCenter *= allianceSign;    //flips sign for RED
+
+        double startingHeadingDeg = -90;        // assumes blue
+        startingHeadingDeg *= allianceSign;     // flips heading for RED
+
+        this.fieldPosition = new FieldPosition(xCenter, yCenter);
+        this.headingDeg = startingHeadingDeg;
+        this.newHeadingReadingDeg = startingHeadingDeg;
+    }
+
     //  When using a pre-defined StartingPose from the enumeration
+    @Deprecated
     public Pose(PresetPose presetPose, Alliance alliance) {
         this(presetPose.getXStart(), presetPose.getYStart(), presetPose.getHeadingStart());
 
@@ -116,8 +147,9 @@ public class Pose {
     }
 
     // When using a StartLine.LinePosition
+    @Deprecated
     public Pose(StartLine.LinePosition linePosition, Alliance alliance){
-        double xPosition = -new PlayField().getFieldHeight()/2 + RobotSize.xSize.getSizeValue()/2;
+        double xPosition = -new PlayField().getFieldYSize()/2 + RobotSize.xSize.getSizeValue()/2;
         //Assumed blue alliance, robot heading 0, right wheels on start line
         double yPosition = linePosition.getyCenter() + RobotSize.ySize.getSizeValue()/2;
         this.fieldPosition = new FieldPosition(xPosition, yPosition);
@@ -130,6 +162,7 @@ public class Pose {
         }
 
     }
+
 
     /*****************************************************************
     //******    SIMPLE GETTERS AND SETTERS

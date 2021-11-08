@@ -120,7 +120,7 @@ public class NavigatorVuforia implements EbotsNavigator{
         OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES,
-                        ebotsWebCam.getxAxisRotationDeg(), ebotsWebCam.getzAxisRotationDeg(), 0)
+                        ebotsWebCam.getxAxisRotationDeg(), ebotsWebCam.getzAxisRotationDeg(), ebotsWebCam.getyAxisRotationDeg())
                 );
 
         /**  Let all the trackable listeners know where the camera is.  */

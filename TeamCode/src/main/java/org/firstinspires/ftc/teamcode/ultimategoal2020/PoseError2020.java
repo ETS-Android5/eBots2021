@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal2020;
 import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,9 @@ public class PoseError2020 {
     ******    CLASS VARIABLES
     ***************************************************************/
     private double headingErrorDeg;     //Error in which way the robot is facing
-    private FieldPosition2020 positionError;    //Field position object for X,Y error from robot's targetPose
+    private FieldPosition positionError;    //Field position object for X,Y error from robot's targetPose
 
-    private ArrayList<ErrorSum2020> errorSum2020s;      //Arraylist of all error Sums (X, Y, Spin)
+    private ArrayList<ErrorSum2020> errorSums2020;      //Arraylist of all error Sums (X, Y, Spin)
 
     /***************************************************************
      ******    SIMPLE GETTERS AND SETTERS
@@ -50,7 +51,7 @@ public class PoseError2020 {
 
     public double getErrorSumComponent(CsysDirection dir){
         double errorSumValue = 0;
-        for(ErrorSum2020 errorSum2020 : errorSum2020s){
+        for(ErrorSum2020 errorSum2020 : errorSums2020){
             if(errorSum2020.getCsysDirection() == dir){
                 errorSumValue = errorSum2020.getValue();
                 break;
@@ -69,7 +70,7 @@ public class PoseError2020 {
     ***************************************************************/
     public PoseError2020(){
         this.headingErrorDeg = 0;
-        this.positionError = new FieldPosition2020(0,0, CoordinateSystem.FIELD);
+        this.positionError = new FieldPosition(0,0, CoordinateSystem.FIELD);
         initializeErrorSums();
     }
 
@@ -89,7 +90,7 @@ public class PoseError2020 {
 
     public void initializeError(EbotsRobot2020 robot){
         //Initialize error
-        this.positionError = new FieldPosition2020();
+        this.positionError = new FieldPosition();
         calculateError(robot,0, Speed.SLOW);
         initializeErrorSums();
     }
@@ -108,29 +109,29 @@ public class PoseError2020 {
     }
 
     private void initializeErrorSums(){
-        errorSum2020s = new ArrayList<>();
+        errorSums2020 = new ArrayList<>();
         //Loop through each direction
         for(CsysDirection dir:CsysDirection.values()){
             //Skip Z Direction
             if(dir != CsysDirection.Z){
                 //Add a new errorSum object to the list
-                errorSum2020s.add(new ErrorSum2020(dir));
+                errorSums2020.add(new ErrorSum2020(dir));
             }
         }
     }
 
     private void updateErrorSums(EbotsRobot2020 robot, long loopDuration, Speed speed){
-        for(ErrorSum2020 errorSum2020 : errorSum2020s){
+        for(ErrorSum2020 errorSum2020 : errorSums2020){
             errorSum2020.update(robot, loopDuration, speed);
         }
     }
 
-    public FieldPosition2020 getPositionErrorInRobotCoordinateSystem(EbotsRobot2020 robot){
+    public FieldPosition getPositionErrorInRobotCoordinateSystem(EbotsRobot2020 robot){
         //this is used in auton to determine how the robot must drive to achieve target pose
 
         //Note: the positionErrorVector is the distance between robot and target pose in FIELD coordinate system
         //Step 1:  Call the Coordinate System routine to perform the rotation transformation
-        FieldPosition2020 positionErrorInRobotCoordinateSystem = CoordinateSystem.transformCoordinateSystem(this.positionError,CoordinateSystem.ROBOT,robot);
+        FieldPosition positionErrorInRobotCoordinateSystem = CoordinateSystem.transformCoordinateSystem(this.positionError,CoordinateSystem.ROBOT,robot.getActualPose().getHeadingDeg());
         return positionErrorInRobotCoordinateSystem;
     }
 

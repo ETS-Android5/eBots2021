@@ -20,10 +20,28 @@ public class MyClass {
 
     public static void main(String[] args) {
         String twoDec = "%.2f";
-        System.out.println("aTan 1/0: " + String.format(twoDec, Math.toDegrees(Math.atan2(1,0))));
-        System.out.println("aTan 0/1: " + String.format(twoDec, Math.toDegrees(Math.atan2(0,1))));
-        System.out.println("aTan -1/0: " + String.format(twoDec, Math.toDegrees(Math.atan2(-1,0))));
-        System.out.println("aTan 0/-1: " + String.format(twoDec, Math.toDegrees(Math.atan2(0,-1))));
+
+        ArrayList<Double> headings = new ArrayList<>();
+        headings.add(170.8);
+        headings.add(-170.0);
+
+        ArrayList<Double> xComponents;
+        double sumXComp;
+        sumXComp = headings.stream()
+                .mapToDouble(h->Math.sin(Math.toRadians(h)))
+                .reduce(0.0,(subtotal, element) -> subtotal + element);
+        System.out.println("Total X: " + String.format(twoDec, sumXComp));
+
+        double sumYComp = headings.stream()
+                .mapToDouble(h->Math.cos(Math.toRadians(h)))
+                .reduce(0.0, (subtotal, element) -> subtotal + element);
+        System.out.println("Total Y: " + String.format(twoDec, sumYComp));
+
+        double resultantAngle = Math.toDegrees(Math.atan2(sumXComp, sumYComp));
+        System.out.println("Resultant Angle: " + String.format(twoDec, resultantAngle));
+
+
+
 
 //        ArrayList<String> ebotsMembers = new ArrayList<>();
 //        ebotsMembers.add("Thomas");

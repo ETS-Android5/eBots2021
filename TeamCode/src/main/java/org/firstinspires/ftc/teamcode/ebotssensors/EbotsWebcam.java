@@ -21,6 +21,7 @@ public class EbotsWebcam {
     // for these transformation, camera long side is aligned with robot x axis (fore-aft)
     // and short side of camera is facing y+, camera lens is facing up z+
     private float xAxisRotationDeg;
+    private float yAxisRotationDeg = 0;
     private float zAxisRotationDeg;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,9 +36,11 @@ public class EbotsWebcam {
         this.zTranslation = z;
 
         this.xAxisRotationDeg = 90.0f;
+        this.yAxisRotationDeg = 0.0f;
 
         if(facingRobotSide==RobotSide.FRONT){
             zAxisRotationDeg = 90.0f;
+            this.yAxisRotationDeg = -10.0f;
         } else if (facingRobotSide == RobotSide.LEFT){
             zAxisRotationDeg = 180.0f;
         } else if (facingRobotSide == RobotSide.BACK){
@@ -72,6 +75,10 @@ public class EbotsWebcam {
 
     public float getxAxisRotationDeg() {
         return xAxisRotationDeg;
+    }
+
+    public float getyAxisRotationDeg() {
+        return yAxisRotationDeg;
     }
 
     public float getzAxisRotationDeg() {

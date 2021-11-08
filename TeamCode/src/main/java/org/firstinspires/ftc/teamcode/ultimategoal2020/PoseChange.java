@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.EncoderSetup;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotOrientation;
+import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 
 import java.util.ArrayList;
 
@@ -17,8 +18,8 @@ import java.util.ArrayList;
 public class PoseChange {
 
     private double spinAngleDeg;    //This contains the angle that occurred during a loop
-    private FieldPosition2020 incrementalRobotMovement;
-    private FieldPosition2020 incrementalFieldMovement;
+    private FieldPosition incrementalRobotMovement;
+    private FieldPosition incrementalFieldMovement;
 
     private final String logTag = "EBOTS";
     private final boolean debugOn = false;
@@ -37,8 +38,8 @@ public class PoseChange {
     public double getSpinAngleDeg() {
         return spinAngleDeg;
     }
-    public FieldPosition2020 getIncrementalRobotMovement() {return incrementalRobotMovement;}
-    public FieldPosition2020 getIncrementalFieldMovement() {return incrementalFieldMovement;}
+    public FieldPosition getIncrementalRobotMovement() {return incrementalRobotMovement;}
+    public FieldPosition getIncrementalFieldMovement() {return incrementalFieldMovement;}
 
     /***************************************************************
      //******    Class METHODS
@@ -131,8 +132,8 @@ public class PoseChange {
 
         double xTranslationRobotCsys = getMovementComponentInches(movementComponents, CoordinateSystem.ROBOT, CsysDirection.X);
         double yTranslationRobotCsys = getMovementComponentInches(movementComponents, CoordinateSystem.ROBOT, CsysDirection.Y);
-        incrementalRobotMovement = new FieldPosition2020(xTranslationRobotCsys,yTranslationRobotCsys,CoordinateSystem.ROBOT);
-        incrementalFieldMovement = CoordinateSystem.transformCoordinateSystem(incrementalRobotMovement,CoordinateSystem.FIELD,robot);
+        incrementalRobotMovement = new FieldPosition(xTranslationRobotCsys,yTranslationRobotCsys,CoordinateSystem.ROBOT);
+        incrementalFieldMovement = CoordinateSystem.transformCoordinateSystem(incrementalRobotMovement,CoordinateSystem.FIELD,robot.getActualPose().getHeadingDeg());
         if(debugOn){
             StringBuilder sb = new StringBuilder();
             sb.append("incrementalRobotMovement: ");
