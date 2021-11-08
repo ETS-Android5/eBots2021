@@ -46,6 +46,10 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
     @Override
     public void initAutonOpMode() {
+        telemetry.addData("Initializing AutonOpMode ", this.getClass().getSimpleName());
+        telemetry.addLine("Please hold................");
+        telemetry.update();
+
         // must initialize the following
         // touchSensors for configuration
         // imu and zeroHeadingDeg (start with assumption that starting pose is Blue Carousel)
@@ -54,8 +58,6 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // initialize Navigator(s) (optional) and Arbitrator if more than 1
         // motion controller
 
-        // front web cam
-//        frontWebcam = new EbotsWebcam(hardwareMap, "Webcam 1", RobotSide.FRONT, (float) RobotSize.xSize.getSizeValue() / 2,-3.25f, 9.0f);
         // TODO: figure out if changing these values is beneficial
         frontWebcam = new EbotsWebcam(hardwareMap, "Webcam 1", RobotSide.FRONT, 0,-3.25f, 9.0f);
 
@@ -70,6 +72,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         itinerary.add(StateTestVuforiaNav.class);
         itinerary.add(StateObserveBarCode.class);
 
+        telemetry.addLine("Initialization complete!");
+        telemetry.update();
     }
 
     private void executeStateMachine(){

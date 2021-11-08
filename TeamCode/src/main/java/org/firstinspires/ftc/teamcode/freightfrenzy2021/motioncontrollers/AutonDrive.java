@@ -48,7 +48,7 @@ public class AutonDrive implements EbotsMotionController {
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public AutonDrive(EbotsAutonOpMode autonOpMode){
-        this.speed = Speed.MEDIUM;
+        this.speed = Speed.SLOW;
 
         // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list

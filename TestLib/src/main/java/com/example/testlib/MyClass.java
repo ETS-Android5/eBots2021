@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.SourceLocator;
 
+
 public class MyClass {
 
     public enum TestEnum{
@@ -19,6 +20,7 @@ public class MyClass {
 
 
     public static void main(String[] args) {
+        //Pose pose = new Pose();
         String twoDec = "%.2f";
 
         ArrayList<Double> headings = new ArrayList<>();

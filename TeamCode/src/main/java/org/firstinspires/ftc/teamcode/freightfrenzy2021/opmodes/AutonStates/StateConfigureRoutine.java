@@ -94,6 +94,8 @@ public class StateConfigureRoutine implements EbotsAutonState{
 
     @Override
     public void performTransitionalActions() {
+        telemetry.addData("Transitioning out of", this.getClass().getSimpleName());
+        telemetry.update();
         opMode.setStartingSide(this.startingSide);
         double initialHeadingDeg = (AllianceSingleton.getAlliance() == Alliance.BLUE) ? -90 : 90;
         opMode.initEbotsImu();
