@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.Accuracy;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
@@ -36,6 +37,7 @@ public class StateTestVuforiaNav implements EbotsAutonState{
     private ArrayList<Pose> poseEstimates = new ArrayList<>();
 
     private StopWatch stopWatch = new StopWatch();
+    private Accuracy accuracy = Accuracy.STANDARD;
 
 
     String logTag = "EBOTS";
@@ -59,16 +61,31 @@ public class StateTestVuforiaNav implements EbotsAutonState{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void performStateActions() {
+        // Actions a) drive the robot b)
         poseString = "Insufficient data";
         scanAttempts++;
 
+        updatePose();
+
+
+        updateTelemetry();
+    }
+
+
+    @Override
+    public void performTransitionalActions() {
+        // do nothing
+        poseString = "jojo";
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void updatePose() {
         dropOldReadings();
         // get new poseEstimate
         Pose poseEstimate = autonOpMode.getNavigatorVuforia().getPoseEstimate();
         recordPoseEstimate(poseEstimate);
-        updateCurrentPose();
-
-        updateTelemetry();
+        calculateCurrentPose();
     }
 
     private void dropOldReadings() {
@@ -93,7 +110,7 @@ public class StateTestVuforiaNav implements EbotsAutonState{
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void updateCurrentPose() {
+    private void calculateCurrentPose() {
         // check if buffer is full after new observation
         boolean bufferFull = (poseEstimates.size() >= bufferSizeTarget);
         if (bufferFull){
@@ -105,16 +122,10 @@ public class StateTestVuforiaNav implements EbotsAutonState{
         }
     }
 
-    @Override
-    public void performTransitionalActions() {
-        // do nothing
-        poseString = "jojo";
-    }
-
 
     /**
      * Processes the provided array of poses and averages X and Y components a field position
-     * @param poses
+     * @param poses array of poses considered estimates of currentPose
      * @return fieldPosition
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -163,6 +174,64 @@ public class StateTestVuforiaNav implements EbotsAutonState{
         return resultantAngle;
 
     }
+
+//    /**
+//     * Target pose is achieved if the position and heading are met and
+//     * @return boolean: isTargetPoseAchieved
+//     */
+//    private boolean isTargetPoseAchieved(){
+//        boolean isTargetPoseAchieved = true;
+//        // check position and heading
+//        boolean isPositionAchieved = poseError.getMagnitude() < accuracy.getPositionalAccuracy();
+//        boolean isHeadingAchieved = Math.abs(poseError.getHeadingErrorDeg()) < accuracy.getHeadingAccuracyDeg();
+//        isTargetPoseAchieved = isTargetPoseAchieved && isPositionAchieved && isHeadingAchieved;
+//
+//        // check the error sums if active
+//        for (CsysDirection dir: CsysDirection.values()) {
+//            if (dir == CsysDirection.Z) continue;  // skip if Z axis
+//            if (motionController.getSpeed().isIntegratorOn(dir)) {
+//                // only check if integrator is on
+//                boolean isIntegratorUnwound = Math.abs(poseError.getErrorSumComponent(dir)) <= accuracy.getTargetIntegratorUnwind(dir);
+//                isHeadingAchieved = isHeadingAchieved && isIntegratorUnwound;
+//            }
+//        }
+//        return isTargetPoseAchieved;
+//    }
+//
+//    private boolean isTargetPoseSustained(boolean isTargetPoseAchieved){
+//        long targetDurationMillis = 750;
+//        boolean isTargetPoseSustained = false;
+//
+//        if (isTargetPoseAchieved && !wasTargetPoseAchieved){
+//            // if pose newly achieved
+//            stopWatchPoseAchieved.reset();
+//            wasTargetPoseAchieved = true;
+//        } else if (isTargetPoseAchieved && wasTargetPoseAchieved){
+//            if (stopWatchPoseAchieved.getElapsedTimeMillis() >= targetDurationMillis){
+//                isTargetPoseSustained = true;
+//            }
+//        } else{
+//            wasTargetPoseAchieved = false;
+//        }
+//        return isTargetPoseSustained;
+//
+//    }
+//
+//    private boolean isNewPoseReliable(Pose newPose){
+//        boolean isNewPoseReliable;
+//        // see how fast the robot would have had to travel to achieve new pose
+//        PoseError detectedPoseChange = new PoseError(currentPose, newPose, autonOpMode);
+//        double distanceTraveled = detectedPoseChange.getMagnitude();
+//        double calculatedSpeed = distanceTraveled / stopWatchVuforia.getElapsedTimeSeconds();
+//        // compare that to a reasonable speed
+//        double speedMultiplier = 2.5;
+//        double maxReasonableSpeed = autonOpMode.getMotionController().getSpeed().getMaxSpeed() * speedMultiplier;
+//        isNewPoseReliable = calculatedSpeed <= maxReasonableSpeed;
+//
+//        return isNewPoseReliable;
+//    }
+//
+
 
     private void updateTelemetry(){
         telemetry.addLine("Push Left + Right Bumper to Exit");
