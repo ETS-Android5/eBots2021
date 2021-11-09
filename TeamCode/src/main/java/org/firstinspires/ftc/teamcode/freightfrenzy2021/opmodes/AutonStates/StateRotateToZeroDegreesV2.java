@@ -40,7 +40,7 @@ public class StateRotateToZeroDegreesV2 implements EbotsAutonState{
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         this.autonOpMode = autonOpMode;
         this.motionController = autonOpMode.getMotionController();
-        this.motionController.setSpeed(Speed.MEDIUM);
+        this.motionController.setSpeed(Speed.SLOW);
         targetHeadingDeg = 0.0;
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

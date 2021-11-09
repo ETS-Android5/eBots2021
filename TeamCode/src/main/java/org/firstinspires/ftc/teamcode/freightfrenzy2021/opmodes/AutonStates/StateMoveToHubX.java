@@ -44,7 +44,7 @@ public class StateMoveToHubX implements EbotsAutonState{
         stopWatch.reset();
 
         if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
-            driveTime = 625;
+            driveTime = 850;
             speed = 1.0;
         } else {
             driveTime = 200;

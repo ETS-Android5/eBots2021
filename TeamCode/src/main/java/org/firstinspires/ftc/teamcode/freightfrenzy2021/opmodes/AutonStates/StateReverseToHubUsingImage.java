@@ -71,7 +71,7 @@ public class StateReverseToHubUsingImage implements EbotsAutonState{
         Log.d(logTag, "In Constructor, this.currentPose:" + currentPose.toString());
         Log.d(logTag, "In Constructor, autonOpmode currentPose:" + autonOpMode.getCurrentPose().toString());
 
-        double tolerance = 3;
+        double tolerance = 0;
         double targetDistFromHubCenter = AllianceShippingHub.getRadius() + RobotSize.xSize.getSizeValue()/2 + tolerance;
         double targetHeadingDeg = 63.4 * allianceSign;
         double targetX = AllianceShippingHub.getFieldPosition().getxPosition() + (targetDistFromHubCenter*Math.cos(Math.toRadians(targetHeadingDeg)));
