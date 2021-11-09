@@ -73,8 +73,6 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateObserveTeamShippingElement.class);
-        itinerary.add(StateReverseToHubUsingImage.class);
-        itinerary.add(StateObserveTeamShippingElement.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();
