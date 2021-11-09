@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
@@ -30,12 +32,11 @@ public class AutonDrive implements EbotsMotionController {
     private double translateAngleRad;
 
     private Speed speed;
+    private Telemetry telemetry;
 
 
     // The IMU sensor object
     //private EbotsImu imu; // use singleton
-
-    private double currentHeadingDeg;       // current field-heading of the robot
 
     private PoseError poseError;
     private double xSignal;
@@ -48,7 +49,8 @@ public class AutonDrive implements EbotsMotionController {
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public AutonDrive(EbotsAutonOpMode autonOpMode){
-        this.speed = Speed.SLOW;
+        this.speed = Speed.MEDIUM;
+        this.telemetry = autonOpMode.telemetry;
 
         // Create a list of mecanum wheels and store in mecanumWheels
         // Wheel rollers are either 45 or -45 degrees.  Note which ones are negative with this list
@@ -97,6 +99,10 @@ public class AutonDrive implements EbotsMotionController {
         return translateAngleRad;
     }
 
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -109,21 +115,18 @@ public class AutonDrive implements EbotsMotionController {
         boolean isSignalSaturated = true;
 
         if (csysDirection == CsysDirection.X){
-            isSignalSaturated = Math.abs(xSignal) > speed.getMaxSpeed();
+            isSignalSaturated = Math.abs(xSignal) >= speed.getMaxSpeed();
 
         } else if (csysDirection == CsysDirection.Y){
-            isSignalSaturated = Math.abs(ySignal) > speed.getMaxSpeed();
+            isSignalSaturated = Math.abs(ySignal) >= speed.getMaxSpeed();
 
         } else if (csysDirection == CsysDirection.Heading){
-            isSignalSaturated = Math.abs(spinSignal) > speed.getTurnSpeed();
+            isSignalSaturated = Math.abs(spinSignal) >= speed.getTurnSpeed();
         }
 
         return isSignalSaturated;
     }
 
-    public void performImuHardwareRead(){
-        currentHeadingDeg = EbotsImu.getCurrentFieldHeadingDeg(true);
-    }
 
 
     @Override
@@ -138,7 +141,7 @@ public class AutonDrive implements EbotsMotionController {
 
     }
 
-    public void calculateDriveFromError(PoseError poseError){
+    public void calculateDriveFromError(Pose currentPose, PoseError poseError){
         //  For field-oriented drive, the inputted forward and lateral commands are intepreted as:
         //  Assuming Red Alliance:
         //      FORWARD:  Robot translates Field Coordinate Y+
@@ -170,7 +173,6 @@ public class AutonDrive implements EbotsMotionController {
         xSignal = poseError.getXError() * speed.getK_p() + poseError.getXErrorSum() * speed.getK_i();
         ySignal = poseError.getYError() * speed.getK_p() + poseError.getYErrorSum() * speed.getK_i();
         spinSignal = poseError.getHeadingErrorDeg() * speed.getS_p() + poseError.getHeadingErrorDegSum() * speed.getS_i();
-        performImuHardwareRead();
 
         //  Step 1:  Calculate the magnitude for drive signal (hypotenuse of xDirDrive and yDirDrive signal)
         //  Step 2:  Calculate the translate angle (based on X & Y signals, robot heading is not a consideration)
@@ -185,7 +187,7 @@ public class AutonDrive implements EbotsMotionController {
         translateAngleRad = Math.atan2(ySignal, xSignal);
 
         //  Step 3:  Calculate the robot angle, which adjusts for robot orientation
-        double driveAngleRad = translateAngleRad - Math.toRadians(currentHeadingDeg);
+        double driveAngleRad = translateAngleRad - currentPose.getHeadingRad();
         // overflow of angle is OK here, the calculation isn't affected
         //driveAngleRad=Math.toRadians(applyAngleBounds(Math.toDegrees(driveAngleRad)));
 
@@ -205,7 +207,12 @@ public class AutonDrive implements EbotsMotionController {
             double scaleFactor = maxAllowedPower/maxCalculatedPowerMagnitude;
             this.applyScaleToCalculatedDrive(scaleFactor);
         }
-
+        String oneDec = "%.1f";
+        String driveString = "Signals for X / Y / Spin: " + String.format(oneDec, xSignal) +
+                " / " + String.format(oneDec, ySignal) +
+                " / " + String.format(oneDec, spinSignal);
+        telemetry.addLine(driveString);
+        Log.d(logTag, driveString);
         // This sets the motor to the calculated power to move robot
         drive();
     }
@@ -251,7 +258,7 @@ public class AutonDrive implements EbotsMotionController {
 
         long translateTimeMillis = (long) ((translateDistance / topTranslationSpeed)*1000);
         long spinTimeMillis = (long) ((rotationAngleRad / topSpinSpeed)*1000);
-        long bufferMillis = 1000L;      //The buffer is a little extra time allotted (maybe should be percentage)
+        long bufferMillis = 1500L;      //The buffer is a little extra time allotted (maybe should be percentage)
 
         //The total calculated time is the travel time and spin time and buffer (plus the soft start duration)
         long calculatedTime = (translateTimeMillis + spinTimeMillis + bufferMillis);

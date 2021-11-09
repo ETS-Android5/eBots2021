@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.Pose2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.StarterStackObservation;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.fieldobjects2020.TargetZone;
 
 public class StateMoveToTargetZone extends AbstractAutonState {

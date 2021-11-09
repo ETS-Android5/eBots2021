@@ -5,15 +5,14 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
-import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
-import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateTestVuforiaNav;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveTeamShippingElement;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
 @Autonomous
@@ -42,6 +41,10 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
             transitionToNextState();
             executeStateMachine();
         }
+
+        // Cleanup the resources from Vuforia
+        navigatorVuforia.deactivateTargets();
+
     }
 
     @Override
@@ -69,8 +72,9 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateTestVuforiaNav.class);
-        itinerary.add(StateObserveBarCode.class);
+        itinerary.add(StateObserveTeamShippingElement.class);
+        itinerary.add(StateReverseToHubUsingImage.class);
+        itinerary.add(StateObserveTeamShippingElement.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();

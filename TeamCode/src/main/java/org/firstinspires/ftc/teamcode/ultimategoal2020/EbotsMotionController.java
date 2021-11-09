@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.GyroSetting;
 import org.firstinspires.ftc.teamcode.ebotsenums.SoftStart;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.opmodes.AutonParameters;
 
 public class EbotsMotionController {

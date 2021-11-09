@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsRevBlink
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EbotsRobot2020;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.EncoderTracker;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.gameelements.PlayField;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ultimategoal2020.sensors2020.EbotsDigitalTouch;

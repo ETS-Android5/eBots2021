@@ -102,7 +102,7 @@ public class PoseError {
     public void calculateError(Pose currentPose, Pose targetPose, long loopDuration){
         double xError = targetPose.getX() - currentPose.getX();
         double yError = targetPose.getY() - currentPose.getY();
-        this.headingErrorDeg = Pose.applyAngleBound(targetPose.getHeadingDeg() - currentPose.getHeadingDeg());
+        this.headingErrorDeg = UtilFuncs.applyAngleBounds(targetPose.getHeadingDeg() - currentPose.getHeadingDeg());
         this.positionError.setxPosition(xError);
         this.positionError.setyPosition(yError);
 
@@ -135,7 +135,10 @@ public class PoseError {
 
             boolean isSignalSaturated = opMode.getMotionController().isSignalSaturated(dir);
             double currentError = this.getErrorComponent(dir);
+
+            // see if error is same sign as errorSum.  If errorSum is 0 (initial value), then considered same sign
             boolean sameSign = Math.signum(currentError) == Math.signum(errorSum.getValue());
+            sameSign = sameSign | errorSum.getValue() == 0.0;
 
             // only update the errorSum for a given direction if either
             // --> the signal is NOT saturated

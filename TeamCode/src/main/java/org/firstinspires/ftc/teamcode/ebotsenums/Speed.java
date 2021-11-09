@@ -4,9 +4,9 @@ import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.MotionControlCoefficient;
 
 public enum Speed {
-    SLOW (0.4, 0.2, 0.35, 0.15, 0.0, 0.05, 0.0, 0.0),
-    MEDIUM (0.60,0.4,  0.10, 0.05, 0.0, 0.03, 0.0, 0.0),  //iGain was 0.05
-    FAST (1.0, 0.6, 0.10, 0.025, 0.0,0.03, 0.0,0.0),  // was 0.05 at start
+    SLOW (0.4, 0.2, .025, 0.01, 0.0, 0.015, 0.0, 0.0),
+    MEDIUM (0.60,0.4,  0.06, 0.00, 0.0, 0.015, 0.0, 0.0),  //iGain was 0.05
+    FAST (1.0, 0.8, 0.04, 0.00, 0.0,0.015, 0.0,0.0),  // was 0.05 at start
     TELEOP (1.0, 0.8, 0.10, 0.025, 0.0,0.03, 0.0,0.0);  // was 0.05 at start
 
     /**  ENUM VARIABLES     **************/

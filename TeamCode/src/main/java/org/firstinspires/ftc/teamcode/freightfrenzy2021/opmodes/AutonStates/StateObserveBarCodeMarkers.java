@@ -22,7 +22,7 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private EbotsAutonOpMode opMode;
+    private EbotsAutonOpMode autonOpMode;
     private BarCodePosition observation;
     private double dividingLine = 163;
     private Telemetry telemetry;
@@ -47,15 +47,17 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
      * Detection engine.
      */
     private TFObjectDetector tfod;
-    private boolean isDuckObserved = false;
     private double leftPosition;
+    private boolean leftMarkerVisible;
+    private boolean middleMarkerVisible;
+
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateObserveBarCodeMarkers(EbotsAutonOpMode autonOpMode){
-        this.opMode = autonOpMode;
+        this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
 //        this.telemetry.clearAll();
         telemetry.addData("Current State", this.getClass().getSimpleName());
@@ -78,15 +80,15 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        return opMode.isStarted() | opMode.isStopRequested();
+        return autonOpMode.isStarted() | autonOpMode.isStopRequested();
     }
 
     @Override
     public void performStateActions() {
-        isDuckObserved = false;
+        leftMarkerVisible = false;
+        middleMarkerVisible = false;
         leftPosition = 0;
         if(tfod == null) return;
-        observation = BarCodePosition.RIGHT;
         // getUpdatedRecognitions() will return null if no new information is available since
         // the last time that call was made.
         List<Recognition> updatedRecognitions = tfod.getRecognitions();
@@ -95,21 +97,25 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
             // step through the list of recognitions and display boundary info.
             for (Recognition recognition : updatedRecognitions) {
                 if (recognition.getLabel() == "Marker"){
-                    isDuckObserved = true;
                     leftPosition = recognition.getLeft();
                     if(recognition.getLeft() >= dividingLine){
-                        observation = BarCodePosition.MIDDLE;
+                        middleMarkerVisible = true;
                     } else {
-                        observation = BarCodePosition.LEFT;
+                        leftMarkerVisible = true;
                     }
                 }
             }
         }
+        if (leftMarkerVisible && middleMarkerVisible) {
+            observation = BarCodePosition.RIGHT;
+        } else if (leftMarkerVisible) {
+            observation = BarCodePosition.MIDDLE;
+        } else {
+            observation = BarCodePosition.LEFT;
+        }
+
         new BarCodeObservation(observation);
-        telemetry.addData("Duck Observed", isDuckObserved);
-        telemetry.addData("LeftPosition", leftPosition);
-
-
+        telemetry.addData("See Left / Middle", leftMarkerVisible + " / " + middleMarkerVisible);
         telemetry.addData("Observation", observation.name());
     }
 
@@ -117,7 +123,7 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
     public void performTransitionalActions() {
         BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
         //reason for crash  :)
-        opMode.setBarCodePosition(barCodePosition);
+        autonOpMode.setBarCodePosition(barCodePosition);
         telemetry.addData("Barcode Position ", barCodePosition);
         telemetry.update();
     }
@@ -146,7 +152,7 @@ public class StateObserveBarCodeMarkers implements EbotsAutonState{
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.minResultConfidence = 0.6f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);

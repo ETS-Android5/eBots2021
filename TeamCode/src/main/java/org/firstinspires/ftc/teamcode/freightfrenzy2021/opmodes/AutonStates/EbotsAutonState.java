@@ -36,8 +36,12 @@ public interface EbotsAutonState {
             newState = new StateMoveToWarehouseY(autonOpMode);
         } else if (targetState == StateObserveBarCodeMarkers.class){
             newState = new StateObserveBarCodeMarkers(autonOpMode);
-        } else if (targetState == StateTestVuforiaNav.class){
-            newState = new StateTestVuforiaNav(autonOpMode);
+        } else if (targetState == StateReverseToHubUsingImage.class){
+            newState = new StateReverseToHubUsingImage(autonOpMode);
+        } else if (targetState == StateObserveTeamShippingElement.class){
+            newState = new StateObserveTeamShippingElement(autonOpMode);
+        } else if (targetState == StateDumpFreight.class){
+            newState = new StateDumpFreight(autonOpMode);
         }
         return newState;
     }

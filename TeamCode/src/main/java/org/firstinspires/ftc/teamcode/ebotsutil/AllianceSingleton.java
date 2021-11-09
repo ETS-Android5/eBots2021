@@ -44,6 +44,10 @@ public class AllianceSingleton {
         allianceSingleton = new AllianceSingleton(alliance);
     }
 
+    public static boolean isBlue() {
+        return allianceSingleton.alliance == Alliance.BLUE;
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

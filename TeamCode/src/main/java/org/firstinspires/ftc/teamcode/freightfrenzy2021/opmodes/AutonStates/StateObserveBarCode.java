@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.List;
@@ -22,10 +23,12 @@ public class StateObserveBarCode implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private EbotsAutonOpMode opMode;
+    private EbotsAutonOpMode autonOpMode;
     private BarCodePosition observation;
     private double dividingLine = 163;
     private Telemetry telemetry;
+    private StopWatch stopWatchState = new StopWatch();
+
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
@@ -55,7 +58,7 @@ public class StateObserveBarCode implements EbotsAutonState{
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateObserveBarCode(EbotsAutonOpMode autonOpMode){
-        this.opMode = autonOpMode;
+        this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
 //        this.telemetry.clearAll();
         telemetry.addData("Current State", this.getClass().getSimpleName());
@@ -78,8 +81,11 @@ public class StateObserveBarCode implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        boolean shouldExit = (opMode.gamepad1.left_bumper && opMode.gamepad1.right_bumper);
-        return shouldExit | opMode.isStarted() | opMode.isStopRequested();
+        boolean lockoutActive = stopWatchState.getElapsedTimeMillis() < 1000;
+        boolean userRequestExit = (autonOpMode.gamepad1.left_bumper && autonOpMode.gamepad1.right_bumper);
+        userRequestExit = userRequestExit && !lockoutActive;
+
+        return userRequestExit | autonOpMode.isStarted() | autonOpMode.isStopRequested();
     }
 
     @Override
@@ -118,7 +124,9 @@ public class StateObserveBarCode implements EbotsAutonState{
     public void performTransitionalActions() {
         BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
         //reason for crash  :)
-        opMode.setBarCodePosition(barCodePosition);
+        autonOpMode.setBarCodePosition(barCodePosition);
+        tfod.deactivate();
+
         telemetry.addData("Barcode Position ", barCodePosition);
         telemetry.update();
     }
@@ -129,13 +137,16 @@ public class StateObserveBarCode implements EbotsAutonState{
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        vuforia = autonOpMode.getNavigatorVuforia().getVuforia();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        if (vuforia == null) {
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+            parameters.vuforiaLicenseKey = VUFORIA_KEY;
+            parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+            //  Instantiate the Vuforia engine
+            vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        }
 
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
@@ -164,4 +175,10 @@ public class StateObserveBarCode implements EbotsAutonState{
             tfod.setZoom(1.0, 16.0/9.0);
         }
     }
+
+    private void updateTelemetry(){
+        telemetry.addLine("Push Left + Right Bumper to Exit");
+
+    }
+
 }

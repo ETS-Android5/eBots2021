@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 import java.util.ArrayList;
 
@@ -87,11 +87,5 @@ public class StateReverseToHub implements EbotsAutonState{
             m.setPower(0.0);
         }
 
-        StopWatch stopWatchDumpFreight = new StopWatch();
-        long dumpTime = 2000;
-        while(stopWatchDumpFreight.getElapsedTimeMillis() < dumpTime){
-            bucket.setState(BucketState.DUMP);
-        }
-        bucket.setState(BucketState.COLLECT);
     }
 }

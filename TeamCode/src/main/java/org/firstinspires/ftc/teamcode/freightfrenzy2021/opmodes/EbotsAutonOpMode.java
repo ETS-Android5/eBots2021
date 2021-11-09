@@ -9,11 +9,9 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
-import org.firstinspires.ftc.teamcode.ultimategoal2020.StopWatch;
 
 import java.util.ArrayList;
 
@@ -27,7 +25,6 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     // AllianceSingleton is managed so it can be passed to Teleop for FieldOrientedDrive
     protected EbotsWebcam frontWebcam;
-
 
     protected StartingSide startingSide = StartingSide.CAROUSEL;
 
@@ -69,11 +66,6 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return currentPose;
     }
 
-
-    public EbotsWebcam getFrontWebcam() {
-        return frontWebcam;
-    }
-
     public AutonDrive getMotionController() {
         return motionController;
     }
@@ -81,7 +73,6 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     public NavigatorVuforia getNavigatorVuforia() {
         return navigatorVuforia;
     }
-
 
     public void setStartingSide(StartingSide startingSide){
         this.startingSide = startingSide;
@@ -113,8 +104,5 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     public void initEbotsImu(){
         EbotsImu.getInstance(hardwareMap, true);
     }
-
-
-
 
 }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.ebotsenums;
 import static java.lang.String.format;
 
 public enum Accuracy{
-    LOOSE (5.0, 3.0, 3.5, 2.50),
+    LOOSE (5.0, 3.0, 5.0, 2.50),
     STANDARD (2.0, 1.0, 3.0, 1.0),
     TIGHT (1.0, 0.50, 1.5, 0.5);
 
@@ -36,6 +36,14 @@ public enum Accuracy{
     }
     public double getSpinIntegratorUnwindLimit() {
         return spinIntegratorUnwindLimit;
+    }
+
+    public double getTargetIntegratorUnwind(CsysDirection dir){
+        double targetIntegratorUnwind = integratorUnwindLimit;  // for all but heading
+        if (dir == CsysDirection.Heading){
+            targetIntegratorUnwind = spinIntegratorUnwindLimit;
+        }
+        return targetIntegratorUnwind;
     }
     @Override
     public String toString(){

@@ -101,14 +101,14 @@ public class Pose {
         this.fieldPosition = new FieldPosition(xInput,yInput);
         //this.x = xInput;
         //this.y = yInput;
-        this.headingDeg = applyAngleBound(headingInputDeg);
+        this.headingDeg = UtilFuncs.applyAngleBounds(headingInputDeg);
         this.newHeadingReadingDeg = headingDeg;
 
     }
 
     public Pose(FieldPosition fp, double headingInputDeg){
         this.fieldPosition = fp;
-        this.headingDeg = applyAngleBound(headingInputDeg);
+        this.headingDeg = UtilFuncs.applyAngleBounds(headingInputDeg);
         this.newHeadingReadingDeg = headingDeg;
 
     }
@@ -195,17 +195,26 @@ public class Pose {
         this.fieldPosition.setyPosition(y);
     }
 
+    public void setFieldPosition(FieldPosition fieldPosition) {
+        this.fieldPosition = fieldPosition;
+    }
+
     public void setHeadingDeg(double headingDeg) {
         /** Sets heading, but makes sure it is within the legal bounds
          *  which is -180 < heading <= 180
          */
-        headingDeg = applyAngleBound(headingDeg);
+        headingDeg = UtilFuncs.applyAngleBounds(headingDeg);
         this.headingDeg = headingDeg;
     }
 
     public void setNewHeadingReadingDeg(double headingReadingDeg){
-        headingReadingDeg = applyAngleBound(headingReadingDeg);
+        headingReadingDeg = UtilFuncs.applyAngleBounds(headingReadingDeg);
         this.newHeadingReadingDeg = headingReadingDeg;
+    }
+
+    public void updateTo(Pose pose){
+        this.fieldPosition = pose.getFieldPosition();
+        this.headingDeg = pose.getHeadingDeg();
     }
 
 
@@ -243,13 +252,5 @@ public class Pose {
     /***************************************************************88
      //******    Class METHODS
      //***************************************************************/
-    public static double applyAngleBound (double inputAngle){
-        while (inputAngle > 180){
-            inputAngle -= 360;
-        }
-        while (inputAngle <= -180){
-            inputAngle += 360;
-        }
-        return inputAngle;
-    }
+
 }
