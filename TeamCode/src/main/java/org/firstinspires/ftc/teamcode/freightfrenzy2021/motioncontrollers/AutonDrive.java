@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.ArrayList;
@@ -203,7 +204,7 @@ public class AutonDrive implements EbotsMotionController {
         //  Step 5:  If needed, scale all the calculated powers so max value equals maxAllowedPower
         double maxAllowedPower = speed.getMaxSpeed();
         double maxCalculatedPowerMagnitude = getMaxCalculatedPowerMagnitude();
-        if (maxCalculatedPowerMagnitude>maxAllowedPower){
+        if (maxCalculatedPowerMagnitude > maxAllowedPower){
             double scaleFactor = maxAllowedPower/maxCalculatedPowerMagnitude;
             this.applyScaleToCalculatedDrive(scaleFactor);
         }
@@ -215,6 +216,30 @@ public class AutonDrive implements EbotsMotionController {
         Log.d(logTag, driveString);
         // This sets the motor to the calculated power to move robot
         drive();
+    }
+
+    public void rotateToFieldHeadingFromError(double headingErrorDeg){
+
+        spinSignal = headingErrorDeg * speed.getS_p();
+
+        // Apply calculated power to each wheel (doesn't move the bot yet)
+        for(MecanumWheel mecanumWheel: mecanumWheels) {
+            // to calculate power, must offset translate angle by wheel roller angle
+            double spinPower = mecanumWheel.getWheelPosition().getSpinSign() * spinSignal;
+            mecanumWheel.setCalculatedPower(spinPower);
+        }
+
+        //  If needed, scale all the calculated powers so max value equals maxAllowedPower
+        double maxAllowedPower = speed.getMaxSpeed();
+        double maxCalculatedPowerMagnitude = getMaxCalculatedPowerMagnitude();
+        if (maxCalculatedPowerMagnitude > maxAllowedPower){
+            double scaleFactor = maxAllowedPower/maxCalculatedPowerMagnitude;
+            this.applyScaleToCalculatedDrive(scaleFactor);
+        }
+
+        // set the bot in motion
+        drive();
+
     }
 
     private double getMaxCalculatedPowerMagnitude(){

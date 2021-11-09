@@ -42,7 +42,11 @@ public interface EbotsAutonState {
             newState = new StateObserveTeamShippingElement(autonOpMode);
         } else if (targetState == StateDumpFreight.class){
             newState = new StateDumpFreight(autonOpMode);
-        }
+        } else if (targetState == StateRotateForHubDump.class){
+            newState = new StateRotateForHubDump(autonOpMode);
+        } else if (targetState == StateRotateToZeroDegreesV2.class){
+        newState = new StateRotateToZeroDegreesV2(autonOpMode);
+    }
         return newState;
     }
 
