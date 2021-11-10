@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
@@ -18,6 +19,7 @@ public class StateNavigateToWarehouse implements EbotsAutonState{
     private DcMotorEx backLeft;
     private DcMotorEx backRight;
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
+    private long driveTime;
 
     public StateNavigateToWarehouse(EbotsAutonOpMode autonOpMode){
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
@@ -33,14 +35,14 @@ public class StateNavigateToWarehouse implements EbotsAutonState{
         motors.add(frontRight);
         motors.add(backRight);
         motors.add(backLeft);
-
+        driveTime = (AllianceSingleton.isBlue()) ? 850  : 1050;
         stopWatch = new StopWatch();
     }
 
     @Override
     public boolean shouldExit() {
         boolean shouldExit = false;
-        long driveTime = 1100;
+
 
         if(stopWatch.getElapsedTimeMillis() >= driveTime){
             shouldExit = true;

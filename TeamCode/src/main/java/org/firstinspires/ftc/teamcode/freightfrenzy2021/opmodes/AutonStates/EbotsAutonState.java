@@ -46,7 +46,11 @@ public interface EbotsAutonState {
             newState = new StateRotateForHubDump(autonOpMode);
         } else if (targetState == StateRotateToZeroDegreesV2.class){
         newState = new StateRotateToZeroDegreesV2(autonOpMode);
-    }
+        }  else if (targetState == StateRotateToCollect.class){
+            newState = new StateRotateToCollect(autonOpMode);
+        } else if (targetState == StateCollectFreight.class){
+            newState = new StateCollectFreight(autonOpMode);
+        }
         return newState;
     }
 

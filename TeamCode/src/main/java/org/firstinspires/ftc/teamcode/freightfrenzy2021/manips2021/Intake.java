@@ -15,7 +15,7 @@ public class Intake {
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public Intake(HardwareMap hardwareMap) {
-        intakeMotor(hardwareMap);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,12 +30,14 @@ public class Intake {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // No static methods defined
 
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void intakeMotor(HardwareMap hardwareMap) {
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+    public void start(){
+        intakeMotor.setPower(0.8);
+    }
+    public void stop(){
+        intakeMotor.setPower(0.0);
     }
 
     public void handleUserInput(Gamepad gamepad) {
