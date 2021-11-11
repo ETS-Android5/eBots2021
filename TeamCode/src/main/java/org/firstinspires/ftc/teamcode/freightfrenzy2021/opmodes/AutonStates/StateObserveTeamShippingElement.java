@@ -29,7 +29,7 @@ public class StateObserveTeamShippingElement implements EbotsAutonState{
     private Telemetry telemetry;
     private StopWatch stopWatchState = new StopWatch();
 
-    private static final String TFOD_MODEL_ASSET = "TSE_Model1.tflite";
+    private static final String TFOD_MODEL_ASSET = "TSE_GreenCubeModel2.tflite";
     private static final String[] LABELS = {
             "Shipele"
     };
@@ -159,7 +159,7 @@ public class StateObserveTeamShippingElement implements EbotsAutonState{
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.6f;
+        tfodParameters.minResultConfidence = 0.8f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
