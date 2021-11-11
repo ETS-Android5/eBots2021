@@ -27,8 +27,8 @@ public class Arm {
 
     public enum Level{
         ONE(0),
-        TWO(570),
-        THREE(1143);
+        TWO(590),
+        THREE(1200);
 
         private int encoderPosition;
 
@@ -54,7 +54,6 @@ public class Arm {
         armMotor.setPower(0.0);
 
         zeroLimitSwitch = hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
-
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,6 +70,8 @@ public class Arm {
     public int getPosition(){
         return armMotor.getCurrentPosition();
     }
+
+    public boolean getIsZeroed(){return isZeroed;}
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Static Methods
@@ -120,6 +121,7 @@ public class Arm {
         armMotor.setTargetPosition(0);
         isZeroed = true;
         opMode.gamepad2.rumble(350);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void moveToLevel(Level level){
@@ -133,7 +135,7 @@ public class Arm {
         boolean travelingDown = (targetPosition < currentPosition);
         double targetPower = travelingDown ? 0.25 : 0.5;
         armMotor.setTargetPosition(targetPosition);
-        armMotor.setPower(0.25);
+        armMotor.setPower(targetPower);
 
     }
 
@@ -143,7 +145,7 @@ public class Arm {
         if(gamepad.left_bumper && gamepad.right_stick_button){
             zeroArmHeight();
             stopWatchInput.reset();
-        } else if(gamepad.circle){
+        } else if(gamepad.square){
             moveToLevel(Level.TWO);
             stopWatchInput.reset();
         } else if(gamepad.cross) {

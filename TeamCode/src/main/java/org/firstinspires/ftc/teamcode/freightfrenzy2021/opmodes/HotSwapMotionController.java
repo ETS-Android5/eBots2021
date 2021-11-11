@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
@@ -26,6 +27,7 @@ public class HotSwapMotionController extends LinearOpMode {
     private StopWatch endGameStopWatch = new StopWatch();
     private Telemetry.Item zeroHeadingItem = null;
     private Intake intake;
+    private EbotsColorSensor colorSensor;
     private Carousel carousel;
     private Bucket bucket;
     private Arm arm;
@@ -41,6 +43,7 @@ public class HotSwapMotionController extends LinearOpMode {
         carousel = new Carousel(hardwareMap);
         bucket = new Bucket(hardwareMap);
         arm = new Arm(this);
+        colorSensor = new EbotsColorSensor(hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
@@ -85,6 +88,8 @@ public class HotSwapMotionController extends LinearOpMode {
         telemetry.addData("Intake Speed", String.format(twoDecimals, intake.getSpeed()));
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
+        telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
+        telemetry.addData("Hue ", String.format(twoDecimals, colorSensor.getHue()));
 
         if (motionController instanceof FieldOrientedDrive){
             telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));
