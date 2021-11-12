@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
@@ -25,8 +27,10 @@ public class HotSwapMotionController extends LinearOpMode {
     private StopWatch endGameStopWatch = new StopWatch();
     private Telemetry.Item zeroHeadingItem = null;
     private Intake intake;
+    private EbotsColorSensor colorSensor;
     private Carousel carousel;
     private Bucket bucket;
+    private Arm arm;
     private DistanceSensor distanceSensor;
     private boolean endGameRumbleIssued;
 
@@ -38,12 +42,14 @@ public class HotSwapMotionController extends LinearOpMode {
         intake = new Intake(hardwareMap);
         carousel = new Carousel(hardwareMap);
         bucket = new Bucket(hardwareMap);
+        arm = new Arm(this);
+        colorSensor = new EbotsColorSensor(hardwareMap);
 
-        motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
+        motionController = EbotsMotionController.get(MecanumDrive.class, this);
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
 
         while (! this.isStarted()){
-            handleUserInput(gamepad1);
+            this.handleUserInput(gamepad1);
             updateTelemetry();
         }
 
@@ -59,6 +65,7 @@ public class HotSwapMotionController extends LinearOpMode {
             intake.handleUserInput(gamepad2);
             carousel.handleUserInput(gamepad2);
             bucket.handleUserInput(gamepad2);
+            arm.handleUserInput(gamepad2);
 
             updateTelemetry();
         }
@@ -79,6 +86,11 @@ public class HotSwapMotionController extends LinearOpMode {
         telemetry.addData("Current Distance", distanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getSpeed()));
         telemetry.addData("Intake Speed", String.format(twoDecimals, intake.getSpeed()));
+        telemetry.addData("Arm isAtBottom", arm.isAtBottom());
+        telemetry.addData("Arm position", arm.getPosition());
+        telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
+        telemetry.addData("Hue ", String.format(twoDecimals, colorSensor.getHue()));
+
         if (motionController instanceof FieldOrientedDrive){
             telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));
             telemetry.addData("Initial Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getZeroHeadingDeg()));

@@ -15,6 +15,7 @@ public class Bucket {
     Servo bucketServo;
     private BucketState bucketState;
     private StopWatch stopWatchDump = new StopWatch();
+    private StopWatch stopWatchInPut = new StopWatch();
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -64,25 +65,29 @@ public class Bucket {
     }
     public void handleUserInput(Gamepad gamepad){
 
-        if(gamepad.dpad_left){
-            if(bucketState == BucketState.COLLECT) toggleState();
+        long lockOutLimit = 500;
+        boolean isLockedOut = stopWatchInPut.getElapsedTimeMillis() <= lockOutLimit;
+        if (gamepad.circle && !isLockedOut){
+            toggleState();
+            stopWatchInPut.reset();
+        } else if (gamepad.dpad_left){
+            if (bucketState != BucketState.DUMP) {
+                stopWatchDump.reset();
+                bucketState = BucketState.DUMP;
+            }
             setPos(getDumpPositionWithVibrate());
-        } else {
-            if(bucketState == BucketState.DUMP) toggleState();
-            setPos(BucketState.COLLECT.getServoSetting());
+        } else if (bucketState == BucketState.DUMP) {
+            toggleState();
         }
     }
 
-    private BucketState toggleState(){
-        BucketState newState;
+    private void toggleState(){
         if (bucketState == BucketState.COLLECT){
-            newState = BucketState.DUMP;
-            stopWatchDump.reset();
-        } else{
-            newState = BucketState.COLLECT;
+            bucketState = BucketState.TRAVEL;
+        } else {
+            bucketState = BucketState.COLLECT;
         }
-        bucketState = newState;
-        return newState;
+        setPos(bucketState.getServoSetting());
     }
 
     private double getDumpPositionWithVibrate(){
