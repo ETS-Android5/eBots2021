@@ -69,6 +69,7 @@ public class Bucket {
         boolean isLockedOut = stopWatchInPut.getElapsedTimeMillis() <= lockOutLimit;
         if (gamepad.circle && !isLockedOut){
             toggleState();
+            stopWatchInPut.reset();
         } else if (gamepad.dpad_left){
             if (bucketState != BucketState.DUMP) {
                 stopWatchDump.reset();
