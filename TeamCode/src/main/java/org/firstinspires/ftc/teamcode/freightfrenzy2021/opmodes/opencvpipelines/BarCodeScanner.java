@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines
 
 import android.util.Log;
 
-import com.vuforia.Rectangle;
-
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -15,38 +13,43 @@ import java.util.Arrays;
 
 public class BarCodeScanner extends OpenCvPipeline {
     // Notice this is declared as an instance variable (and re-used), not a local variable
-    Mat hsv = new Mat();
-    Mat submat;
+    Mat leftHsv = new Mat();
+    Mat rightHsv = new Mat();
+    Mat leftTargetMat;
+    Mat rightTargetMat;
     boolean firstPass = true;
-    int avgHue;
+    int leftHue;
+    int rightHue;
     Rect leftRect = new Rect(new Point(15, 120), new Point(105, 170));
     Rect rightRect = new Rect(new Point(200, 120), new Point(230, 170));
 
     @Override
     public void init(Mat firstFrame) {
         Log.d("EBOTS", "Mat size: " + firstFrame.size().toString());
-        submat = firstFrame.submat(leftRect);
-        Log.d("EBOTS", "SubMat size: " + submat.size().toString());
-        Log.d("EBOTS", "First cell values " + Arrays.toString(submat.get(0,0)));
+        leftTargetMat = firstFrame.submat(leftRect);
+        rightTargetMat = firstFrame.submat(rightRect);
+        Log.d("EBOTS", "SubMat size: " + leftTargetMat.size().toString());
+        Log.d("EBOTS", "First cell values " + Arrays.toString(leftTargetMat.get(0,0)));
     }
 
     @Override
     public Mat processFrame(Mat mat) {
-        Imgproc.cvtColor(submat, hsv, Imgproc.COLOR_RGB2HSV);
-        setAverageHue(hsv);
+        Imgproc.cvtColor(leftTargetMat, leftHsv, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(rightTargetMat, rightHsv, Imgproc.COLOR_RGB2HSV);
+        leftHue = calculateAverageHue(leftHsv);
+        rightHue = calculateAverageHue(rightHsv);
         if (firstPass) {
-            Log.d("EBOTS", "hsv size: " + hsv.size().toString());
-            Log.d("EBOTS", "hsv cols: " + String.format("%d", hsv.cols()));
-            Log.d("EBOTS", "val1: " + Arrays.toString(hsv.get(0,0)));
-            Log.d("EBOTS", "val2: " + Arrays.toString(hsv.get(45,17)));
-            Log.d("EBOTS", "val3: " + Arrays.toString(hsv.get(85,32)));
-            Log.d("EBOTS", "Average Hue: " + String.format("%d", avgHue));
+            Log.d("EBOTS", "hsv size: " + leftHsv.size().toString());
+            Log.d("EBOTS", "hsv cols: " + String.format("%d", leftHsv.cols()));
+            Log.d("EBOTS", "val1: " + Arrays.toString(leftHsv.get(0,0)));
+            Log.d("EBOTS", "val2: " + Arrays.toString(leftHsv.get(45,17)));
+            Log.d("EBOTS", "val3: " + Arrays.toString(leftHsv.get(85,32)));
+            Log.d("EBOTS", "Left Hue: " + String.format("%d", leftHue));
+            Log.d("EBOTS", "Right Hue: " + String.format("%d", rightHue));
         }
 
         // draw a bounding rectangle
         Scalar rectColor = new Scalar(255,10,10);
-        Point upperLeft = new Point(15, 120);
-        Point lowerRight = new Point(105, 170);
         int thickness = 2;
         Imgproc.rectangle (mat,leftRect, rectColor, thickness);
         Imgproc.rectangle (mat,rightRect, rectColor, thickness);
@@ -57,11 +60,14 @@ public class BarCodeScanner extends OpenCvPipeline {
     }
 
 
-    public int getAvgHue(){
-        return avgHue;
+    public int getLeftHue(){
+        return leftHue;
+    }
+    public int getRightHue(){
+        return rightHue;
     }
 
-    private void setAverageHue(Mat hsv){
+    private int calculateAverageHue(Mat hsv){
         int sum = 0;
         int divisor = hsv.rows() * hsv.cols();
         for (int row=0; row < hsv.rows(); row++){
@@ -71,7 +77,7 @@ public class BarCodeScanner extends OpenCvPipeline {
         }
 
         double average = ((double) sum) / divisor;
-        avgHue = (int) average;
+        return (int) average;
 
     }
 }
