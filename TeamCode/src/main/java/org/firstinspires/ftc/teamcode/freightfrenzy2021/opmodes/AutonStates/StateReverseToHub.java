@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class StateReverseToHub implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();

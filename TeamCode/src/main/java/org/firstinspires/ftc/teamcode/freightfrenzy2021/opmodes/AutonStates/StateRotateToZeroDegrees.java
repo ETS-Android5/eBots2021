@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class StateRotateToZeroDegrees implements EbotsAutonState{
 
 

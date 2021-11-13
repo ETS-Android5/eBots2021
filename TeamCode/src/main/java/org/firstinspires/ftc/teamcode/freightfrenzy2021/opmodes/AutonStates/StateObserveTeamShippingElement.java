@@ -29,7 +29,7 @@ public class StateObserveTeamShippingElement implements EbotsAutonState{
     private Telemetry telemetry;
     private StopWatch stopWatchState = new StopWatch();
 
-    private static final String TFOD_MODEL_ASSET = "TSE_GreenCubeModel2.tflite";
+    private static final String TFOD_MODEL_ASSET = "green_model3.tflite";
     private static final String[] LABELS = {
             "Shipele"
     };

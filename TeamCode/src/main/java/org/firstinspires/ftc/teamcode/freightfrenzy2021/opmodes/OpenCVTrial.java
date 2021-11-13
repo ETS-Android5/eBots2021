@@ -66,9 +66,9 @@ public class OpenCVTrial extends LinearOpMode {
     private String getColor(int hue){
         String color = "unknown";
 
-        if (hue < 35 | hue > 150){
+        if (hue < 45 | hue > 150){
             color = "Red";
-        } else if (hue > 40 && hue < 75){
+        } else if (hue > 60 && hue < 85){
             color = "Green";
         }
         return color;

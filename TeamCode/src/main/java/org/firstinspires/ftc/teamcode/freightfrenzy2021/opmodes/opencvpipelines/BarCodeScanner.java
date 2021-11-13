@@ -20,8 +20,8 @@ public class BarCodeScanner extends OpenCvPipeline {
     boolean firstPass = true;
     int leftHue;
     int rightHue;
-    Rect leftRect = new Rect(new Point(15, 120), new Point(105, 170));
-    Rect rightRect = new Rect(new Point(200, 120), new Point(230, 170));
+    Rect leftRect = new Rect(new Point(10, 170), new Point(80, 200));
+    Rect rightRect = new Rect(new Point(165, 170), new Point(230, 200));
 
     @Override
     public void init(Mat firstFrame) {
