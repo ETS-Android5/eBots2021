@@ -71,6 +71,15 @@ public class Arm {
         return armMotor.getCurrentPosition();
     }
 
+    public boolean isAtTargetLevel(){
+        boolean verdict = false;
+        int error = armMotor.getTargetPosition() - armMotor.getCurrentPosition();
+        if (Math.abs(error) <= 25){
+            verdict = true;
+        }
+        return verdict;
+    }
+
     public boolean getIsZeroed(){return isZeroed;}
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
