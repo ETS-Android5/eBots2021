@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.CalibrateMovement;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public interface EbotsAutonState {
@@ -50,9 +51,10 @@ public interface EbotsAutonState {
             newState = new StateRotateToCollect(autonOpMode);
         } else if (targetState == StateCollectFreight.class){
             newState = new StateCollectFreight(autonOpMode);
-        } else if (targetState == StateOpenCVObserve.class){
-            newState =  new StateOpenCVObserve(autonOpMode);
-
+        } else if (targetState == StateCalibrateHubX.class){
+            newState = new StateCalibrateHubX(autonOpMode);
+        } else if (targetState == StateMoveWithEncoders.class){
+            newState = new StateMoveWithEncoders(autonOpMode);
         }
         return newState;
     }

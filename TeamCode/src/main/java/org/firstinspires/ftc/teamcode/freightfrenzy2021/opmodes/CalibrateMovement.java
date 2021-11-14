@@ -9,15 +9,14 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCalibrateHubX;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMecanumEncoderTest;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveTeamShippingElement;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
 @Autonomous
-public class AutonOpModeV2 extends EbotsAutonOpMode {
+public class CalibrateMovement extends EbotsAutonOpMode {
 
     String logTag = "EBOTS";
     int statesCreated = 0;
@@ -73,9 +72,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateObserveTeamShippingElement.class);
-        itinerary.add(StateConfigureRoutine.class);
-//        itinerary.add(StateObserveTeamShippingElement.class);
+//        itinerary.add(StateCalibrateHubX.class);
+//        itinerary.add(StateMoveWithEncoders.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();

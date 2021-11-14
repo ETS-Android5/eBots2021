@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreight;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubX;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToWarehouseY;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOff;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
@@ -27,15 +28,15 @@ public class RoutineCarousel extends EbotsAutonRoutine{
         itinerary.add(StateDeliverDuck.class);
         itinerary.add(StatePushOff.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);
-        itinerary.add(StateMoveToHubX.class);
+        itinerary.add(StateMoveWithEncoders.class);
         itinerary.add(StateRotateForHubDump.class);
         itinerary.add(StateReverseToHubUsingImage.class);
-        itinerary.add(StateDumpFreight.class);
+//        itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOff.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);
-        itinerary.add(StateNavigateToWarehouse.class);
-        itinerary.add(StateRotateToCollect.class);
-        itinerary.add(StateCollectFreight.class);
+//        itinerary.add(StateNavigateToWarehouse.class);
+//        itinerary.add(StateRotateToCollect.class);
+//        itinerary.add(StateCollectFreight.class);
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
@@ -49,6 +50,11 @@ public class MecanumWheel {
         this.calculatedPower = newPower;
     }
 
+    public int getMotorClicks(){
+        return motor.getCurrentPosition();
+    }
+
+
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
@@ -57,5 +63,7 @@ public class MecanumWheel {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+    public void zeroMotorEncoders(){
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 }

@@ -74,6 +74,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return navigatorVuforia;
     }
 
+    public BarCodePosition getBarCodePosition() {
+        return barCodePosition;
+    }
+
     public void setStartingSide(StartingSide startingSide){
         this.startingSide = startingSide;
     }
