@@ -50,6 +50,9 @@ public interface EbotsAutonState {
             newState = new StateRotateToCollect(autonOpMode);
         } else if (targetState == StateCollectFreight.class){
             newState = new StateCollectFreight(autonOpMode);
+        } else if (targetState == StateOpenCVObserve.class){
+            newState =  new StateOpenCVObserve(autonOpMode);
+
         }
         return newState;
     }
