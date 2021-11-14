@@ -3,18 +3,15 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumWheel;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.ArrayList;
 
-public class StateCalibrateHubX implements EbotsAutonState{
+public class StateMoveWithEncoders implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
     EbotsAutonOpMode autonOpMode;
@@ -30,7 +27,7 @@ public class StateCalibrateHubX implements EbotsAutonState{
     private long driveTime;
 
 
-    public StateCalibrateHubX(EbotsAutonOpMode autonOpMode){
+    public StateMoveWithEncoders(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -47,17 +44,11 @@ public class StateCalibrateHubX implements EbotsAutonState{
 
         stopWatch.reset();
 
-        if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
-            driveTime = 0;
-            speed = 1.0;
-        } else {
-            driveTime = 200;
-            speed = -1.0;
-        }
-
         for(DcMotorEx motor: motors){
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setTargetPosition(2700);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setPower(1.0);
         }
     }
 
@@ -70,23 +61,15 @@ public class StateCalibrateHubX implements EbotsAutonState{
                 && !lockOutActive){
             shouldExit = true;
         }
+        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > 3000L;
 
           autonOpMode.telemetry.update();
-        return shouldExit | autonOpMode.isStarted() | autonOpMode.isStopRequested();
+        return shouldExit | stateTimedOut |  !autonOpMode.opModeIsActive();
     }
 
     @Override
     public void performStateActions() {
-        speed = 1.0;
-        if(stopWatch.getElapsedTimeMillis() <= driveTime){
-            for(DcMotorEx motor: motors) {
-                motor.setPower(speed);
-            }
-        } else {
-            for (DcMotorEx motor : motors) {
-                motor.setPower(0);
-            }
-        }
+
         updateTelemetry();
     }
 

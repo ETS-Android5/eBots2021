@@ -30,7 +30,7 @@ Instance Attributes
     double currentDistance;
     double targetDistance;
 
-    private long stateTimeLimit=2000;
+    private long stateTimeLimit=750;
     private EbotsAutonOpMode autonOpMode;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

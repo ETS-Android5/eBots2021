@@ -9,8 +9,10 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCalibrateHubX;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMecanumEncoderTest;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
 @Autonomous
@@ -70,7 +72,8 @@ public class CalibrateMovement extends EbotsAutonOpMode {
 
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateMecanumEncoderTest.class);
+//        itinerary.add(StateCalibrateHubX.class);
+//        itinerary.add(StateMoveWithEncoders.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();
