@@ -20,9 +20,39 @@ public class BarCodeScanner extends OpenCvPipeline {
     boolean firstPass = true;
     int leftHue;
     int rightHue;
+    int readingCount = 0;
+    boolean readingConsumed = false;    // manage state of whether reading has been consumed
     Rect leftRect = new Rect(new Point(10, 170), new Point(80, 200));
     Rect rightRect = new Rect(new Point(165, 170), new Point(230, 200));
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Getters & Setters
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    public int getLeftHue(){
+        return leftHue;
+    }
+    public int getRightHue(){
+        return rightHue;
+    }
+
+    public boolean isReadingConsumed() {
+        return readingConsumed;
+    }
+
+    public int getReadingCount() {
+        return readingCount;
+    }
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Static Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    // No static methods defined
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public void init(Mat firstFrame) {
         Log.d("EBOTS", "Mat size: " + firstFrame.size().toString());
@@ -38,6 +68,9 @@ public class BarCodeScanner extends OpenCvPipeline {
         Imgproc.cvtColor(rightTargetMat, rightHsv, Imgproc.COLOR_RGB2HSV);
         leftHue = calculateAverageHue(leftHsv);
         rightHue = calculateAverageHue(rightHsv);
+        readingConsumed = false;    // flat the current value as a new reading
+        readingCount++;
+
         if (firstPass) {
             Log.d("EBOTS", "hsv size: " + leftHsv.size().toString());
             Log.d("EBOTS", "hsv cols: " + String.format("%d", leftHsv.cols()));
@@ -60,11 +93,9 @@ public class BarCodeScanner extends OpenCvPipeline {
     }
 
 
-    public int getLeftHue(){
-        return leftHue;
-    }
-    public int getRightHue(){
-        return rightHue;
+
+    public void markReadingAsConsumed(){
+        readingConsumed = true;
     }
 
     private int calculateAverageHue(Mat hsv){

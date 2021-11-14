@@ -7,14 +7,26 @@ import java.util.ArrayList;
 public class BarCodeObservation {
 
     private static int bufferSize = 100;
+
+    private static int observationCount = 0;  // cummulative observations
+
     private static ArrayList<BarCodePosition> barCodePositions = new ArrayList<>();
+
+    public static int getObservationCount() {
+        return observationCount;
+    }
+
+    public static void resetObservations(){
+        barCodePositions = new ArrayList<>();
+        observationCount = 0;
+    }
     public static BarCodePosition giveBarCodePosition(){
+        observationCount++;
         BarCodePosition barCodePosition = BarCodePosition.RIGHT;
         int middleCount = 0;
         int leftCount = 0;
         int rightCount = 0;
-        for( int i = 0; i < barCodePositions.size(); i++) {
-            BarCodePosition pos = barCodePositions.get(i);
+        for(BarCodePosition pos: barCodePositions) {
             if (pos == BarCodePosition.LEFT) leftCount++;
             if (pos == BarCodePosition.MIDDLE) middleCount++;
             if (pos == BarCodePosition.RIGHT) rightCount++;

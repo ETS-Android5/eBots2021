@@ -21,9 +21,9 @@ public class StateOpenCVObserve implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private EbotsAutonOpMode OpMode;
+    private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
-    StopWatch stopWatch;
+    StopWatch stopWatch = new StopWatch();
     HardwareMap hardwareMap;
     BarCodeScanner barCodeScanner;
     OpenCvCamera camera;
@@ -35,15 +35,17 @@ public class StateOpenCVObserve implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateOpenCVObserve(EbotsAutonOpMode opMode){
+    public StateOpenCVObserve(EbotsAutonOpMode autonOpMode){
         String logTag = "EBOTS";
-        this.OpMode = opMode;
-        this.telemetry = opMode.telemetry;
+        this.autonOpMode = autonOpMode;
+        this.telemetry = autonOpMode.telemetry;
+
+        BarCodeObservation.resetObservations();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         // With live preview
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        EbotsColorSensor bucketColorSensor = new EbotsColorSensor(hardwareMap);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -61,8 +63,6 @@ public class StateOpenCVObserve implements EbotsAutonState{
             }
         });
 
-        telemetry.addData("Current State", this.getClass().getSimpleName());
-
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,22 +79,39 @@ public class StateOpenCVObserve implements EbotsAutonState{
         return color;
     }
 
+
     @Override
     public boolean shouldExit() {
         //User Request Exit not implemented
-        return OpMode.isStopRequested() | stopWatch.getElapsedTimeMillis() < 1000;
+        return autonOpMode.isStopRequested() | autonOpMode.isStarted();
     }
 
     @Override
     public void performStateActions() {
-
-        while(!OpMode.isStarted() && !OpMode.isStopRequested()) {
+        // This accesses video stream processing occurring on a concurrent OpenCV pipeline
+        // The pipeline process loops independent of the state machine
+        // New observations are processed only if the pipeline reading has not been consumed
+        // The pipeline process manages the consumption state of the reading in readingConsumed
+        if (!barCodeScanner.isReadingConsumed()){
             int leftHue = barCodeScanner.getLeftHue();
             leftColor = getColor(leftHue);
             int rightHue = barCodeScanner.getRightHue();
             rightColor= getColor(rightHue);
 
+            observation = BarCodePosition.RIGHT;
+            if (leftColor.equals("Red")){
+                observation = BarCodePosition.LEFT;
+            }else if (rightColor.equals("Red")){
+                observation = BarCodePosition.MIDDLE;
+            }else{
+                observation = BarCodePosition.RIGHT;
+            }
+
+            new BarCodeObservation(observation);
+
+            barCodeScanner.markReadingAsConsumed();
         }
+
         observation = BarCodePosition.RIGHT;
         if (leftColor.equals("Red")){
             observation = BarCodePosition.LEFT;
@@ -105,18 +122,21 @@ public class StateOpenCVObserve implements EbotsAutonState{
         }
 
         new BarCodeObservation(observation);
+        telemetry.addData("Observation Count", BarCodeObservation.getObservationCount());
+        telemetry.addData("Camera Readings", barCodeScanner.getReadingCount());
         telemetry.addData("LeftColor", leftColor);
         telemetry.addData("RightColor", rightColor);
-        telemetry.addData("Observation", observation.name());
-
+        telemetry.addData("Current Observation", observation.name());
+        // TODO: next line should be removed after debugging
+        telemetry.addData("Barcode Position ", BarCodeObservation.giveBarCodePosition().name());
     }
 
     @Override
     public void performTransitionalActions() {
         BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
-        OpMode.setBarCodePosition(barCodePosition);
+        autonOpMode.setBarCodePosition(barCodePosition);
         telemetry.addData("Barcode Position ", barCodePosition);
-        telemetry.update();
         camera.stopStreaming();
     }
+
 }

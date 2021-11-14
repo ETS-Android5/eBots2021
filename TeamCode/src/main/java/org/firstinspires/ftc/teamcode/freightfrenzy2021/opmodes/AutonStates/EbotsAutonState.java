@@ -55,6 +55,8 @@ public interface EbotsAutonState {
             newState = new StateCalibrateHubX(autonOpMode);
         } else if (targetState == StateMoveWithEncoders.class){
             newState = new StateMoveWithEncoders(autonOpMode);
+        } else if (targetState == StateOpenCVObserve.class){
+            newState = new StateOpenCVObserve(autonOpMode);
         }
         return newState;
     }
