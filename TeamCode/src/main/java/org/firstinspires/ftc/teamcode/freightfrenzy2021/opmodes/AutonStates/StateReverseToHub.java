@@ -55,7 +55,7 @@ public class StateReverseToHub implements EbotsAutonState{
 
         stopWatch.reset();
 
-        bucket = new Bucket(hardwareMap);
+        bucket = new Bucket(this.autonOpMode);
     }
 
     @Override

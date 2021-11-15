@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.BarCodeScanner;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -27,25 +29,31 @@ public class StateOpenCVObserve implements EbotsAutonState{
     HardwareMap hardwareMap;
     BarCodeScanner barCodeScanner;
     OpenCvCamera camera;
-    String rightColor;
-    String leftColor;
     private BarCodePosition observation;
-
+    String logTag = "EBOTS";
+    int loopCount = 0;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public StateOpenCVObserve(EbotsAutonOpMode autonOpMode){
-        String logTag = "EBOTS";
+        Log.d(logTag, "Instantiating StateOpenCVObserve");
         this.autonOpMode = autonOpMode;
+        this.hardwareMap = autonOpMode.hardwareMap;
         this.telemetry = autonOpMode.telemetry;
 
         BarCodeObservation.resetObservations();
+        Log.d(logTag, "Observations reset");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        // WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        Log.d(logTag, "cameraMonitorViewId set");
+
+        WebcamName webcamName = autonOpMode.getFrontWebcam().getWebcamName();
         // With live preview
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        Log.d(logTag, "camera instantiated");
+        barCodeScanner = new BarCodeScanner();
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -62,6 +70,9 @@ public class StateOpenCVObserve implements EbotsAutonState{
                 Log.d(logTag, "There was an error");
             }
         });
+
+        Log.d(logTag, "Constructor complete");
+
 
     }
 
@@ -82,6 +93,7 @@ public class StateOpenCVObserve implements EbotsAutonState{
 
     @Override
     public boolean shouldExit() {
+        loopCount++;
         //User Request Exit not implemented
         return autonOpMode.isStopRequested() | autonOpMode.isStarted();
     }
@@ -93,18 +105,24 @@ public class StateOpenCVObserve implements EbotsAutonState{
         // New observations are processed only if the pipeline reading has not been consumed
         // The pipeline process manages the consumption state of the reading in readingConsumed
         if (!barCodeScanner.isReadingConsumed()){
-            int leftHue = barCodeScanner.getLeftHue();
-            leftColor = getColor(leftHue);
-            int rightHue = barCodeScanner.getRightHue();
-            rightColor= getColor(rightHue);
+            double confidenceThreshold = 0.8;
 
-            observation = BarCodePosition.RIGHT;
-            if (leftColor.equals("Red")){
+            if (AllianceSingleton.isBlue()) {
+                // if on the blue side then robot sees middle and right spot
                 observation = BarCodePosition.LEFT;
-            }else if (rightColor.equals("Red")){
-                observation = BarCodePosition.MIDDLE;
-            }else{
+                if (barCodeScanner.getLeftConfidenceRed() > confidenceThreshold) {
+                    observation = BarCodePosition.MIDDLE;
+                } else if (barCodeScanner.getRightConfidenceRed() > confidenceThreshold) {
+                    observation = BarCodePosition.RIGHT;
+                }
+            } else{
+                // on red alliance and seeing left and middle
                 observation = BarCodePosition.RIGHT;
+                if (barCodeScanner.getLeftConfidenceRed() > confidenceThreshold) {
+                    observation = BarCodePosition.LEFT;
+                } else if (barCodeScanner.getRightConfidenceRed() > confidenceThreshold) {
+                    observation = BarCodePosition.MIDDLE;
+                }
             }
 
             new BarCodeObservation(observation);
@@ -112,20 +130,11 @@ public class StateOpenCVObserve implements EbotsAutonState{
             barCodeScanner.markReadingAsConsumed();
         }
 
-        observation = BarCodePosition.RIGHT;
-        if (leftColor.equals("Red")){
-            observation = BarCodePosition.LEFT;
-        }else if (rightColor.equals("Red")){
-            observation = BarCodePosition.MIDDLE;
-        }else{
-            observation = BarCodePosition.RIGHT;
-        }
-
-        new BarCodeObservation(observation);
-        telemetry.addData("Observation Count", BarCodeObservation.getObservationCount());
+        telemetry.addData("Observation Attempts", loopCount);
+        telemetry.addData("Cummulative Observation Count", BarCodeObservation.getObservationCount());
         telemetry.addData("Camera Readings", barCodeScanner.getReadingCount());
-        telemetry.addData("LeftColor", leftColor);
-        telemetry.addData("RightColor", rightColor);
+        telemetry.addData("LeftConfidenceRed", String.format("%.2f", barCodeScanner.getLeftConfidenceRed()));
+        telemetry.addData("RightConfidenceRed", String.format("%.2f", barCodeScanner.getRightConfidenceRed()));
         telemetry.addData("Current Observation", observation.name());
         // TODO: next line should be removed after debugging
         telemetry.addData("Barcode Position ", BarCodeObservation.giveBarCodePosition().name());
@@ -136,7 +145,11 @@ public class StateOpenCVObserve implements EbotsAutonState{
         BarCodePosition barCodePosition = BarCodeObservation.giveBarCodePosition();
         autonOpMode.setBarCodePosition(barCodePosition);
         telemetry.addData("Barcode Position ", barCodePosition);
-        camera.stopStreaming();
+        try {
+            camera.stopStreaming();
+        } catch (Exception e){
+            Log.d(logTag, "There was an exception when shutting down the camera");
+        }
     }
 
 }

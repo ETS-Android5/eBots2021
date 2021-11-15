@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumWheel;
@@ -29,6 +31,11 @@ public class StateCalibrateHubX implements EbotsAutonState{
     private double speed;
     private long driveTime;
 
+    DistanceSensor backDistanceSensor;
+    DistanceSensor leftDistanceSensor;
+    DistanceSensor rightDistanceSensor;
+
+
 
     public StateCalibrateHubX(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
@@ -42,10 +49,15 @@ public class StateCalibrateHubX implements EbotsAutonState{
 
         motors.add(frontLeft);
         motors.add(frontRight);
-        motors.add(backRight);
         motors.add(backLeft);
+        motors.add(backRight);
 
         stopWatch.reset();
+
+        backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
+        leftDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
+        rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightDistanceSensor");
+
 
         if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
             driveTime = 0;
@@ -101,6 +113,10 @@ public class StateCalibrateHubX implements EbotsAutonState{
         for (DcMotorEx motor : motors){
             autonOpMode.telemetry.addData("motor " + String.format("%d", i++), motor.getCurrentPosition());
         }
+
+        autonOpMode.telemetry.addData("Back Distance", backDistanceSensor.getDistance(DistanceUnit.INCH));
+        autonOpMode.telemetry.addData("Left Distance", leftDistanceSensor.getDistance(DistanceUnit.INCH));
+        autonOpMode.telemetry.addData("Right Distance", rightDistanceSensor.getDistance(DistanceUnit.INCH));
 
     }
 }

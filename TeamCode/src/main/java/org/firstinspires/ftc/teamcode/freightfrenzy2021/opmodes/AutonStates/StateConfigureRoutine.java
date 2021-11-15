@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -29,17 +31,17 @@ public class StateConfigureRoutine implements EbotsAutonState{
     private Telemetry telemetry;
     private DigitalChannel allianceTouchSensor;
     private DigitalChannel startingSideTouchSensor;
-    private EbotsAutonOpMode opMode;
+    private EbotsAutonOpMode autonOpMode;
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateConfigureRoutine(EbotsAutonOpMode opMode){
-        this.opMode = opMode;
-        this.telemetry = opMode.telemetry;
-        HardwareMap hardwareMap = opMode.hardwareMap;
-        startingSide = opMode.getStartingSide();
+    public StateConfigureRoutine(EbotsAutonOpMode autonOpMode){
+        this.autonOpMode = autonOpMode;
+        this.telemetry = autonOpMode.telemetry;
+        HardwareMap hardwareMap = autonOpMode.hardwareMap;
+        startingSide = autonOpMode.getStartingSide();
 
         allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");
         startingSideTouchSensor = hardwareMap.get(DigitalChannel.class, "startingSideTouchSensor");
@@ -64,10 +66,10 @@ public class StateConfigureRoutine implements EbotsAutonState{
     @Override
     public boolean shouldExit() {
         boolean shouldExit = false;
-        if (opMode.gamepad1.left_bumper && opMode.gamepad1.right_bumper){
+        if (autonOpMode.gamepad1.left_bumper && autonOpMode.gamepad1.right_bumper){
            shouldExit = true;
         }
-        return opMode.isStarted() | shouldExit | opMode.isStopRequested();
+        return autonOpMode.isStarted() | shouldExit | autonOpMode.isStopRequested();
     }
 // if blue set heading to -heading
     @Override
@@ -96,17 +98,18 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performTransitionalActions() {
         telemetry.addData("Transitioning out of", this.getClass().getSimpleName());
         telemetry.update();
-        opMode.setStartingSide(this.startingSide);
+        autonOpMode.setStartingSide(this.startingSide);
         double initialHeadingDeg = (AllianceSingleton.getAlliance() == Alliance.BLUE) ? -90 : 90;
-        opMode.initEbotsImu();
-        opMode.setInitialHeadingDeg(initialHeadingDeg);
+        autonOpMode.initEbotsImu();
+        autonOpMode.setInitialHeadingDeg(initialHeadingDeg);
 
         // Note that IMU and Alliance must be set prior to initializing pose
         Pose startingPose = new Pose(AllianceSingleton.getAlliance(), startingSide);
-        opMode.setCurrentPose(startingPose);
+        autonOpMode.setCurrentPose(startingPose);
 
         EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
                 new RoutineCarousel() : new RoutineWarehouse();
-        opMode.appendStatesToRoutineItinerary(routine);
+        autonOpMode.appendStatesToRoutineItinerary(routine);
+        Log.d("EBOTS", "Completed StateConfigureRoutine");
     }
 }

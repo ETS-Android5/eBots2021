@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
@@ -76,6 +77,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public BarCodePosition getBarCodePosition() {
         return barCodePosition;
+    }
+
+    public EbotsWebcam getFrontWebcam() {
+        return frontWebcam;
     }
 
     public void setStartingSide(StartingSide startingSide){

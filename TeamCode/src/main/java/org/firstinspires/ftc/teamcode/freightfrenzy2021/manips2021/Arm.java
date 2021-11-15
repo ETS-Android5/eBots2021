@@ -14,8 +14,12 @@ import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Class Attributes
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
     private DcMotorEx armMotor;
     private DigitalChannel zeroLimitSwitch;
     private boolean isZeroed = false;
@@ -23,7 +27,7 @@ public class Arm {
 
     LinearOpMode opMode;
 
-    String logTag = "EBOTS";
+    private static String logTag = "EBOTS";
 
     public enum Level{
         ONE(0),
@@ -48,17 +52,16 @@ public class Arm {
         Log.d(logTag, "Instantiating arm...");
         HardwareMap hardwareMap = opMode.hardwareMap;
         this.opMode = opMode;
-        armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
-        armMotor.setTargetPosition(0);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.0);
-
-        zeroLimitSwitch = hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
+        this.armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
+        this.zeroLimitSwitch = hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
+        this.init();
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
     public double getSpeed(){
         return armMotor.getPower();
     }
@@ -91,10 +94,17 @@ public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    public void init(){
+        isZeroed = false;
+        armMotor.setTargetPosition(0);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setPower(0.0);
+    }
 
     public void zeroArmHeight(){
         Log.d(logTag, "Entering zeroArmHeight");
         if(isAtBottom()) {
+            Log.d(logTag, "Arm is at bottom...");
             performZeroActions();
             return;
         }
@@ -131,6 +141,8 @@ public class Arm {
         isZeroed = true;
         opMode.gamepad2.rumble(350);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     public void moveToLevel(Level level){
@@ -139,7 +151,6 @@ public class Arm {
         if (!isZeroed) return;
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
-        int error = targetPosition - currentPosition;
 
         boolean travelingDown = (targetPosition < currentPosition);
         double targetPower = travelingDown ? 0.25 : 0.5;
@@ -152,6 +163,7 @@ public class Arm {
         if (stopWatchInput.getElapsedTimeMillis() < 500) return;
 
         if(gamepad.left_bumper && gamepad.right_stick_button){
+            Log.d(logTag, "Captured input to zeroArmHeight");
             zeroArmHeight();
             stopWatchInput.reset();
         } else if(gamepad.square){

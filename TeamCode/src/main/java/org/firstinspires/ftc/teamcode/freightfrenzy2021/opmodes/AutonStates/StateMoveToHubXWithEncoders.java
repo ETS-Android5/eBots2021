@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode
 
 import java.util.ArrayList;
 
-public class StateMoveWithEncoders implements EbotsAutonState{
+public class StateMoveToHubXWithEncoders implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
     EbotsAutonOpMode autonOpMode;
@@ -27,7 +27,7 @@ public class StateMoveWithEncoders implements EbotsAutonState{
     private long driveTime;
 
 
-    public StateMoveWithEncoders(EbotsAutonOpMode autonOpMode){
+    public StateMoveToHubXWithEncoders(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -39,8 +39,8 @@ public class StateMoveWithEncoders implements EbotsAutonState{
 
         motors.add(frontLeft);
         motors.add(frontRight);
-        motors.add(backRight);
         motors.add(backLeft);
+        motors.add(backRight);
 
         stopWatch.reset();
 

@@ -31,6 +31,11 @@ public class UtilFuncs {
         return boundedAngle;
     }
 
+    public static int calculateTargetClicks(double distanceInInches){
+        double clicksPerInch = 48.9;
+        return (int) Math.round(distanceInInches * clicksPerInch);
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

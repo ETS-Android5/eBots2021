@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.Mecanu
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 @TeleOp
-public class HotSwapMotionController extends LinearOpMode {
+public class EbotsTeleOp extends LinearOpMode {
 
     private EbotsMotionController motionController;
     private StopWatch lockoutStopWatch = new StopWatch();
@@ -33,7 +33,12 @@ public class HotSwapMotionController extends LinearOpMode {
     private Arm arm;
     private DistanceSensor distanceSensor;
     private boolean endGameRumbleIssued;
+    private boolean justDumped = false;
 
+
+    public void setJustDumped(boolean justDumped) {
+        this.justDumped = justDumped;
+    }
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -41,7 +46,7 @@ public class HotSwapMotionController extends LinearOpMode {
         endGameRumbleIssued = false;
         intake = new Intake(hardwareMap);
         carousel = new Carousel(hardwareMap);
-        bucket = new Bucket(hardwareMap);
+        bucket = new Bucket(this);
         arm = new Arm(this);
         colorSensor = new EbotsColorSensor(hardwareMap);
 
@@ -65,6 +70,10 @@ public class HotSwapMotionController extends LinearOpMode {
             intake.handleUserInput(gamepad2);
             carousel.handleUserInput(gamepad2);
             bucket.handleUserInput(gamepad2);
+            if(this.justDumped) {
+                arm.moveToLevel(Arm.Level.ONE);
+                justDumped = false;
+            }
             arm.handleUserInput(gamepad2);
 
             updateTelemetry();

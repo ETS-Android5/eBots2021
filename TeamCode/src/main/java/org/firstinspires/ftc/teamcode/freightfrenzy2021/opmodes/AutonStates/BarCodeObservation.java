@@ -21,7 +21,6 @@ public class BarCodeObservation {
         observationCount = 0;
     }
     public static BarCodePosition giveBarCodePosition(){
-        observationCount++;
         BarCodePosition barCodePosition = BarCodePosition.RIGHT;
         int middleCount = 0;
         int leftCount = 0;
@@ -45,6 +44,8 @@ public class BarCodeObservation {
 
         }
         barCodePositions.add(barCodePosition);
+        observationCount++;
+
 
 
 

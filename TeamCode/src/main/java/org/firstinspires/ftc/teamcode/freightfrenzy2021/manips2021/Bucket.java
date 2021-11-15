@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
 
 public class Bucket {
 
@@ -14,17 +16,19 @@ public class Bucket {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     Servo bucketServo;
     private BucketState bucketState;
+    private BucketState dumpStartedFrom;
     private StopWatch stopWatchDump = new StopWatch();
-    private StopWatch stopWatchInPut = new StopWatch();
+    private StopWatch stopWatchInput = new StopWatch();
+    private LinearOpMode opMode;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Bucket(HardwareMap hardwareMap){
+    public Bucket(LinearOpMode opMode){
+        this.opMode = opMode;
+        HardwareMap hardwareMap = opMode.hardwareMap;
         initServo(hardwareMap);
         stopWatchDump = new StopWatch();
         bucketState = BucketState.COLLECT;
-
-
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Getters & Setters
@@ -66,15 +70,22 @@ public class Bucket {
     public void handleUserInput(Gamepad gamepad){
 
         long lockOutLimit = 500;
-        boolean isLockedOut = stopWatchInPut.getElapsedTimeMillis() <= lockOutLimit;
+        boolean isLockedOut = stopWatchInput.getElapsedTimeMillis() <= lockOutLimit;
         if (gamepad.circle && !isLockedOut){
+            // if push the circle, toggle between COLLECT and TRAVEL
             toggleState();
-            stopWatchInPut.reset();
+            stopWatchInput.reset();
         } else if (gamepad.dpad_left){
+            // if dpad left, set the state to dump and start the timer for the bucket waggle
             if (bucketState != BucketState.DUMP) {
                 stopWatchDump.reset();
+                dumpStartedFrom = bucketState;  // either collect or travel
+                // Log.d("EBOTS", "dumpStartedFrom: " + dumpStartedFrom.name());
                 bucketState = BucketState.DUMP;
+                // Log.d("EBOTS", "dumpStartedFrom: (After set to DUMP)" + dumpStartedFrom.name());
+
             }
+            // the target position varies in time to shake freight out
             setPos(getDumpPositionWithVibrate());
         } else if (bucketState == BucketState.DUMP) {
             toggleState();
@@ -85,6 +96,11 @@ public class Bucket {
         if (bucketState == BucketState.COLLECT){
             bucketState = BucketState.TRAVEL;
         } else {
+            // if state was DUMP them return arm to level 1
+            if (opMode instanceof EbotsTeleOp){
+                ((EbotsTeleOp) opMode).setJustDumped(true);
+            }
+            // whether state was TRAVEL or DUMP it sets it to collect
             bucketState = BucketState.COLLECT;
         }
         setPos(bucketState.getServoSetting());
@@ -94,7 +110,7 @@ public class Bucket {
         double targetServoSetting = BucketState.DUMP.getServoSetting();
         double settingReduction = 0.1;  // amount to reduce setting
         // first allow bucket to dump or duration dumpTime
-        long dumpTime = 500;
+        long dumpTime = (dumpStartedFrom == BucketState.COLLECT) ? 450 : 200;
         // vibrate by frequency
         long frequencyMillis = 100;
 

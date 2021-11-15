@@ -24,14 +24,17 @@ public class StateDumpFreight implements EbotsAutonState{
     public StateDumpFreight(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
-        bucket = new Bucket(hardwareMap);
-        arm = new Arm(autonOpMode);
+        bucket = new Bucket(this.autonOpMode);
+        arm = new Arm (autonOpMode);
         arm.zeroArmHeight();
         stopWatchState = new StopWatch();
         stopWatchDump = new StopWatch();
         stateTimeLimit = 5000L;
         dumpTime = 2000L;
         BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
+
+        //BarCodePosition barCodePosition = BarCodePosition.RIGHT;
+
         targetLevel = Arm.Level.ONE;
         if (barCodePosition == BarCodePosition.MIDDLE){
             targetLevel = Arm.Level.TWO;
@@ -59,6 +62,9 @@ public class StateDumpFreight implements EbotsAutonState{
         if (arm.isAtTargetLevel() && !targetLevelAchieved){
             stopWatchDump.reset();
             targetLevelAchieved = true;
+            bucket.setState(BucketState.DUMP);
+        } else if (targetLevelAchieved){
+            // once dumping, must continue to set state to get bucket waggle
             bucket.setState(BucketState.DUMP);
         }
     }
