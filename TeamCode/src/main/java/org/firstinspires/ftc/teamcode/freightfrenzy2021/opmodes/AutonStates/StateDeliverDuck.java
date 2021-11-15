@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -52,6 +53,10 @@ Constructors
         motors.add(backRight);
         motors.add(backLeft);
 
+        for(DcMotorEx motor: motors){
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
     }
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Getters & Setters
@@ -74,10 +79,10 @@ Instance Methods
     @Override
     public void performStateActions() {
         carousel.startMotor();
-        boolean firstApproach = (stopWatch.getElapsedTimeMillis() < 2000);
+        boolean firstApproach = (stopWatch.getElapsedTimeMillis() < 650);
         if (autonOpMode.getAlliance() == Alliance.BLUE && firstApproach){
             // if on the blue alliance, the Carousel wheel doesn't align well.  must rotate some during first approach
-            double powerLevel = (stopWatch.getElapsedTimeMillis() < 2000) ? -0.2 : 0.0;
+            double powerLevel = -0.2;
             frontRight.setPower(powerLevel);
             backRight.setPower(powerLevel);
             frontLeft.setPower(-powerLevel);
@@ -92,5 +97,8 @@ Instance Methods
     @Override
     public void performTransitionalActions() {
         carousel.stopMotor();
+        for(DcMotorEx motor: motors){
+            motor.setPower(0.0);
+        }
     }
 }

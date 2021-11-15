@@ -26,6 +26,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
 
     private int encoderTarget;
+    private int allowableErrorInClicks = 10;
 
 
     public DriveToEncoderTarget(EbotsAutonOpMode autonOpMode){
@@ -73,15 +74,18 @@ public class DriveToEncoderTarget implements EbotsMotionController{
     public boolean isTargetReached(){
         boolean targetReached = false;
         int error = getAverageClicks() - encoderTarget;
-        if (Math.abs(error) < 25){
+        if (Math.abs(error) < allowableErrorInClicks){
             targetReached = true;
         }
         return targetReached;
     }
 
     public void logAllEncoderClicks(){
+        Log.d("EBOTS", "Error target: " + String.format("%d", allowableErrorInClicks));
         for(DcMotorEx motor: motors){
-            Log.d("EBOTS", "Motor Position:" + String.format("%d", motor.getCurrentPosition()));
+            Log.d("EBOTS", "Motor Position:" + String.format("%d", motor.getCurrentPosition()) +
+                    " Target Position: " + String.format("%d", motor.getTargetPosition()) +
+                    " Error: " + String.format("%d", motor.getCurrentPosition() - motor.getTargetPosition()));
         }
     }
 

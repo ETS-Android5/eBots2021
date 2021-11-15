@@ -58,9 +58,11 @@ public interface EbotsAutonState {
             newState = new StateOpenCVObserve(autonOpMode);
         } else if (targetState == StatePushOffWithEncoders.class){
             newState = new StatePushOffWithEncoders(autonOpMode);
+        } else if (targetState == StateRotateForDeliverDuck.class){
+            newState = new StateRotateForDeliverDuck(autonOpMode);
+        } else if (targetState == StateDriveToCarouselWithDeadReckoningNav.class){
+            newState = new StateDriveToCarouselWithDeadReckoningNav(autonOpMode);
         }
-
-
         return newState;
     }
 

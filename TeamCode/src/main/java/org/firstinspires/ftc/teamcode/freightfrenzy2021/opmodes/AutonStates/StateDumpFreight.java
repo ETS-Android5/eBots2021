@@ -23,10 +23,10 @@ public class StateDumpFreight implements EbotsAutonState{
 
     public StateDumpFreight(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
-        HardwareMap hardwareMap = autonOpMode.hardwareMap;
-        bucket = new Bucket(this.autonOpMode);
+        bucket = autonOpMode.bucket;
         arm = new Arm (autonOpMode);
-        arm.zeroArmHeight();
+        // This is commented out because limit switch is not working.
+        //arm.zeroArmHeight();
         stopWatchState = new StopWatch();
         stopWatchDump = new StopWatch();
         stateTimeLimit = 5000L;
@@ -52,7 +52,8 @@ public class StateDumpFreight implements EbotsAutonState{
 
     @Override
     public boolean shouldExit() {
-        boolean dumpComplete = targetLevelAchieved && stopWatchDump.getElapsedTimeMillis() > dumpTime;
+        boolean dumpTimeCompleted = stopWatchDump.getElapsedTimeMillis() > dumpTime;
+        boolean dumpComplete = targetLevelAchieved && dumpTimeCompleted;
         boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;
         return stateTimedOut | dumpComplete | !autonOpMode.opModeIsActive();
     }

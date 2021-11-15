@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
@@ -37,6 +38,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     protected Pose currentPose;
 
     protected NavigatorVuforia navigatorVuforia;
+
+    public Bucket bucket;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -68,6 +71,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     }
 
     public AutonDrive getMotionController() {
+        // because motors may be in the wrong mode, must init the motors when passing to a State
+        motionController.initMotorModes();
         return motionController;
     }
 

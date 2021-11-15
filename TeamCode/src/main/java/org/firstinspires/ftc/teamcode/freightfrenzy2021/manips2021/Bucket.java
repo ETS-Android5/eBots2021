@@ -42,10 +42,13 @@ public class Bucket {
     }
 
     public void setState(BucketState targetState){
-        if(targetState == BucketState.DUMP){
+        if(targetState == BucketState.DUMP) {
             // If asking to dump but state was previously collect then toggle state
-            if(bucketState == BucketState.COLLECT) toggleState();
+            if (bucketState == BucketState.COLLECT) toggleState();
             setPos(getDumpPositionWithVibrate());
+        } else if(targetState == BucketState.TRAVEL) {
+            bucketState = BucketState.TRAVEL;
+            setPos(BucketState.TRAVEL.getServoSetting());
         } else {
             // if asking to COLLECT but state was previously DUMP, then toggle state
             if(bucketState == BucketState.DUMP) toggleState();

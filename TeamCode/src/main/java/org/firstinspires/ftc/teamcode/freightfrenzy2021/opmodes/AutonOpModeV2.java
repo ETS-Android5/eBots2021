@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
@@ -25,9 +27,11 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     private EbotsAutonState currentState;
     private boolean stateComplete = false;
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         initAutonOpMode();
+
 
         Log.d(logTag, "About to start State Machine...");
         // Execute the pre-match state machine
@@ -71,6 +75,10 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
         // motion controller
         this.motionController = new AutonDrive(this);
+
+        // put bucket in collect position
+        bucket = new Bucket(this);
+        bucket.setState(BucketState.TRAVEL);
 
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);

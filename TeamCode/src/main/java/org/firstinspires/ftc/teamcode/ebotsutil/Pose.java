@@ -116,12 +116,10 @@ public class Pose {
     public Pose(Alliance alliance, StartingSide startingSide){
         //Start on the bottom wall, heading = 0
         double robotHalfWidth = RobotSize.ySize.getSizeValue()/2;
-        int numTiles = 0;
-        if (startingSide == StartingSide.CAROUSEL) {
-            numTiles = (AllianceSingleton.getAlliance()==Alliance.RED) ? 2 : 1;
-        }
+        // Note that robot sees LEFT and MIDDLE barcode when RED
+        //  and MIDDLE and RIGHT when BLUE
+        int numTiles = 2;
         double xCenter = (-FieldTile.getSize() * numTiles) + robotHalfWidth;
-
 
         double yCenter = (PlayField.getSideLength()/2 - RobotSize.xSize.getSizeValue()/2);  //assumes blue
         int allianceSign = (alliance == Alliance.BLUE) ? 1 : -1;

@@ -97,7 +97,12 @@ public class Arm {
     public void init(){
         isZeroed = false;
         armMotor.setTargetPosition(0);
+        // These lines are added because limit switch is not working properly
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        isZeroed = true;
+        //****************************************
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setPower(0.0);
     }
 
@@ -110,7 +115,7 @@ public class Arm {
         }
 
         StopWatch stopWatchZero = new StopWatch();
-        long timeLimit = 1500;
+        long timeLimit = 250;
         boolean isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

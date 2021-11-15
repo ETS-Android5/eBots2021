@@ -74,15 +74,20 @@ public class StateConfigureRoutine implements EbotsAutonState{
 // if blue set heading to -heading
     @Override
     public void performStateActions() {
-        if (!allianceTouchSensor.getState() && stopWatch.getElapsedTimeMillis() >= touchSensorTimer) {
+        boolean lockOutActive = stopWatch.getElapsedTimeMillis() <= touchSensorTimer;
+        boolean allianceToggleRequested = autonOpMode.gamepad1.left_bumper &&
+                (!allianceTouchSensor.getState() | autonOpMode.gamepad1.triangle | autonOpMode.gamepad2.triangle);
+        boolean startingSideToggleRequested = autonOpMode.gamepad1.left_bumper &&
+                (!startingSideTouchSensor.getState() | autonOpMode.gamepad1.cross | autonOpMode.gamepad2.cross);
+
+        if (allianceToggleRequested && !lockOutActive) {
             stopWatch.reset();
             if (AllianceSingleton.getAlliance() == Alliance.BLUE) {
                 AllianceSingleton.setAlliance(Alliance.RED);
             } else {
                 AllianceSingleton.setAlliance(Alliance.BLUE);
             }
-        }
-        if (!startingSideTouchSensor.getState() && stopWatch.getElapsedTimeMillis() >= touchSensorTimer) {
+        } else if (startingSideToggleRequested && !lockOutActive) {
             stopWatch.reset();
             if (this.startingSide == StartingSide.CAROUSEL) {
                 startingSide = StartingSide.WAREHOUSE;

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -64,6 +65,7 @@ public class AutonDrive implements EbotsMotionController {
             // get motorName and initialize it
             String motorName = pos.getMotorName();
             DcMotorEx motor = autonOpMode.hardwareMap.get(DcMotorEx.class, motorName);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //  Reverse motor depending on side
             if(pos.getRobotSide() == RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -111,6 +113,17 @@ public class AutonDrive implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    public void initMotorModes(){
+        for(MecanumWheel mecanumWheel: mecanumWheels){
+            DcMotorEx motor = mecanumWheel.getMotor();
+            motor.setPower(0.0);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            if(mecanumWheel.getWheelPosition().getRobotSide() == RobotSide.RIGHT) {
+                mecanumWheel.getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
+            }
+
+        }
+    }
 
     public boolean isSignalSaturated(CsysDirection csysDirection){
         boolean isSignalSaturated = true;
