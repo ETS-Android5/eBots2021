@@ -76,9 +76,9 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performStateActions() {
         boolean lockOutActive = stopWatch.getElapsedTimeMillis() <= touchSensorTimer;
         boolean allianceToggleRequested = autonOpMode.gamepad1.left_bumper &&
-                (!allianceTouchSensor.getState() | autonOpMode.gamepad1.triangle | autonOpMode.gamepad2.triangle);
+                (!allianceTouchSensor.getState() | autonOpMode.gamepad1.triangle);
         boolean startingSideToggleRequested = autonOpMode.gamepad1.left_bumper &&
-                (!startingSideTouchSensor.getState() | autonOpMode.gamepad1.cross | autonOpMode.gamepad2.cross);
+                (!startingSideTouchSensor.getState() | autonOpMode.gamepad1.cross);
 
         if (allianceToggleRequested && !lockOutActive) {
             stopWatch.reset();
