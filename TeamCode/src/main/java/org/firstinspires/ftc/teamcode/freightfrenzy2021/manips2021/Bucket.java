@@ -98,13 +98,15 @@ public class Bucket {
     private void toggleState(){
         if (bucketState == BucketState.COLLECT){
             bucketState = BucketState.TRAVEL;
+        } else if(bucketState == BucketState.TRAVEL) {
+            bucketState = BucketState.COLLECT;
         } else {
             // if state was DUMP them return arm to level 1
             if (opMode instanceof EbotsTeleOp){
                 ((EbotsTeleOp) opMode).setJustDumped(true);
             }
             // whether state was TRAVEL or DUMP it sets it to collect
-            bucketState = BucketState.COLLECT;
+            bucketState = BucketState.TRAVEL;
         }
         setPos(bucketState.getServoSetting());
     }

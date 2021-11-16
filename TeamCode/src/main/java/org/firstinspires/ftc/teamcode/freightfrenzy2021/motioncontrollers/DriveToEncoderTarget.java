@@ -61,6 +61,9 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setPower(1.0);
         }
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     public int getAverageClicks(){

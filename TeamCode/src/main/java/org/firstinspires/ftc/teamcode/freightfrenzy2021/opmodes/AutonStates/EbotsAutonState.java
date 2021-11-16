@@ -64,6 +64,8 @@ public interface EbotsAutonState {
             newState = new StateDriveToCarouselWithDeadReckoningNav(autonOpMode);
         } else if (targetState == StatePushOffAllianceHub.class){
             newState = new StatePushOffAllianceHub(autonOpMode);
+        } else if (targetState == StateReverseToHubUsingEncoders.class){
+            newState = new StateReverseToHubUsingEncoders(autonOpMode);
         }
 
         return newState;

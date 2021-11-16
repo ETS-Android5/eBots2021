@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOff;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithEncoders;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForDeliverDuck;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
@@ -44,7 +46,7 @@ public class RoutineCarousel extends EbotsAutonRoutine{
         itinerary.add(StateRotateToZeroDegreesV2.class);
         itinerary.add(StateMoveToHubXWithEncoders.class);
         itinerary.add(StateRotateForHubDump.class);
-        itinerary.add(StateReverseToHubUsingImage.class);
+        itinerary.add(StateReverseToHubUsingEncoders.class);
         itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOffWithEncoders.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);

@@ -72,7 +72,7 @@ public class StateDumpFreight implements EbotsAutonState{
 
     @Override
     public void performTransitionalActions() {
-        bucket.setState(BucketState.COLLECT);
+        bucket.setState(BucketState.TRAVEL);
         arm.moveToLevel(Arm.Level.ONE);
     }
 }
