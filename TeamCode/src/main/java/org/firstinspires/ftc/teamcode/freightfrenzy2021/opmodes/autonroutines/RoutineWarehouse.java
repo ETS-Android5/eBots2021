@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToWarehouseY;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOff;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianceHub;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
@@ -40,7 +41,7 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
         itinerary.add(StateRotateForHubDump.class);
         itinerary.add(StateReverseToHubUsingImage.class);
         itinerary.add(StateDumpFreight.class);
-        itinerary.add(StatePushOffWithEncoders.class);
+        itinerary.add(StatePushOffAllianceHub.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);
         itinerary.add(StateNavigateToWarehouse.class);
 //        itinerary.add(StateRotateToCollect.class);

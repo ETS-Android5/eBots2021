@@ -28,7 +28,6 @@ public class StateReverseToHub implements EbotsAutonState{
     double currentDistance;
     double targetDistance;
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
-    private double speed;
     private long stateTimeLimit=2000;
     private Bucket bucket;
 
@@ -49,9 +48,7 @@ public class StateReverseToHub implements EbotsAutonState{
         motors.add(backLeft);
 
         distanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
-        targetDistance = 2;
-
-        stateTimeLimit = 500;
+        targetDistance = 1.75;
 
         stopWatch.reset();
 
@@ -71,10 +68,12 @@ public class StateReverseToHub implements EbotsAutonState{
         double currentError = currentDistance - targetDistance;
         double power = currentError / 20;
         double maxAllowedSpeed = 0.6;
+        double minAllowedSpeed = 0.15;
 
         // Now make sure that the power doesn't exceed our maxAllowedSpeed, and preserve sign
         double powerSign = Math.signum(power);
         double powerMagnitude = Math.min(Math.abs(power), maxAllowedSpeed);
+        powerMagnitude = Math.max(powerMagnitude, minAllowedSpeed);
         power = powerSign * powerMagnitude;
 
         for(DcMotorEx m : motors) {

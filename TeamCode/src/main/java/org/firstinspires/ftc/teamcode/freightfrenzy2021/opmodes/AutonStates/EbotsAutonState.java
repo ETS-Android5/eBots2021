@@ -62,7 +62,10 @@ public interface EbotsAutonState {
             newState = new StateRotateForDeliverDuck(autonOpMode);
         } else if (targetState == StateDriveToCarouselWithDeadReckoningNav.class){
             newState = new StateDriveToCarouselWithDeadReckoningNav(autonOpMode);
+        } else if (targetState == StatePushOffAllianceHub.class){
+            newState = new StatePushOffAllianceHub(autonOpMode);
         }
+
         return newState;
     }
 

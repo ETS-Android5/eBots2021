@@ -120,6 +120,10 @@ public class Pose {
         //  and MIDDLE and RIGHT when BLUE
         int numTiles = (startingSide == StartingSide.CAROUSEL) ? 2 : 0;
         double xCenter = (-FieldTile.getSize() * numTiles) + robotHalfWidth;
+        if(AllianceSingleton.isBlue()){
+            // add 4 inches for alignment
+            xCenter += xCenter;
+        }
 
         double yCenter = (PlayField.getSideLength()/2 - RobotSize.xSize.getSizeValue()/2);  //assumes blue
         int allianceSign = (alliance == Alliance.BLUE) ? 1 : -1;

@@ -31,8 +31,8 @@ public class Arm {
 
     public enum Level{
         ONE(0),
-        TWO(590),
-        THREE(1200);
+        TWO(610),
+        THREE(1220);
 
         private int encoderPosition;
 

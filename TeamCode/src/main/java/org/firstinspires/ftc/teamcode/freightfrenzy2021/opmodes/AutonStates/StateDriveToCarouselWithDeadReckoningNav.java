@@ -63,7 +63,7 @@ public class StateDriveToCarouselWithDeadReckoningNav implements EbotsAutonState
         Log.d(logTag, "In Constructor StateDriveToCarouselWithDeadReckoningNav, this.currentPose:" + currentPose.toString());
 
         double targetHeadingDeg = currentPose.getHeadingDeg();
-        double targetX = -53.5;
+        double targetX = -63.5;
         // note that Y dimension accounts for allianceSign with the result of sin(targetHeadingDeg), which is negative for negative angles
         double targetY = currentPose.getY();
         this.targetPose = new Pose(targetX, targetY, targetHeadingDeg);
