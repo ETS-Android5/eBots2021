@@ -3,16 +3,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateReverseToHubUsingEncoders implements EbotsAutonState{
+public class StateDriveToWall implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
     private long stateTimeLimit;
@@ -24,7 +21,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 //    private int targetEncoderClicks = 2733;
 
     private double travelDistance;
-    private int targetClicks= -975;
+    private int targetClicks= 1300;
 
 
     private double speed;
@@ -32,7 +29,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
     private String logTag = "EBOTS";
 
 
-    public StateReverseToHubUsingEncoders(EbotsAutonOpMode autonOpMode){
+    public StateDriveToWall(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
 //        HardwareMap hardwareMap = autonOpMode.hardwareMap;
 //        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");

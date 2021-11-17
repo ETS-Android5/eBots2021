@@ -38,7 +38,7 @@ Constructors
         this.autonOpMode = autonOpMode;
         carousel = new Carousel(hardwareMap);
         stopWatch = new StopWatch();
-        stateTimeLimit = 5000;
+        stateTimeLimit = 4250;
         this.autonOpMode = autonOpMode;
         frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -79,19 +79,11 @@ Instance Methods
     @Override
     public void performStateActions() {
         carousel.startMotor();
-        boolean firstApproach = (stopWatch.getElapsedTimeMillis() < 650);
-        if (autonOpMode.getAlliance() == Alliance.BLUE && firstApproach){
-            // if on the blue alliance, the Carousel wheel doesn't align well.  must rotate some during first approach
-            double powerLevel = -0.2;
-            frontRight.setPower(powerLevel);
-            backRight.setPower(powerLevel);
-            frontLeft.setPower(-powerLevel);
-            backLeft.setPower(-powerLevel);
-        } else {
-            for (DcMotorEx m : motors) {
-                m.setPower(-0.10);
-            }
+
+        for (DcMotorEx m : motors) {
+            m.setPower(-0.10);
         }
+
     }
 
     @Override

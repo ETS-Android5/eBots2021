@@ -4,16 +4,14 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateRotateForDeliverDuck implements EbotsAutonState{
+public class StateRotateToDeliverDuckBlue implements EbotsAutonState{
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +22,6 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private EbotsAutonOpMode autonOpMode;
-    private Telemetry telemetry;
     private AutonDrive motionController;
     // State used for updating telemetry
     private double targetHeadingDeg;
@@ -37,21 +34,17 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     private StopWatch stopWatchPoseAchieved = new StopWatch();
     private long targetDurationMillis = 250;
 
-    private String logTag = "EBOTS";
-    private boolean firstPass = true;
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public StateRotateForDeliverDuck(EbotsAutonOpMode autonOpMode){
-        Log.d(logTag, "In Constructor for StateRotateForDeliverDuck");
+    public StateRotateToDeliverDuckBlue(EbotsAutonOpMode autonOpMode){
+        Log.d("EBOTS", "In constructor for StateRotateToZeroDegreesV2" + autonOpMode.getCurrentPose().toString());
+
+        HardwareMap hardwareMap = autonOpMode.hardwareMap;
         this.autonOpMode = autonOpMode;
-        telemetry = autonOpMode.telemetry;
         this.motionController = autonOpMode.getMotionController();
-//        this.motionController = new AutonDrive(autonOpMode);
-        this.motionController.setSpeed(Speed.MEDIUM);
-//        targetHeadingDeg = (AllianceSingleton.isBlue() ? 0 : 0);
-        targetHeadingDeg = 0;
+        this.motionController.setSpeed(Speed.SLOW);
+        targetHeadingDeg = -60;
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -68,10 +61,6 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     public boolean shouldExit() {
         headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getCurrentFieldHeadingDeg(true));
 
-        if (firstPass){
-            Log.d(logTag, "heading error is " + String.format("%.2f", headingErrorDeg));
-            firstPass = false;
-        }
         double acceptableError = 3;
 
         boolean isTargetHeadingAchieved = Math.abs(headingErrorDeg) < acceptableError;
@@ -80,9 +69,7 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-        updateTelemetry();
-
-        return isTargetHeadingSustained | stateTimedOut | autonOpMode.isStopRequested();
+        return isTargetHeadingSustained | stateTimedOut | !autonOpMode.opModeIsActive();
     }
 
     @Override
@@ -92,16 +79,12 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
 
     @Override
     public void performTransitionalActions() {
-        Log.d(logTag, "Performing transitional actions for StateDeliverDuck");
-        Log.d(logTag, "Current heading is: " + String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false)) +
-                " Error is: " + (String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false) - targetHeadingDeg)));
         motionController.stop();
 
-        // update robot's pose in autonOpMode
+        // update currentPose in autonOpMode
         autonOpMode.getCurrentPose().setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(true));
-        telemetry.addLine("Exiting RotateForDeliverDuck");
-        telemetry.update();
-        Log.d(logTag, "Exiting RotateForDeliverDuck, robot's pose: " + autonOpMode.getCurrentPose().toString());
+        Log.d("EBOTS", "Exiting StateRotateToZeroDegreesV2, robot's pose: " + autonOpMode.getCurrentPose().toString());
+
     }
 
     private boolean isTargetHeadingSustained(boolean isTargetPoseAchieved){
@@ -122,11 +105,5 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
         }
 
         return isTargetPoseSustained;
-    }
-
-    private void updateTelemetry(){
-        telemetry.addData("Current Heading", String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false)));
-        telemetry.addData("Target Heading", targetHeadingDeg);
-
     }
 }

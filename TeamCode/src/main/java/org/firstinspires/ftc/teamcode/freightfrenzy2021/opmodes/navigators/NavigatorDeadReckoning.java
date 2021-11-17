@@ -57,13 +57,13 @@ public class NavigatorDeadReckoning implements EbotsNavigator{
         double distanceTraveled = rateInPerSec * (loopDuration/1000.0);
         double xDist = Math.cos(translateAngleRad) * distanceTraveled;
         double yDist = Math.sin(translateAngleRad) * distanceTraveled;
-        Log.d(logTag, "Travel Distance (X, Y) -- (" + String.format("%.2f", xDist) +
-                ", " + String.format("%.2f", yDist) + ")");
+//        Log.d(logTag, "Travel Distance (X, Y) -- (" + String.format("%.2f", xDist) +
+//                ", " + String.format("%.2f", yDist) + ")");
         // apply translation to starting pose
         double newX = startingPose.getX() + xDist;
         double newY = startingPose.getY() + yDist;
         Pose endPose = new Pose(newX, newY, EbotsImu.getCurrentFieldHeadingDeg(false));
-        Log.d(logTag, "Pose just updated in DRnav:" + endPose.toString());
+//        Log.d(logTag, "Pose just updated in DRnav:" + endPose.toString());
         return endPose;
     }
 

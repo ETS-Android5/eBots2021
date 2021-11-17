@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateReverseToHubUsingEncoders implements EbotsAutonState{
+public class StateMoveToHubY implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
     private long stateTimeLimit;
@@ -23,8 +24,9 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
     private DriveToEncoderTarget motionController;
 //    private int targetEncoderClicks = 2733;
 
+
     private double travelDistance;
-    private int targetClicks= -975;
+    private int targetClicks = 1370;
 
 
     private double speed;
@@ -32,7 +34,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
     private String logTag = "EBOTS";
 
 
-    public StateReverseToHubUsingEncoders(EbotsAutonOpMode autonOpMode){
+    public StateMoveToHubY(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
 //        HardwareMap hardwareMap = autonOpMode.hardwareMap;
 //        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -54,10 +56,10 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
         travelDistance = poseError.getMagnitude();
 
         motionController = new DriveToEncoderTarget(autonOpMode);
-
-//        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
+        targetClicks = (AllianceSingleton.isBlue() ? 1100 : 1370);
+        //targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = 1000;
+        stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         Log.d(logTag, "Expected travel time: " + String.format("%d", stateTimeLimit));
         motionController.setEncoderTarget(targetClicks);
     }
@@ -67,7 +69,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
-        if (stateTimedOut) Log.d(logTag, "Move to Hub X Timed out!!!!!");
+        if (stateTimedOut) Log.d(logTag, "Move to Hub Y Timed out!!!!!");
         if (targetTravelCompleted) Log.d(logTag, "Position achieved in " + stopWatch.toString());
 
         return targetTravelCompleted | stateTimedOut |  !autonOpMode.opModeIsActive();
@@ -87,7 +89,12 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
         Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
 
         // Update the robots pose in autonOpMode
-
+        double currentHeadingRad = Math.toRadians(EbotsImu.getCurrentFieldHeadingDeg(true));
+        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
+        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
+        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
+        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
+        startingFieldPosition.offset(deltaFieldPosition);
         Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
     }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineBlueCarousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineCarousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineWarehouse;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
@@ -112,8 +113,14 @@ public class StateConfigureRoutine implements EbotsAutonState{
         Pose startingPose = new Pose(AllianceSingleton.getAlliance(), startingSide);
         autonOpMode.setCurrentPose(startingPose);
 
-        EbotsAutonRoutine routine = (startingSide == StartingSide.CAROUSEL) ?
-                new RoutineCarousel() : new RoutineWarehouse();
+        EbotsAutonRoutine routine;
+        if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){
+            routine = new RoutineCarousel();
+        } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
+            routine = new RoutineBlueCarousel();
+        } else {
+            routine = new RoutineWarehouse();
+        }
         autonOpMode.appendStatesToRoutineItinerary(routine);
         Log.d("EBOTS", "Completed StateConfigureRoutine");
     }

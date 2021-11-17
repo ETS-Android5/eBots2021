@@ -66,6 +66,24 @@ public interface EbotsAutonState {
             newState = new StatePushOffAllianceHub(autonOpMode);
         } else if (targetState == StateReverseToHubUsingEncoders.class){
             newState = new StateReverseToHubUsingEncoders(autonOpMode);
+        } else if (targetState == StateRotateToFieldCenter.class){
+            newState = new StateRotateToFieldCenter(autonOpMode);
+        } else if (targetState == StateMoveToHubY.class){
+            newState = new StateMoveToHubY(autonOpMode);
+        } else if (targetState == StateRotate180.class){
+            newState = new StateRotate180(autonOpMode);
+        } else if (targetState == StateDriveToWall.class){
+            newState = new StateDriveToWall(autonOpMode);
+        } else if (targetState == StateParkInStorageUnit.class) {
+            newState = new StateParkInStorageUnit(autonOpMode);
+        } else if (targetState == StateReverseToCarouselWithEncoders.class) {
+            newState = new StateReverseToCarouselWithEncoders(autonOpMode);
+        } else if (targetState == StatePushOffWithEncodersBlue.class) {
+            newState = new StatePushOffWithEncodersBlue(autonOpMode);
+        } else if (targetState == StateRotateToDeliverDuckBlue.class) {
+            newState = new StateRotateToDeliverDuckBlue(autonOpMode);
+        } else if (targetState == StateStrafeRight.class) {
+            newState = new StateStrafeRight(autonOpMode);
         }
 
         return newState;

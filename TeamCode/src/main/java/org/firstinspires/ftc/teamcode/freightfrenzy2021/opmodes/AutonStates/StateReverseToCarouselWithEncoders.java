@@ -3,16 +3,14 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateReverseToHubUsingEncoders implements EbotsAutonState{
+public class StateReverseToCarouselWithEncoders implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();
     private long stateTimeLimit;
@@ -24,7 +22,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 //    private int targetEncoderClicks = 2733;
 
     private double travelDistance;
-    private int targetClicks= -975;
+    private int targetClicks;
 
 
     private double speed;
@@ -32,7 +30,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
     private String logTag = "EBOTS";
 
 
-    public StateReverseToHubUsingEncoders(EbotsAutonOpMode autonOpMode){
+    public StateReverseToCarouselWithEncoders(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
 //        HardwareMap hardwareMap = autonOpMode.hardwareMap;
 //        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -55,11 +53,13 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 
         motionController = new DriveToEncoderTarget(autonOpMode);
 
+        targetClicks = (AllianceSingleton.isBlue()) ? -675 : -450;
 //        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = 1000;
         Log.d(logTag, "Expected travel time: " + String.format("%d", stateTimeLimit));
         motionController.setEncoderTarget(targetClicks);
+        //-450
     }
 
       @Override

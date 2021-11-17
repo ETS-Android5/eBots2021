@@ -61,15 +61,43 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setPower(1.0);
         }
+    }
+
+    public void strafe(double direction, int encoderTarget){
+        this.encoderTarget = encoderTarget;
+        for(DcMotorEx motor: motors) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setTargetPosition(encoderTarget);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
+        if (direction == 90){
+            frontLeft.setTargetPosition(-encoderTarget);
+            frontRight.setTargetPosition(encoderTarget);
+            backLeft.setTargetPosition(encoderTarget);
+            backRight.setTargetPosition(-encoderTarget);
+            for (DcMotorEx motor : motors){
+                motor.setPower(1.0);
+            }
+        } else if (direction == -90){
+            frontLeft.setTargetPosition(encoderTarget);
+            frontRight.setTargetPosition(-encoderTarget);
+            backLeft.setTargetPosition(-encoderTarget);
+            backRight.setTargetPosition(encoderTarget);
+            for (DcMotorEx motor : motors){
+                motor.setPower(1.0);
+            }
+        }
     }
 
     public int getAverageClicks(){
         int totalClicks = 0;
         for(DcMotorEx motor: motors){
-            totalClicks += motor.getCurrentPosition();
+            totalClicks += Math.abs(motor.getCurrentPosition());
         }
         return (totalClicks / 4);
     }
