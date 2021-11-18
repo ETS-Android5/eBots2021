@@ -84,6 +84,10 @@ public interface EbotsAutonState {
             newState = new StateRotateToDeliverDuckBlue(autonOpMode);
         } else if (targetState == StateStrafeRight.class) {
             newState = new StateStrafeRight(autonOpMode);
+        } else if (targetState == StateDelayFiveSeconds.class) {
+            newState = new StateDelayFiveSeconds(autonOpMode);
+        } else if (targetState == StateDelayTenSeconds.class) {
+            newState = new StateDelayTenSeconds(autonOpMode);
         }
 
         return newState;

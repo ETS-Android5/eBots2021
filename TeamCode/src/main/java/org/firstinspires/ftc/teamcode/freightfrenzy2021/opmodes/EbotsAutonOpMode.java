@@ -111,6 +111,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public abstract void initAutonOpMode();
 
+    public void appendStateToItinerary(Class autonStateClass){
+        this.itinerary.add(autonStateClass);
+    }
+
     public void appendStatesToRoutineItinerary(EbotsAutonRoutine routine){
         this.itinerary.addAll(routine.getRoutineItinerary());
     }

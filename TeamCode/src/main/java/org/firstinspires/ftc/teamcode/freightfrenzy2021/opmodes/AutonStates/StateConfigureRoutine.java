@@ -33,7 +33,13 @@ public class StateConfigureRoutine implements EbotsAutonState{
     private DigitalChannel allianceTouchSensor;
     private DigitalChannel startingSideTouchSensor;
     private EbotsAutonOpMode autonOpMode;
+    private DelayTime delayTime = DelayTime.ZERO;
 
+    public enum DelayTime{
+        ZERO,
+        FIVE_SECONDS,
+        TEN_SECONDS
+    }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -81,6 +87,14 @@ public class StateConfigureRoutine implements EbotsAutonState{
         boolean startingSideToggleRequested = autonOpMode.gamepad1.left_bumper &&
                 (!startingSideTouchSensor.getState() | autonOpMode.gamepad1.cross);
 
+        boolean moreDelayRequested = autonOpMode.gamepad1.left_bumper &&
+                autonOpMode.gamepad1.dpad_right;
+
+        boolean lessDelayRequested = autonOpMode.gamepad1.left_bumper &&
+                autonOpMode.gamepad1.dpad_left;
+
+
+
         if (allianceToggleRequested && !lockOutActive) {
             stopWatch.reset();
             if (AllianceSingleton.getAlliance() == Alliance.BLUE) {
@@ -94,6 +108,20 @@ public class StateConfigureRoutine implements EbotsAutonState{
                 startingSide = StartingSide.WAREHOUSE;
             } else {
                 startingSide = StartingSide.CAROUSEL;
+            }
+        } else if(moreDelayRequested && !lockOutActive){
+            stopWatch.reset();
+            if(delayTime == DelayTime.ZERO){
+                delayTime = DelayTime.FIVE_SECONDS;
+            } else if(delayTime == DelayTime.FIVE_SECONDS){
+                delayTime = DelayTime.TEN_SECONDS;
+            }
+        }else if(lessDelayRequested && !lockOutActive){
+            stopWatch.reset();
+            if(delayTime == DelayTime.TEN_SECONDS) {
+                delayTime = DelayTime.FIVE_SECONDS;
+            } else if (delayTime == DelayTime.FIVE_SECONDS){
+                delayTime = DelayTime.ZERO;
             }
         }
         telemetry.addData("alliance color: ", AllianceSingleton.getAlliance());
@@ -112,6 +140,14 @@ public class StateConfigureRoutine implements EbotsAutonState{
         // Note that IMU and Alliance must be set prior to initializing pose
         Pose startingPose = new Pose(AllianceSingleton.getAlliance(), startingSide);
         autonOpMode.setCurrentPose(startingPose);
+
+        if (delayTime == DelayTime.FIVE_SECONDS){
+            // add delay to itinerary
+            autonOpMode.appendStateToItinerary(StateDelayFiveSeconds.class);
+        }else if (delayTime == DelayTime.TEN_SECONDS){
+            // add delay to itinerary
+            autonOpMode.appendStateToItinerary(StateDelayTenSeconds.class);
+        }
 
         EbotsAutonRoutine routine;
         if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){

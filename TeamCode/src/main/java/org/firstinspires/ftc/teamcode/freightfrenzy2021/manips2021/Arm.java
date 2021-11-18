@@ -10,7 +10,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
 
 public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -152,8 +154,11 @@ public class Arm {
 
     public void moveToLevel(Level level){
         Log.d(logTag, "Enter move to level");
-
+        if(opMode instanceof EbotsTeleOp){
+            ((EbotsTeleOp) opMode).bucket.setState(BucketState.TRAVEL);
+        }
         if (!isZeroed) return;
+
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
 

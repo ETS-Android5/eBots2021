@@ -29,8 +29,9 @@ public class EbotsTeleOp extends LinearOpMode {
     private Intake intake;
     private EbotsColorSensor colorSensor;
     private Carousel carousel;
-    private Bucket bucket;
     private Arm arm;
+    public Bucket bucket;
+
     private DistanceSensor distanceSensor;
     private boolean endGameRumbleIssued;
     private boolean justDumped = false;
