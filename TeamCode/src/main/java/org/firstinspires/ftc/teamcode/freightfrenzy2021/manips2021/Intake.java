@@ -41,12 +41,21 @@ public class Intake {
     }
 
     public void handleUserInput(Gamepad gamepad) {
-        if (gamepad.right_trigger > 0.3) {
-            intakeMotor.setPower(gamepad.right_trigger);
+        double maxPower = 0.75;
+        double power = 0.0;
 
+        if ((gamepad.right_trigger > 0.3) && gamepad.right_bumper){
+            power = 1.0;
+            intakeMotor.setPower(power);
+        } else if (gamepad.right_trigger > 0.3){
+            power = Math.min(gamepad.right_trigger,maxPower);
+            intakeMotor.setPower(power);
+        } else if ((gamepad.left_trigger > 0.3) && gamepad.left_bumper){
+            power = 1.0;
+            intakeMotor.setPower(-power);
         } else if (gamepad.left_trigger > 0.3) {
-            intakeMotor.setPower(-gamepad.left_trigger);
-
+            power = Math.min(gamepad.left_trigger,maxPower);
+            intakeMotor.setPower(-power);
         } else  {
             intakeMotor.setPower(0);
         }
