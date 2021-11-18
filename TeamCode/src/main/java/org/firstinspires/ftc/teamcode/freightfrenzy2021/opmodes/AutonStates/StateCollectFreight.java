@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
@@ -44,6 +45,7 @@ public class StateCollectFreight implements EbotsAutonState{
     String logTag = "EBOTS";
     private final Intake intake;
     FreightDetector freightDetector;
+    boolean freightPresent = false;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -63,25 +65,12 @@ public class StateCollectFreight implements EbotsAutonState{
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         intake = new Intake(hardwareMap);
-    }
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Getters & Setters
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        freightDetector = new FreightDetector();
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Class Methods
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Instance Methods
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private boolean isFreight(){
-
-        boolean isFreight = false;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         Log.d(logTag, "cameraMonitorViewId set");
-
-        WebcamName webcamName = autonOpMode.getFrontWebcam().getWebcamName();
+        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketWebCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
+        WebcamName webcamName = bucketWebCam.getWebcamName();
         // With live preview
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         Log.d(logTag, "camera instantiated");
@@ -103,16 +92,30 @@ public class StateCollectFreight implements EbotsAutonState{
         });
         Log.d(logTag, "Camera for Freight Detector Instantiated");
 
+    }
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Getters & Setters
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Class Methods
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Methods
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    private void updatedFreightPresent(){
         if (!freightDetector.isReadingConsumed()) {
             double confidenceThreshold = 0.8;
             if (freightDetector.getFrameConfidenceNoRed() > confidenceThreshold){
-                isFreight = true;
+                freightPresent = true;
+            } else {
+                freightPresent = false;
             }
+            freightDetector.markReadingAsConsumed();
         }
-        freightDetector.markReadingAsConsumed();
         telemetry.addData("Camera Readings", freightDetector.getReadingCount());
-        telemetry.addData("FrameConfidenceNoRed", String.format("%.2f", freightDetector.getFrameConfidenceNoRed()));
-        return isFreight;
+        telemetry.addData("FrameConfidenceNoRed", String.format("%.2f", freightPresent));
     }
 
     @Override
@@ -121,9 +124,9 @@ public class StateCollectFreight implements EbotsAutonState{
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
         boolean isFreightCollected = false;
         //Exit if the camera reads non-red values with in the frame
-        isFreightCollected = isFreight();
+        updatedFreightPresent();
 
-        return  stateTimedOut | !autonOpMode.opModeIsActive() | isFreightCollected;
+        return  stateTimedOut | !autonOpMode.opModeIsActive() | freightPresent;
     }
 
     @Override
@@ -145,6 +148,7 @@ public class StateCollectFreight implements EbotsAutonState{
         } catch (Exception e){
             Log.d(logTag, "There was an exception when shutting down the camera");
         }
+
         for (DcMotorEx m : leftMotors) {
             m.setPower(0.0);
         }

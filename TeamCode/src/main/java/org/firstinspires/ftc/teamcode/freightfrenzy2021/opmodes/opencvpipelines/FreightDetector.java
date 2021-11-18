@@ -21,6 +21,7 @@ public class FreightDetector extends OpenCvPipeline {
     //Check the co ordinates
     Rect frameRect = new Rect(new Point(10, 170), new Point(80, 200));
     float confidenceNoRed = 0.0f;
+    float averageHue = 0.0f;
 
     public boolean isReadingConsumed() {
         return readingConsumed;
@@ -46,16 +47,18 @@ public class FreightDetector extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(frameTargetMat, frameHsv, Imgproc.COLOR_RGB2HSV);
         confidenceNoRed = calculateConfidenceNoRed(frameHsv);
+        averageHue = calculateAverageHue(frameHsv);
         readingConsumed = false;    // flat the current value as a new reading
         readingCount++;
 
         if (firstPass) {
             Log.d("EBOTS", "hsv size: " + frameHsv.size().toString());
-            Log.d("EBOTS", "Lefthsv cols: " + String.format("%d", frameHsv.cols()));
+            Log.d("EBOTS", "hsv cols: " + String.format("%d", frameHsv.cols()));
             Log.d("EBOTS", "val1: " + Arrays.toString(frameHsv.get(0,0)));
             Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(14,34)));
             Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(29,69)));
-            Log.d("EBOTS", "Left Confidence Red: " + String.format("%.1f", confidenceNoRed));
+            Log.d("EBOTS", "Confidence Not Red: " + String.format("%.1f", confidenceNoRed));
+            Log.d("EBOTS", "Average Hue: " + String.format("%.1f", averageHue));
         }
         // draw a bounding rectangle
         Scalar rectColor = new Scalar(255,10,10);
@@ -79,7 +82,7 @@ public class FreightDetector extends OpenCvPipeline {
                     validPixels++;
                     // if value is high enough (ignores black)
                     double currentHue = hsv.get(row, col)[0];
-                    if (!(currentHue < 45)| !(currentHue > 150)) {
+                    if (currentHue > 45 && currentHue < 150){
                         noRed++;
                     }
                 }
@@ -89,6 +92,22 @@ public class FreightDetector extends OpenCvPipeline {
         float percentValidPixels = ((float) validPixels) / totalPixels;
         float noRedPercentage = (percentValidPixels > 0.40) ? ((float)noRed / validPixels) : 0.0f;
         return  noRedPercentage;
+    }
+
+    private int calculateAverageHue(Mat hsv){
+        // Average Caused issues with red readings, which can be 150-180 and 0-40 in low light
+        int sum = 0;
+
+        int divisor = hsv.rows() * hsv.cols();
+        for (int row=0; row < hsv.rows(); row++){
+            for (int col=0; col < hsv.cols(); col++){
+                sum += hsv.get(row, col)[0];
+            }
+        }
+
+        double average = ((double) sum) / divisor;
+        return (int) average;
+
     }
 
     public void markReadingAsConsumed(){
