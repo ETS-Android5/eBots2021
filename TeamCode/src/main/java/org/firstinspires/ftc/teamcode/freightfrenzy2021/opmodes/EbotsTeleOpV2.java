@@ -133,15 +133,16 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private void rumbleIfFreightPresent(){
         Log.d(logTag, "Inside rumbleIfFreightPresent....");
         if(bucket.getBucketState() == BucketState.COLLECT){
-            freightLoaded = freightDetector.getIsBox();
+            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
             Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
                     " freightRumbleLockedOut: " + freightRumbleLockedOut);
             if(freightLoaded && !freightRumbleLockedOut){
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
+                gamepad1.rumble(250);
+                gamepad2.rumble(250);
                 freightDetector.markReadingAsConsumed();
                 freightLoaded = false;
+                stopWatchFreightRumble.reset();
             }
         }
     }
@@ -158,6 +159,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Freight Detected ", freightDetector.getFrameConfidenceNoRed());
         telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
         telemetry.addData("Is Box ", freightDetector.getIsBox());
+        telemetry.addData("Is Ball ", freightDetector.getIsBall());
 
         if (motionController instanceof FieldOrientedDrive){
             telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));

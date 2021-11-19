@@ -19,9 +19,10 @@ public class FreightDetector extends OpenCvPipeline {
     boolean readingConsumed = false;
     String logTag = "EBOTS";
     boolean isBox = false;
+    boolean isBall = false;
 
     //Check the co ordinates
-    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 60));
+    Rect frameRect = new Rect(new Point(130, 180), new Point(190, 240));
     float confidenceNoRed = 0.0f;
     int averageHue = 0;
 
@@ -45,6 +46,10 @@ public class FreightDetector extends OpenCvPipeline {
         return isBox;
     }
 
+    public boolean getIsBall() {
+        return isBall;
+    }
+
     @Override
     public void init(Mat firstFrame) {
         Log.d("EBOTS", "Mat size: " + firstFrame.size().toString());
@@ -61,6 +66,7 @@ public class FreightDetector extends OpenCvPipeline {
         confidenceNoRed = calculateConfidenceNoRed(frameHsv);
         averageHue = calculateAverageHue(frameHsv);
         isBox = calculateConfidenceBox(frameHsv) >= confidenceThreshold;
+        isBall = calculateConfidenceBall(frameHsv) >= confidenceThreshold;
 
         readingConsumed = false;    // flat the current value as a new reading
         readingCount++;
@@ -123,7 +129,7 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
                 // if value is high enough (ignores black)
-                if ((pixelHue > 10 && pixelHue < 30) &&
+                if ((pixelHue > 10 && pixelHue < 60) &&
                         pixelSaturation > 200 && pixelValue > 150) {
                     cubeCount++;
                 }
@@ -132,6 +138,31 @@ public class FreightDetector extends OpenCvPipeline {
         double cubeConfidence = ((double) cubeCount) / pixelCount;
         Log.d(logTag, "cubeCount / pixelCount: " + String.format("%.2f", cubeConfidence));
         return cubeConfidence;
+    }
+
+    private double calculateConfidenceBall(Mat hsv){
+        int pixelCount = 0;
+        double pixelHue;
+        double pixelSaturation;
+        double pixelValue;
+
+        int ballCount=0;
+        for (int row = 0; row < hsv.rows(); row++) {
+            for (int col = 0; col < hsv.cols(); col++) {
+                pixelHue = hsv.get(row, col)[0];
+                pixelSaturation = hsv.get(row, col)[1];
+                pixelValue = hsv.get(row, col)[2];
+                pixelCount++;
+                // if value is high enough (ignores black)
+                if ((pixelHue > 40 && pixelHue < 80)
+                        && pixelValue > 150) {
+                    ballCount++;
+                }
+            }
+        }
+        double ballConfidence = ((double) ballCount) / pixelCount;
+        Log.d(logTag, "ballCount / pixelCount: " + String.format("%.2f", ballConfidence));
+        return ballConfidence;
     }
 
     private int calculateAverageHue(Mat hsv){

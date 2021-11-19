@@ -107,8 +107,10 @@ public class Bucket {
             bucketState = BucketState.COLLECT;
         } else {
             // if state was DUMP them return arm to level 1
-            if (opMode instanceof EbotsTeleOp || opMode instanceof EbotsTeleOpV2){
+            if (opMode instanceof EbotsTeleOp){
                 ((EbotsTeleOp) opMode).setJustDumped(true);
+            } else if(opMode instanceof EbotsTeleOpV2){
+                ((EbotsTeleOpV2) opMode).setJustDumped(true);
             }
             // whether state was TRAVEL or DUMP it sets it to collect
             bucketState = BucketState.TRAVEL;
