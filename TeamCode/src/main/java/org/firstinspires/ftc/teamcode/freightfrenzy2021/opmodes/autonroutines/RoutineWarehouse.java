@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianceHub;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateNinetyDegrees;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegrees;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesV2;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeRight;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeRightForWarehouse;
 
 public class RoutineWarehouse extends EbotsAutonRoutine{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,9 +46,10 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
         itinerary.add(StateRotateToFieldCenter.class);
         itinerary.add(StateMoveToHubY.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);
+        itinerary.add(StateReverseToHubUsingEncoders.class);
         itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOffAllianceHub.class);
-        itinerary.add(StateStrafeRight.class);
+        itinerary.add(StateStrafeRightForWarehouse.class);
         itinerary.add(StateRotateToZeroDegreesV2.class);
         itinerary.add(StateNavigateToWarehouse.class);
 //        itinerary.add(StateRotateToCollect.class);

@@ -27,6 +27,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
 
     private int encoderTarget;
     private int allowableErrorInClicks = 10;
+    private double speed = 0.5;
 
 
     public DriveToEncoderTarget(EbotsAutonOpMode autonOpMode){
@@ -59,7 +60,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motor.setTargetPosition(encoderTarget);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motor.setPower(1.0);
+            motor.setPower(speed);
         }
     }
 
@@ -81,7 +82,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             backLeft.setTargetPosition(encoderTarget);
             backRight.setTargetPosition(-encoderTarget);
             for (DcMotorEx motor : motors){
-                motor.setPower(1.0);
+                motor.setPower(speed);
             }
         } else if (direction == -90){
             frontLeft.setTargetPosition(encoderTarget);
@@ -89,7 +90,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             backLeft.setTargetPosition(-encoderTarget);
             backRight.setTargetPosition(encoderTarget);
             for (DcMotorEx motor : motors){
-                motor.setPower(1.0);
+                motor.setPower(speed);
             }
         }
     }

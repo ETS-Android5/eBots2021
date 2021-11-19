@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
@@ -24,7 +26,7 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 //    private int targetEncoderClicks = 2733;
 
     private double travelDistance;
-    private int targetClicks= -975;
+    private int targetClicks;
 
 
     private double speed;
@@ -57,8 +59,17 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 
 //        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = 1000;
+        stateTimeLimit = 2000;
         Log.d(logTag, "Expected travel time: " + String.format("%d", stateTimeLimit));
+        StartingSide startingSide = autonOpMode.getStartingSide();
+        if(startingSide==StartingSide.CAROUSEL){
+            targetClicks = -985;
+        } else if(AllianceSingleton.isBlue()){
+            targetClicks = -450;
+        } else{
+            targetClicks = -175;
+        }
+        //targetClicks =  startingSide==StartingSide.CAROUSEL ? -985 : -175;
         motionController.setEncoderTarget(targetClicks);
     }
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
+import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
@@ -56,7 +57,12 @@ public class StateMoveToHubY implements EbotsAutonState{
         travelDistance = poseError.getMagnitude();
 
         motionController = new DriveToEncoderTarget(autonOpMode);
-        targetClicks = (AllianceSingleton.isBlue() ? 1100 : 1370);
+        StartingSide startingSide = autonOpMode.getStartingSide();
+        if (startingSide==StartingSide.CAROUSEL) {
+            targetClicks = (AllianceSingleton.isBlue() ? 1350 : 1370);
+        } else{
+            targetClicks = (AllianceSingleton.isBlue() ? 1425 : 1370);
+        }
         //targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);

@@ -126,6 +126,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
         }
         telemetry.addData("alliance color: ", AllianceSingleton.getAlliance());
         telemetry.addData("starting side: ", startingSide);
+        telemetry.addData("delay: ", delayTime.name());
     }
 
     @Override

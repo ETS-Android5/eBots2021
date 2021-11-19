@@ -33,8 +33,8 @@ public class Arm {
 
     public enum Level{
         ONE(0),
-        TWO(610),
-        THREE(1220);
+        TWO(640),
+        THREE(1250);
 
         private int encoderPosition;
 
@@ -154,10 +154,33 @@ public class Arm {
 
     public void moveToLevel(Level level){
         Log.d(logTag, "Enter move to level");
+        StopWatch stopWatch = new StopWatch();
+        long timeLimit = 1000;
+        long minTime = 400L;
+        boolean isTimedOut = false;
+        boolean bucketInTravelPosition = false;
         if(opMode instanceof EbotsTeleOp){
-            ((EbotsTeleOp) opMode).bucket.setState(BucketState.TRAVEL);
+            Log.d(logTag, "inside if of TeleOp");
+            while (opMode.opModeIsActive() && !bucketInTravelPosition && !isTimedOut) {
+                ((EbotsTeleOp) opMode).bucket.setState(BucketState.TRAVEL);
+                bucketInTravelPosition = stopWatch.getElapsedTimeMillis() > minTime;
+                isTimedOut = stopWatch.getElapsedTimeMillis() > timeLimit;
+            }
         }
-        if (!isZeroed) return;
+        if (!isZeroed | !bucketInTravelPosition) return;
+
+        int targetPosition = level.getEncoderPosition();
+        int currentPosition = armMotor.getCurrentPosition();
+
+        boolean travelingDown = (targetPosition < currentPosition);
+        double targetPower = travelingDown ? 0.25 : 0.5;
+        armMotor.setTargetPosition(targetPosition);
+        armMotor.setPower(targetPower);
+
+    }
+
+    public void moveToLevelAuton(Level level){
+        Log.d(logTag, "Enter move to level auton");
 
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();

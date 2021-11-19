@@ -35,7 +35,7 @@ public class StateNavigateToWarehouse implements EbotsAutonState{
         motors.add(frontRight);
         motors.add(backRight);
         motors.add(backLeft);
-        driveTime = (AllianceSingleton.isBlue()) ? 850  : 1050;
+        driveTime = 650;
         stopWatch = new StopWatch();
     }
 

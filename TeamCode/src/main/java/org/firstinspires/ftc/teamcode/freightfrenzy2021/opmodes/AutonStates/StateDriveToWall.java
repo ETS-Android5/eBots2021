@@ -21,7 +21,7 @@ public class StateDriveToWall implements EbotsAutonState{
 //    private int targetEncoderClicks = 2733;
 
     private double travelDistance;
-    private int targetClicks= 1300;
+    private int targetClicks= 1600;
 
 
     private double speed;
@@ -54,7 +54,7 @@ public class StateDriveToWall implements EbotsAutonState{
 
 //        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = 1000;
+        stateTimeLimit = 2000;
         Log.d(logTag, "Expected travel time: " + String.format("%d", stateTimeLimit));
         motionController.setEncoderTarget(targetClicks);
     }

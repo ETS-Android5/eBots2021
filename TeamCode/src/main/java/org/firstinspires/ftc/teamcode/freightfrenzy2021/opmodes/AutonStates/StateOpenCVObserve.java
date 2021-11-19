@@ -105,7 +105,7 @@ public class StateOpenCVObserve implements EbotsAutonState{
         // New observations are processed only if the pipeline reading has not been consumed
         // The pipeline process manages the consumption state of the reading in readingConsumed
         if (!barCodeScanner.isReadingConsumed()){
-            double confidenceThreshold = 0.8;
+            double confidenceThreshold = 0.7f;
 
             if (AllianceSingleton.isBlue()) {
                 // if on the blue side then robot sees middle and right spot

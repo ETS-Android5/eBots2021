@@ -35,6 +35,15 @@ public class StateDumpFreight implements EbotsAutonState{
 
         //BarCodePosition barCodePosition = BarCodePosition.RIGHT;
 
+
+        if(bucket.getBucketState() != BucketState.TRAVEL){
+            StopWatch stopWatch = new StopWatch();
+            bucket.setState(BucketState.TRAVEL);
+            while(autonOpMode.opModeIsActive() && stopWatch.getElapsedTimeMillis() < 350){
+                // wait for the bucket to move to travel state
+            }
+        }
+
         targetLevel = Arm.Level.ONE;
         if (barCodePosition == BarCodePosition.MIDDLE){
             targetLevel = Arm.Level.TWO;
@@ -46,7 +55,7 @@ public class StateDumpFreight implements EbotsAutonState{
             stopWatchDump.reset();
             bucket.setState(BucketState.DUMP);
         } else {
-            arm.moveToLevel(targetLevel);
+            arm.moveToLevelAuton(targetLevel);
         }
     }
 
@@ -73,6 +82,6 @@ public class StateDumpFreight implements EbotsAutonState{
     @Override
     public void performTransitionalActions() {
         bucket.setState(BucketState.TRAVEL);
-        arm.moveToLevel(Arm.Level.ONE);
+        arm.moveToLevelAuton(Arm.Level.ONE);
     }
 }

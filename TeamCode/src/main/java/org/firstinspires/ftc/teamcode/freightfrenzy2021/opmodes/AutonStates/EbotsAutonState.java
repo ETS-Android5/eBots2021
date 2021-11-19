@@ -88,6 +88,8 @@ public interface EbotsAutonState {
             newState = new StateDelayFiveSeconds(autonOpMode);
         } else if (targetState == StateDelayTenSeconds.class) {
             newState = new StateDelayTenSeconds(autonOpMode);
+        } else if (targetState == StateStrafeRightForWarehouse.class) {
+            newState = new StateStrafeRightForWarehouse(autonOpMode);
         }
 
         return newState;

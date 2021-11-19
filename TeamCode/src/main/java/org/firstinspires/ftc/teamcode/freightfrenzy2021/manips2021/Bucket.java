@@ -41,6 +41,10 @@ public class Bucket {
         return bucketServo.getPosition();
     }
 
+    public BucketState getBucketState() {
+        return bucketState;
+    }
+
     public void setState(BucketState targetState){
         if(targetState == BucketState.DUMP) {
             // If asking to dump but state was previously collect then toggle state

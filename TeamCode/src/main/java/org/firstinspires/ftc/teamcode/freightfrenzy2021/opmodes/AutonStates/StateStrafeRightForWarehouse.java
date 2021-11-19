@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateStrafeRight implements EbotsAutonState{
+public class StateStrafeRightForWarehouse implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -24,15 +24,15 @@ public class StateStrafeRight implements EbotsAutonState{
     private boolean firstPass = true;
     private double travelDistance = 4.0;
 
-    public StateStrafeRight(EbotsAutonOpMode autonOpMode){
+    public StateStrafeRightForWarehouse(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering StatePushOffWithEncoders constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = AllianceSingleton.isBlue() ? 150 : 300;
+        targetClicks = 900;
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
+        stateTimeLimit = 2000;
         stopWatch = new StopWatch();
         int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
         motionController.strafe(90 * allianceSign, targetClicks);
