@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
@@ -43,6 +44,9 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private OpenCvCamera camera;
     private String logTag = "EBOTS";
     private FreightDetector freightDetector;
+    private boolean freightLoaded = false;
+    private StopWatch stopWatchFreightRumble = new StopWatch();
+    private long freightRumbleTimeLimit = 1500L;
 
 
 
@@ -58,7 +62,6 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         carousel = new Carousel(hardwareMap);
         bucket = new Bucket(this);
         arm = new Arm(this);
-
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
@@ -92,6 +95,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
         while (! this.isStarted()){
             this.handleUserInput(gamepad1);
+            rumbleIfFreightPresent();
             updateTelemetry();
         }
 
@@ -101,6 +105,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         while (opModeIsActive()){
 
             rumbleIfEndGame();
+            rumbleIfFreightPresent();
 
             this.handleUserInput(gamepad1);
             motionController.handleUserInput(gamepad1);
@@ -122,6 +127,22 @@ public class EbotsTeleOpV2 extends LinearOpMode {
             gamepad1.rumble(1000);
             gamepad2.rumble(1000);
             endGameRumbleIssued = true;
+        }
+    }
+
+    private void rumbleIfFreightPresent(){
+        Log.d(logTag, "Inside rumbleIfFreightPresent....");
+        if(bucket.getBucketState() == BucketState.COLLECT){
+            freightLoaded = freightDetector.getIsBox();
+            boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
+            Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
+                    " freightRumbleLockedOut: " + freightRumbleLockedOut);
+            if(freightLoaded && !freightRumbleLockedOut){
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
+                freightDetector.markReadingAsConsumed();
+                freightLoaded = false;
+            }
         }
     }
 

@@ -115,7 +115,6 @@ public class FreightDetector extends OpenCvPipeline {
         double pixelSaturation;
         double pixelValue;
 
-        double valueThreshold = 50.0;
         int cubeCount=0;
         for (int row = 0; row < hsv.rows(); row++) {
             for (int col = 0; col < hsv.cols(); col++) {
@@ -124,7 +123,7 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
                 // if value is high enough (ignores black)
-                if ((pixelHue > 10 && pixelHue < 20) &&
+                if ((pixelHue > 10 && pixelHue < 30) &&
                         pixelSaturation > 200 && pixelValue > 150) {
                     cubeCount++;
                 }
