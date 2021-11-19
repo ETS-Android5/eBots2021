@@ -69,7 +69,7 @@ public class StateCollectFreight implements EbotsAutonState{
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         Log.d(logTag, "cameraMonitorViewId set");
-        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketWebCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
+        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
         WebcamName webcamName = bucketWebCam.getWebcamName();
         // With live preview
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);

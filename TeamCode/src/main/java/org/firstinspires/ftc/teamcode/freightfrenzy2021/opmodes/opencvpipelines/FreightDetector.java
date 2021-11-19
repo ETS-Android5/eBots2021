@@ -17,11 +17,13 @@ public class FreightDetector extends OpenCvPipeline {
     boolean firstPass = true;
     int readingCount = 0;
     boolean readingConsumed = false;
+    String logTag = "EBOTS";
+    boolean isBox = false;
 
     //Check the co ordinates
-    Rect frameRect = new Rect(new Point(10, 170), new Point(80, 200));
+    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 60));
     float confidenceNoRed = 0.0f;
-    float averageHue = 0.0f;
+    int averageHue = 0;
 
     public boolean isReadingConsumed() {
         return readingConsumed;
@@ -35,6 +37,14 @@ public class FreightDetector extends OpenCvPipeline {
         return confidenceNoRed;
     }
 
+    public float getAverageHue() {
+        return averageHue;
+    }
+
+    public boolean getIsBox() {
+        return isBox;
+    }
+
     @Override
     public void init(Mat firstFrame) {
         Log.d("EBOTS", "Mat size: " + firstFrame.size().toString());
@@ -45,9 +55,13 @@ public class FreightDetector extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        double confidenceThreshold = 0.7;
+
         Imgproc.cvtColor(frameTargetMat, frameHsv, Imgproc.COLOR_RGB2HSV);
         confidenceNoRed = calculateConfidenceNoRed(frameHsv);
         averageHue = calculateAverageHue(frameHsv);
+        isBox = calculateConfidenceBox(frameHsv) >= confidenceThreshold;
+
         readingConsumed = false;    // flat the current value as a new reading
         readingCount++;
 
@@ -55,10 +69,10 @@ public class FreightDetector extends OpenCvPipeline {
             Log.d("EBOTS", "hsv size: " + frameHsv.size().toString());
             Log.d("EBOTS", "hsv cols: " + String.format("%d", frameHsv.cols()));
             Log.d("EBOTS", "val1: " + Arrays.toString(frameHsv.get(0,0)));
-            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(14,34)));
-            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(29,69)));
+            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(input.rows()/2,input.cols()/2)));
+            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.rows()-1,input.cols()-1)));
             Log.d("EBOTS", "Confidence Not Red: " + String.format("%.1f", confidenceNoRed));
-            Log.d("EBOTS", "Average Hue: " + String.format("%.1f", averageHue));
+            Log.d("EBOTS", "Average Hue: " + String.format("%d", averageHue));
         }
         // draw a bounding rectangle
         Scalar rectColor = new Scalar(255,10,10);
@@ -89,9 +103,36 @@ public class FreightDetector extends OpenCvPipeline {
 
             }
         }
+        Log.d(logTag, "validPixels: " + String.format("%d", validPixels) + ", noRed: " + String.format("%d", noRed));
         float percentValidPixels = ((float) validPixels) / totalPixels;
         float noRedPercentage = (percentValidPixels > 0.40) ? ((float)noRed / validPixels) : 0.0f;
         return  noRedPercentage;
+    }
+
+    private double calculateConfidenceBox(Mat hsv){
+        int pixelCount = 0;
+        double pixelHue;
+        double pixelSaturation;
+        double pixelValue;
+
+        double valueThreshold = 50.0;
+        int cubeCount=0;
+        for (int row = 0; row < hsv.rows(); row++) {
+            for (int col = 0; col < hsv.cols(); col++) {
+                pixelHue = hsv.get(row, col)[0];
+                pixelSaturation = hsv.get(row, col)[1];
+                pixelValue = hsv.get(row, col)[2];
+                pixelCount++;
+                // if value is high enough (ignores black)
+                if ((pixelHue > 10 && pixelHue < 20) &&
+                        pixelSaturation > 200 && pixelValue > 150) {
+                    cubeCount++;
+                }
+            }
+        }
+        double cubeConfidence = ((double) cubeCount) / pixelCount;
+        Log.d(logTag, "cubeCount / pixelCount: " + String.format("%.2f", cubeConfidence));
+        return cubeConfidence;
     }
 
     private int calculateAverageHue(Mat hsv){
@@ -106,11 +147,24 @@ public class FreightDetector extends OpenCvPipeline {
         }
 
         double average = ((double) sum) / divisor;
+        averageHue = (int) average;
+
+        logColorValues(hsv);
+
         return (int) average;
+
 
     }
 
     public void markReadingAsConsumed(){
         readingConsumed = true;
+    }
+
+    public void logColorValues(Mat hsv){
+        Log.d("EBOTS", "val1: " + Arrays.toString(hsv.get(0,0)));
+        Log.d("EBOTS", "val2: " + Arrays.toString(hsv.get(hsv.rows()/2,hsv.cols()/2)));
+        Log.d("EBOTS", "val3: " + Arrays.toString(hsv.get(hsv.rows()-1,hsv.cols()-1)));
+        Log.d("EBOTS", "Avg Hue: " + String.format("%d", averageHue));
+
     }
 }

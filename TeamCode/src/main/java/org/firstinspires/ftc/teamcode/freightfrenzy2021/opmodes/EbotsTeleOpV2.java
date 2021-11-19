@@ -61,7 +61,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
-        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketWebCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
+        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         Log.d(logTag, "cameraMonitorViewId set");
@@ -134,6 +134,9 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
+        telemetry.addData("Freight Detected ", freightDetector.getFrameConfidenceNoRed());
+        telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
+        telemetry.addData("Is Box ", freightDetector.getIsBox());
 
         if (motionController instanceof FieldOrientedDrive){
             telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));
