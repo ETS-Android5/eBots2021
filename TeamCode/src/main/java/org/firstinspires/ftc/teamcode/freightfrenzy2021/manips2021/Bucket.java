@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOpV2;
 
 public class Bucket {
 
@@ -106,7 +107,7 @@ public class Bucket {
             bucketState = BucketState.COLLECT;
         } else {
             // if state was DUMP them return arm to level 1
-            if (opMode instanceof EbotsTeleOp){
+            if (opMode instanceof EbotsTeleOp || opMode instanceof EbotsTeleOpV2){
                 ((EbotsTeleOp) opMode).setJustDumped(true);
             }
             // whether state was TRAVEL or DUMP it sets it to collect
