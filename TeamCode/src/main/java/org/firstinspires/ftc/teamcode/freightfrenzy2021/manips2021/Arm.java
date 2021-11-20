@@ -27,6 +27,8 @@ public class Arm {
     private DigitalChannel zeroLimitSwitch;
     private boolean isZeroed = false;
     private StopWatch stopWatchInput = new StopWatch();
+    private boolean wasAtLevelOne = false;
+    private boolean isAtLevelOne = false;
 
     LinearOpMode opMode;
 
@@ -75,6 +77,23 @@ public class Arm {
 
     public int getPosition(){
         return armMotor.getCurrentPosition();
+    }
+
+    private void setIsAtLevelOne(){
+        int currentPosition = armMotor.getCurrentPosition();
+        int allowedTolerance = 5;
+        int maxAllowedPosition = Level.ONE.encoderPosition + allowedTolerance;
+        isAtLevelOne = currentPosition < maxAllowedPosition;
+    }
+
+    public boolean shouldBucketCollect(){
+        boolean returnFlag = false;
+        setIsAtLevelOne();
+        if (!wasAtLevelOne && isAtLevelOne){
+            returnFlag = true;
+            wasAtLevelOne = true;
+        }
+        return returnFlag;
     }
 
     public boolean isAtTargetLevel(){
@@ -186,6 +205,7 @@ public class Arm {
         double targetPower = travelingDown ? 0.25 : 0.5;
         armMotor.setTargetPosition(targetPosition);
         armMotor.setPower(targetPower);
+        if(level != Level.ONE) wasAtLevelOne = false;
 
     }
 

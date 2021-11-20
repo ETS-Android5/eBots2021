@@ -106,6 +106,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
             rumbleIfEndGame();
             rumbleIfFreightPresent();
+            rotateBucketIfArmAtBottom();
 
             this.handleUserInput(gamepad1);
             motionController.handleUserInput(gamepad1);
@@ -133,7 +134,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private void rumbleIfFreightPresent(){
         //Log.d(logTag, "Inside rumbleIfFreightPresent....");
         if(bucket.getBucketState() == BucketState.COLLECT){
-            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
+//            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
+            freightLoaded = freightDetector.getIsBox();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
             //Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
             //        " freightRumbleLockedOut: " + freightRumbleLockedOut);
@@ -187,6 +189,12 @@ public class EbotsTeleOpV2 extends LinearOpMode {
             lockoutStopWatch.reset();
         }
 
+    }
+
+    private void rotateBucketIfArmAtBottom(){
+        if (arm.shouldBucketCollect()) {
+            bucket.setState(BucketState.COLLECT);
+        }
     }
 }
 
