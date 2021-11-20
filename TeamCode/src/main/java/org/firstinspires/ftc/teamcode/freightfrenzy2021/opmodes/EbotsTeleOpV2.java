@@ -37,7 +37,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private Telemetry.Item zeroHeadingItem = null;
     private Intake intake;
     private Carousel carousel;
-    private Bucket bucket;
+    public Bucket bucket;
     private Arm arm;
     private boolean endGameRumbleIssued;
     private boolean justDumped = false;
@@ -131,12 +131,12 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     }
 
     private void rumbleIfFreightPresent(){
-        Log.d(logTag, "Inside rumbleIfFreightPresent....");
+        //Log.d(logTag, "Inside rumbleIfFreightPresent....");
         if(bucket.getBucketState() == BucketState.COLLECT){
             freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
-            Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
-                    " freightRumbleLockedOut: " + freightRumbleLockedOut);
+            //Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
+            //        " freightRumbleLockedOut: " + freightRumbleLockedOut);
             if(freightLoaded && !freightRumbleLockedOut){
                 gamepad1.rumble(250);
                 gamepad2.rumble(250);

@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOpV2;
 
 public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,8 +34,8 @@ public class Arm {
 
     public enum Level{
         ONE(0),
-        TWO(640),
-        THREE(1250);
+        TWO(625),
+        THREE(1235);
 
         private int encoderPosition;
 
@@ -167,6 +168,15 @@ public class Arm {
                 isTimedOut = stopWatch.getElapsedTimeMillis() > timeLimit;
             }
         }
+        if(opMode instanceof EbotsTeleOpV2){
+            Log.d(logTag, "inside if of TeleOpV2");
+            while (opMode.opModeIsActive() && !bucketInTravelPosition && !isTimedOut) {
+                ((EbotsTeleOpV2) opMode).bucket.setState(BucketState.TRAVEL);
+                bucketInTravelPosition = stopWatch.getElapsedTimeMillis() > minTime;
+                isTimedOut = stopWatch.getElapsedTimeMillis() > timeLimit;
+            }
+        }
+
         if (!isZeroed | !bucketInTravelPosition) return;
 
         int targetPosition = level.getEncoderPosition();
