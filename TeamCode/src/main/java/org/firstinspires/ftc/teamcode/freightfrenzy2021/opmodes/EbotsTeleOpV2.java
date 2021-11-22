@@ -63,7 +63,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         bucket = new Bucket(this);
         arm = new Arm(this);
 
-        motionController = EbotsMotionController.get(MecanumDrive.class, this);
+        motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
