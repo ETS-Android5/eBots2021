@@ -45,7 +45,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
         maxAllowedPower = 1.0;
         spinScaleFactor = 1.0;
 
-        ebotsImu = EbotsImu.getInstance(hardwareMap, false);
+        ebotsImu = EbotsImu.getInstance(hardwareMap);
 
         driverFieldHeadingRad = Math.toRadians(AllianceSingleton.getDriverFieldHeadingDeg());
 

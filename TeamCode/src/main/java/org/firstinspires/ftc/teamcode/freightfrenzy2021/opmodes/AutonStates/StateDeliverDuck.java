@@ -36,7 +36,7 @@ Constructors
     public StateDeliverDuck(EbotsAutonOpMode autonOpMode){
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         this.autonOpMode = autonOpMode;
-        carousel = new Carousel(hardwareMap);
+        carousel = Carousel.getInstance(hardwareMap);
         stopWatch = new StopWatch();
         stateTimeLimit = 4250;
         this.autonOpMode = autonOpMode;

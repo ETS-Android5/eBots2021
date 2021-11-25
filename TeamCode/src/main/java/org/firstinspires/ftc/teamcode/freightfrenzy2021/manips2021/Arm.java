@@ -27,6 +27,7 @@ public class Arm {
     private DigitalChannel zeroLimitSwitch;
     private boolean isZeroed = false;
     private StopWatch stopWatchInput = new StopWatch();
+    private static Arm armInstance = null;
 
     LinearOpMode opMode;
 
@@ -51,7 +52,7 @@ public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Arm(LinearOpMode opMode) {
+    private Arm(LinearOpMode opMode) {
         Log.d(logTag, "Instantiating arm...");
         HardwareMap hardwareMap = opMode.hardwareMap;
         this.opMode = opMode;
@@ -91,7 +92,13 @@ public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Static Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    // No static methods defined
+    //Return the instance if not present
+    public static Arm getInstance(LinearOpMode opMode){
+        if (armInstance == null){
+            armInstance = new Arm(opMode);
+        }
+        return armInstance;
+    }
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

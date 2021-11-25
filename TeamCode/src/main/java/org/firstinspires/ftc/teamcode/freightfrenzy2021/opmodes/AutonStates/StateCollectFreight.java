@@ -64,7 +64,7 @@ public class StateCollectFreight implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake = new Intake(hardwareMap);
+        intake = Intake.getInstance(hardwareMap);
         freightDetector = new FreightDetector();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

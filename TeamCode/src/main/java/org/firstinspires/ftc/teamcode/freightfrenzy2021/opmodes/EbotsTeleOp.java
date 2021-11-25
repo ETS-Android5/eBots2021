@@ -45,10 +45,10 @@ public class EbotsTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         endGameRumbleIssued = false;
-        intake = new Intake(hardwareMap);
-        carousel = new Carousel(hardwareMap);
-        bucket = new Bucket(this);
-        arm = new Arm(this);
+        intake = Intake.getInstance(hardwareMap);
+        carousel = Carousel.getInstance(hardwareMap);
+        bucket = Bucket.getInstance(this);
+        arm = Arm.getInstance(this);
         colorSensor = new EbotsColorSensor(hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);

@@ -18,13 +18,18 @@ public class Bucket {
     Servo bucketServo;
     private BucketState bucketState;
     private BucketState dumpStartedFrom;
-    private StopWatch stopWatchDump = new StopWatch();
+    private StopWatch stopWatchDump;
     private StopWatch stopWatchInput = new StopWatch();
     private LinearOpMode opMode;
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Attributes
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    private static Bucket ebotsBucket = null;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Bucket(LinearOpMode opMode){
+    private Bucket(LinearOpMode opMode){
         this.opMode = opMode;
         HardwareMap hardwareMap = opMode.hardwareMap;
         initServo(hardwareMap);
@@ -64,6 +69,17 @@ public class Bucket {
     Static Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // No static methods defined
+    public static Bucket getInstance(LinearOpMode opMode){
+        boolean bucketExists = false;
+        if (ebotsBucket != null) bucketExists = true;
+
+        if (bucketExists){
+            ebotsBucket = new Bucket(opMode);
+        }
+
+        return ebotsBucket;
+
+    }
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
