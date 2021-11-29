@@ -60,7 +60,7 @@ public class StateRotate180 implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getCurrentFieldHeadingDeg(true));
+        headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
 
         double acceptableError = 3;
 
@@ -83,7 +83,7 @@ public class StateRotate180 implements EbotsAutonState{
         motionController.stop();
 
         // update currentPose in autonOpMode
-        autonOpMode.getCurrentPose().setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(true));
+        autonOpMode.getCurrentPose().setHeadingDeg(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
         Log.d("EBOTS", "Exiting StateRotateToZeroDegreesV2, robot's pose: " + autonOpMode.getCurrentPose().toString());
 
     }

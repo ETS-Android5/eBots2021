@@ -159,7 +159,7 @@ public class StateReverseToHubUsingImage implements EbotsAutonState{
             lastScanSuccessful = false;
         } else{
             // if pose detected, add it to the poseEstimates array and update other indicators
-            poseEstimate.setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(true));
+            poseEstimate.setHeadingDeg(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
             poseEstimates.add(poseEstimate);
             successfulScans++;
             lastScanSuccessful = true;
@@ -183,7 +183,7 @@ public class StateReverseToHubUsingImage implements EbotsAutonState{
             currentPose.setFieldPosition(navigatorDeadReckoning.getPoseEstimate(loopDuration).getFieldPosition());
         }
         // always use the heading from imu
-        currentPose.setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(false));
+        currentPose.setHeadingDeg(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false));
     }
 
 

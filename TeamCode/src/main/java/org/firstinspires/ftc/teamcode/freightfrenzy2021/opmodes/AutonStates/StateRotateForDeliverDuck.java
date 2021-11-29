@@ -66,7 +66,7 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getCurrentFieldHeadingDeg(true));
+        headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
 
         if (firstPass){
             Log.d(logTag, "heading error is " + String.format("%.2f", headingErrorDeg));
@@ -93,12 +93,12 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     @Override
     public void performTransitionalActions() {
         Log.d(logTag, "Performing transitional actions for StateDeliverDuck");
-        Log.d(logTag, "Current heading is: " + String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false)) +
-                " Error is: " + (String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false) - targetHeadingDeg)));
+        Log.d(logTag, "Current heading is: " + String.format("%.2f", EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false)) +
+                " Error is: " + (String.format("%.2f", EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false) - targetHeadingDeg)));
         motionController.stop();
 
         // update robot's pose in autonOpMode
-        autonOpMode.getCurrentPose().setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(true));
+        autonOpMode.getCurrentPose().setHeadingDeg(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
         telemetry.addLine("Exiting RotateForDeliverDuck");
         telemetry.update();
         Log.d(logTag, "Exiting RotateForDeliverDuck, robot's pose: " + autonOpMode.getCurrentPose().toString());
@@ -125,7 +125,7 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     }
 
     private void updateTelemetry(){
-        telemetry.addData("Current Heading", String.format("%.2f", EbotsImu.getCurrentFieldHeadingDeg(false)));
+        telemetry.addData("Current Heading", String.format("%.2f", EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false)));
         telemetry.addData("Target Heading", targetHeadingDeg);
 
     }

@@ -128,7 +128,7 @@ public class StateDriveToCarouselWithDeadReckoningNav implements EbotsAutonState
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updatePose() {
         currentPose.setFieldPosition(navigatorDeadReckoning.getPoseEstimate(loopDuration).getFieldPosition());
-        currentPose.setHeadingDeg(EbotsImu.getCurrentFieldHeadingDeg(false));
+        currentPose.setHeadingDeg(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false));
     }
 
 

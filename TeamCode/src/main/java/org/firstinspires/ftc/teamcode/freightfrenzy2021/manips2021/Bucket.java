@@ -70,15 +70,12 @@ public class Bucket {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // No static methods defined
     public static Bucket getInstance(LinearOpMode opMode){
-        boolean bucketExists = false;
-        if (ebotsBucket != null) bucketExists = true;
 
-        if (bucketExists){
+        if (ebotsBucket == null){
             ebotsBucket = new Bucket(opMode);
         }
 
         return ebotsBucket;
-
     }
 
 

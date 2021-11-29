@@ -121,7 +121,7 @@ public class CalibrateMovement extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", EbotsImu.getCurrentFieldHeadingDeg(false));
+        telemetry.addData("Current heading", EbotsImu.getInstance(hardwareMap).getCurrentFieldHeadingDeg(false));
         telemetry.update();
     }
 
