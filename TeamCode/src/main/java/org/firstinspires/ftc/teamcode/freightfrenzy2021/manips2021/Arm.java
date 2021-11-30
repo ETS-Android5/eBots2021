@@ -28,6 +28,7 @@ public class Arm {
     private boolean isZeroed = false;
     private StopWatch stopWatchInput = new StopWatch();
     private static Arm armInstance = null;
+    HardwareMap hardwareMap;
 
     LinearOpMode opMode;
 
@@ -54,11 +55,10 @@ public class Arm {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Arm(LinearOpMode opMode) {
         Log.d(logTag, "Instantiating arm...");
-        HardwareMap hardwareMap = opMode.hardwareMap;
+        this.hardwareMap = opMode.hardwareMap;
         this.opMode = opMode;
-        this.armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
-        this.zeroLimitSwitch = hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
-        this.init();
+
+        this.init(hardwareMap);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,8 +104,10 @@ public class Arm {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public void init(){
+    public void init(HardwareMap hardwareMap){
         isZeroed = false;
+        this.armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
+        this.zeroLimitSwitch = hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
         armMotor.setTargetPosition(0);
         // These lines are added because limit switch is not working properly
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

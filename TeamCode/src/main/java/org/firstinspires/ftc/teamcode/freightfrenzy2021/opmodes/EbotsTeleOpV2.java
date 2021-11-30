@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
@@ -63,6 +64,9 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         //Check if reset is needed
         bucket = Bucket.getInstance(this);
         arm = Arm.getInstance(this);
+        //Re-Initialize Arm with new HardwareMap
+        //arm.init(hardwareMap); Moved to UtilFuncs
+        UtilFuncs.initManips(arm,carousel,hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);

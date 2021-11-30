@@ -52,7 +52,7 @@ public class Carousel {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void initMotor (HardwareMap hardwareMap){
+    public void initMotor (HardwareMap hardwareMap){
          carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
          speed = carouselMotor.getPower();
     }
