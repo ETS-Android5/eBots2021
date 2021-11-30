@@ -22,7 +22,7 @@ public class FreightDetector extends OpenCvPipeline {
     boolean isBall = false;
 
     //Check the co ordinates
-    Rect frameRect = new Rect(new Point(130, 180), new Point(190, 240));
+    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
     float confidenceNoRed = 0.0f;
     int averageHue = 0;
 

@@ -95,7 +95,8 @@ public class StateOpenCVObserve implements EbotsAutonState{
     public boolean shouldExit() {
         loopCount++;
         //User Request Exit not implemented
-        return autonOpMode.isStopRequested() | autonOpMode.isStarted();
+        boolean userRequestedExit = autonOpMode.gamepad1.left_bumper && autonOpMode.gamepad1.right_bumper;
+        return autonOpMode.isStopRequested() | autonOpMode.isStarted() | userRequestedExit;
     }
 
     @Override

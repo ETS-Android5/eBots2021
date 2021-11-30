@@ -8,9 +8,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +37,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
 
     private double currentHeadingDeg;          // current field-heading of the robot
     private double driverFieldHeadingRad;   // Direction of the drive based on alliance side of field
+    private Speed speed = Speed.TELEOP;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -42,8 +45,9 @@ public class FieldOrientedDrive implements EbotsMotionController {
         HardwareMap hardwareMap = opMode.hardwareMap;
         telemetry = opMode.telemetry;
 
-        maxAllowedPower = 1.0;
-        spinScaleFactor = 1.0;
+        speed = Speed.TELEOP;
+        maxAllowedPower = speed.getMaxSpeed();
+        spinScaleFactor = speed.getTurnSpeed();
 
         ebotsImu = EbotsImu.getInstance(hardwareMap);
 
@@ -130,10 +134,37 @@ public class FieldOrientedDrive implements EbotsMotionController {
         //      +X --> Forward, +Y is Left, +Z is up
         //   +Spin --> Counter clockwise
 
+        // force an imu read;
+        double currentHeadingDeg = EbotsImu.getCurrentFieldHeadingDeg(true);
+
         //Read in the gamepad inputs and update current heading
         double forwardInput = -gamepad.left_stick_y;  //reversing sign because up on gamepad is negative
         double lateralInput = -gamepad.left_stick_x;  //reversing sign because right on gamepad is positive
+
+        // Spin input is either provided from the right stick or calculated from error if right trigger or bumper squeezed
         double spinInput = -gamepad.right_stick_x * spinScaleFactor;    //Positive means to spin to the left (counterclockwise (CCW) when looking down on robot)
+
+        // See if override is requested and set flag and target heading
+        boolean spinOverrideActive = false;
+        double targetHeadingDeg = 0;
+        if(gamepad.right_trigger > 0.3){
+            spinOverrideActive = true;
+            targetHeadingDeg = -AllianceSingleton.getDriverFieldHeadingDeg();    // note negative sign
+        } else if(gamepad.right_bumper){
+            spinOverrideActive = true;
+            targetHeadingDeg = 0.0;
+        }
+
+        // If override active, calculate spin signal based on PID coefficients and heading error
+        if (spinOverrideActive){
+            double headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - currentHeadingDeg);
+            // apply PID
+            spinInput = headingErrorDeg * speed.getS_p();
+            // don't over-saturate signal while preserving sign
+            double spinSign = Math.signum(spinInput);
+            spinInput = Math.min(spinScaleFactor, Math.abs(spinInput));
+            spinInput = spinInput * spinSign;
+        }
 
         //  Step 1:  Calculate the magnitude for drive signal (hypotenuse of xDirDrive and yDirDrive signal)
         //  Step 2:  Calculate the translate angle (based on X & Y signals, robot heading is not a consideration)
@@ -149,7 +180,6 @@ public class FieldOrientedDrive implements EbotsMotionController {
         translateFieldAngleRad = Math.atan2(lateralInput, forwardInput) + driverFieldHeadingRad;
 
         //  Step 3:  Calculate the robot driveAngle, which adjusts for robot orientation
-        currentHeadingDeg = ebotsImu.getCurrentFieldHeadingDeg(true);
         double driveAngleRad = translateFieldAngleRad - Math.toRadians(currentHeadingDeg);
         // overflow of angle is OK here, the calculation isn't affected
         //driveAngleRad=Math.toRadians(applyAngleBounds(Math.toDegrees(driveAngleRad)));
