@@ -31,10 +31,8 @@ public class Bucket {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Bucket(LinearOpMode opMode){
         this.opMode = opMode;
-        HardwareMap hardwareMap = opMode.hardwareMap;
-        initServo(hardwareMap);
-        stopWatchDump = new StopWatch();
-        bucketState = BucketState.COLLECT;
+        init(opMode.hardwareMap);
+
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Getters & Setters
@@ -61,7 +59,11 @@ public class Bucket {
             setPos(BucketState.TRAVEL.getServoSetting());
         } else {
             // if asking to COLLECT but state was previously DUMP, then toggle state
-            if(bucketState == BucketState.DUMP) toggleState();
+            if(bucketState == BucketState.DUMP) {
+                toggleState();
+            } else {
+                bucketState = BucketState.COLLECT;
+            }
             setPos(BucketState.COLLECT.getServoSetting());
         }
     }
@@ -82,12 +84,14 @@ public class Bucket {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void initServo (HardwareMap hardwareMap){
+    public void init(HardwareMap hardwareMap){
         bucketServo = hardwareMap.get(Servo.class,"bucket");
         bucketState = BucketState.COLLECT;
         bucketServo.setPosition(bucketState.getServoSetting());
-
+        stopWatchDump = new StopWatch();
+        this.setState(BucketState.COLLECT);
     }
+
     public void handleUserInput(Gamepad gamepad){
 
         long lockOutLimit = 500;

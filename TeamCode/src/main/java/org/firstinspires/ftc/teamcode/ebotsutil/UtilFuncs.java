@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ebotsutil;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 
 public class UtilFuncs {
@@ -44,6 +45,7 @@ public class UtilFuncs {
     public static void initManips(Arm arm, Carousel carousel, LinearOpMode opMode){
         arm.init(opMode);
         carousel.initMotor(opMode.hardwareMap);
+        Bucket.getInstance(opMode).init(opMode.hardwareMap);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -63,6 +63,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         carousel = Carousel.getInstance(hardwareMap);
         //Check if reset is needed
         bucket = Bucket.getInstance(this);
+        bucket.setState(BucketState.COLLECT);
+
         arm = Arm.getInstance(this);
         //Re-Initialize Arm with new HardwareMap
         //arm.init(hardwareMap); Moved to UtilFuncs
