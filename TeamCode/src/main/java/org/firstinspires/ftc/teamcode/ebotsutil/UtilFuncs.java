@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.ebotsutil;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 
 public class UtilFuncs {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,9 +41,9 @@ public class UtilFuncs {
         return (int) Math.round(distanceInInches * clicksPerInch);
     }
 
-    public static void initManips(Arm arm, Carousel carousel,HardwareMap hardwareMap){
-        arm.init(hardwareMap);
-        carousel.initMotor(hardwareMap);
+    public static void initManips(Arm arm, Carousel carousel, LinearOpMode opMode){
+        arm.init(opMode);
+        carousel.initMotor(opMode.hardwareMap);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

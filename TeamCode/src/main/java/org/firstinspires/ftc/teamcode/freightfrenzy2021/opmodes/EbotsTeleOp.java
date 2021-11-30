@@ -52,7 +52,7 @@ public class EbotsTeleOp extends LinearOpMode {
         arm = Arm.getInstance(this);
         //Initialize Arm with new HardwareMap
         //arm.init(hardwareMap); moved to UtilFuncs
-        UtilFuncs.initManips(arm,carousel,hardwareMap);
+        UtilFuncs.initManips(arm,carousel,this);
         colorSensor = new EbotsColorSensor(hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);

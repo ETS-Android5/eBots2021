@@ -66,7 +66,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         arm = Arm.getInstance(this);
         //Re-Initialize Arm with new HardwareMap
         //arm.init(hardwareMap); Moved to UtilFuncs
-        UtilFuncs.initManips(arm,carousel,hardwareMap);
+        UtilFuncs.initManips(arm,carousel,this);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
