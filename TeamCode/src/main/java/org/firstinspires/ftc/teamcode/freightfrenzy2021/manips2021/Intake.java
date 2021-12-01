@@ -10,11 +10,12 @@ public class Intake {
     Instance Attributes
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private DcMotorEx intakeMotor;
+    private static Intake intakeInstance = null;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Intake(HardwareMap hardwareMap) {
+    private Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
     }
 
@@ -28,7 +29,14 @@ public class Intake {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Static Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    // No static methods defined
+    // Create a new Intake instance if not present
+    public static Intake getInstance(HardwareMap hardwareMap){
+        if (intakeInstance == null){
+            intakeInstance = new Intake(hardwareMap);
+        }
+
+        return intakeInstance;
+    }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods

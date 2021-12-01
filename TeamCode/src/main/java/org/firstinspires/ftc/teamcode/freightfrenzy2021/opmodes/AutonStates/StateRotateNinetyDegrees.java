@@ -75,7 +75,7 @@ public class StateRotateNinetyDegrees implements EbotsAutonState{
         double acceptableError = 3;
         boolean targetHeadingAchieved = false;
 
-        currentHeading = EbotsImu.getCurrentFieldHeadingDeg(true);
+        currentHeading = EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true);
         currentError = currentHeading - targetHeadingDeg;
         currentError = UtilFuncs.applyAngleBounds(currentError);
 

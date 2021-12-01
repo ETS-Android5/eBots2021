@@ -23,8 +23,9 @@ public class StateDumpFreight implements EbotsAutonState{
 
     public StateDumpFreight(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
-        bucket = autonOpMode.bucket;
-        arm = new Arm (autonOpMode);
+        //stopWatchDump re-instantiation necessary??
+        bucket = Bucket.getInstance(autonOpMode);
+        arm = Arm.getInstance (autonOpMode);
         // This is commented out because limit switch is not working.
         //arm.zeroArmHeight();
         stopWatchState = new StopWatch();

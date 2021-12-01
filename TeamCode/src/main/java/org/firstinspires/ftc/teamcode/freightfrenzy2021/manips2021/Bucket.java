@@ -18,18 +18,21 @@ public class Bucket {
     Servo bucketServo;
     private BucketState bucketState;
     private BucketState dumpStartedFrom;
-    private StopWatch stopWatchDump = new StopWatch();
+    private StopWatch stopWatchDump;
     private StopWatch stopWatchInput = new StopWatch();
     private LinearOpMode opMode;
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Instance Attributes
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    private static Bucket ebotsBucket = null;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Bucket(LinearOpMode opMode){
+    private Bucket(LinearOpMode opMode){
         this.opMode = opMode;
-        HardwareMap hardwareMap = opMode.hardwareMap;
-        initServo(hardwareMap);
-        stopWatchDump = new StopWatch();
-        bucketState = BucketState.COLLECT;
+        init(opMode.hardwareMap);
+
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Getters & Setters
@@ -56,7 +59,11 @@ public class Bucket {
             setPos(BucketState.TRAVEL.getServoSetting());
         } else {
             // if asking to COLLECT but state was previously DUMP, then toggle state
-            if(bucketState == BucketState.DUMP) toggleState();
+            if(bucketState == BucketState.DUMP) {
+                toggleState();
+            } else {
+                bucketState = BucketState.COLLECT;
+            }
             setPos(BucketState.COLLECT.getServoSetting());
         }
     }
@@ -64,17 +71,27 @@ public class Bucket {
     Static Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // No static methods defined
+    public static Bucket getInstance(LinearOpMode opMode){
+
+        if (ebotsBucket == null){
+            ebotsBucket = new Bucket(opMode);
+        }
+
+        return ebotsBucket;
+    }
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void initServo (HardwareMap hardwareMap){
+    public void init(HardwareMap hardwareMap){
         bucketServo = hardwareMap.get(Servo.class,"bucket");
         bucketState = BucketState.COLLECT;
         bucketServo.setPosition(bucketState.getServoSetting());
-
+        stopWatchDump = new StopWatch();
+        this.setState(BucketState.COLLECT);
     }
+
     public void handleUserInput(Gamepad gamepad){
 
         long lockOutLimit = 500;

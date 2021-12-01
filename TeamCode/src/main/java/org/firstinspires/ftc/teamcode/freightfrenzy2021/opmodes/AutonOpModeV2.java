@@ -25,6 +25,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     String logTag = "EBOTS";
     int statesCreated = 0;
     private EbotsAutonState currentState;
+    private EbotsImu ebotsimu;
     private boolean stateComplete = false;
 
 
@@ -77,7 +78,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         this.motionController = new AutonDrive(this);
 
         // put bucket in collect position
-        bucket = new Bucket(this);
+        bucket = Bucket.getInstance(this);
         bucket.setState(BucketState.TRAVEL);
 
         // Setup the pre-match autonStates
@@ -131,10 +132,10 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     }
 
     private void updateTelemetry(){
+        ebotsimu = EbotsImu.getInstance(hardwareMap);
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", EbotsImu.getCurrentFieldHeadingDeg(false));
+        telemetry.addData("Current heading", ebotsimu.getCurrentFieldHeadingDeg(false));
         telemetry.update();
     }
-
 
 }

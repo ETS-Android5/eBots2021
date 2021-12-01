@@ -4,27 +4,33 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCalibrateHubX;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreight;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateOpenCVObserve;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToCollect;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
-
 @Autonomous
-public class CalibrateMovement extends EbotsAutonOpMode {
+public class AutonOpMode_CollectFreight extends EbotsAutonOpMode {
 
     String logTag = "EBOTS";
     int statesCreated = 0;
     private EbotsAutonState currentState;
     private boolean stateComplete = false;
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         initAutonOpMode();
+
 
         Log.d(logTag, "About to start State Machine...");
         // Execute the pre-match state machine
@@ -69,10 +75,17 @@ public class CalibrateMovement extends EbotsAutonOpMode {
         // motion controller
         this.motionController = new AutonDrive(this);
 
+        // put bucket in collect position
+        bucket = Bucket.getInstance(this);
+        bucket.setState(BucketState.TRAVEL);
+
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateCalibrateHubX.class);
-//        itinerary.add(StateMoveWithEncoders.class);
+        itinerary.add(StateOpenCVObserve.class);
+        itinerary.add(StateNavigateToWarehouse.class);
+        itinerary.add(StateRotateToCollect.class);
+        itinerary.add(StateCollectFreight.class);
+//        itinerary.add(StateObserveTeamShippingElement.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();

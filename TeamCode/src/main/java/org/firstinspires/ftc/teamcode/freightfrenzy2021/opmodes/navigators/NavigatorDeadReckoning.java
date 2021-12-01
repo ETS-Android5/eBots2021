@@ -62,7 +62,7 @@ public class NavigatorDeadReckoning implements EbotsNavigator{
         // apply translation to starting pose
         double newX = startingPose.getX() + xDist;
         double newY = startingPose.getY() + yDist;
-        Pose endPose = new Pose(newX, newY, EbotsImu.getCurrentFieldHeadingDeg(false));
+        Pose endPose = new Pose(newX, newY, EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(false));
 //        Log.d(logTag, "Pose just updated in DRnav:" + endPose.toString());
         return endPose;
     }

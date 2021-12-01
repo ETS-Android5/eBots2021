@@ -67,7 +67,7 @@ public class StateStrafeRight implements EbotsAutonState{
         Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
 
         // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getCurrentFieldHeadingDeg(true));
+        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
         double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
         double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
         FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);

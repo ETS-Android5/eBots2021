@@ -17,11 +17,12 @@ public class Carousel {
     boolean isTouching;
     int encoderClicks;
     DcMotorEx carouselMotor;
+    private static Carousel carouselInstance = null;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public Carousel(HardwareMap hardwareMap){
+    private Carousel(HardwareMap hardwareMap){
         initMotor(hardwareMap);
         stopWatch = new StopWatch();
     }
@@ -40,13 +41,18 @@ public class Carousel {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Static Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    // No static methods defined
-
+    // Create a Carousel, if not present.
+    public static Carousel getInstance(HardwareMap hardwareMap){
+        if (carouselInstance == null){
+            carouselInstance = new Carousel(hardwareMap);
+        }
+        return carouselInstance;
+    }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void initMotor (HardwareMap hardwareMap){
+    public void initMotor (HardwareMap hardwareMap){
          carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
          speed = carouselMotor.getPower();
     }

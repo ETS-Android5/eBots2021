@@ -40,6 +40,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     protected NavigatorVuforia navigatorVuforia;
 
     public Bucket bucket;
+    private EbotsImu ebotsimu;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -62,7 +63,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     }
 
     public double getCurrentHeadingDeg(boolean forceHardwareRead){
-        return EbotsImu.getCurrentFieldHeadingDeg(forceHardwareRead);
+        ebotsimu = EbotsImu.getInstance(hardwareMap);
+        return ebotsimu.getCurrentFieldHeadingDeg(forceHardwareRead);
     }
 
     public Pose getCurrentPose() {
@@ -97,8 +99,9 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     }
 
     public void setInitialHeadingDeg(double initialHeadingDeg) {
+        ebotsimu = EbotsImu.getInstance(hardwareMap);
         // initial heading is managed by the imu
-        EbotsImu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
+        ebotsimu.setFieldHeadingWhenInitializedDeg(initialHeadingDeg);
     }
 
     public void setCurrentPose(Pose currentPose) {
@@ -121,7 +124,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
 
     public void initEbotsImu(){
-        EbotsImu.getInstance(hardwareMap, true);
+        ebotsimu = EbotsImu.getInstance(hardwareMap);
+        ebotsimu.initEbotsImu(hardwareMap);
     }
 
 }

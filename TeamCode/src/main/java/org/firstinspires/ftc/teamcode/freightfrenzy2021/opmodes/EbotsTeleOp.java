@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
+import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
@@ -45,10 +46,13 @@ public class EbotsTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         endGameRumbleIssued = false;
-        intake = new Intake(hardwareMap);
-        carousel = new Carousel(hardwareMap);
-        bucket = new Bucket(this);
-        arm = new Arm(this);
+        intake = Intake.getInstance(hardwareMap);
+        carousel = Carousel.getInstance(hardwareMap);
+        bucket = Bucket.getInstance(this);
+        arm = Arm.getInstance(this);
+        //Initialize Arm with new HardwareMap
+        //arm.init(hardwareMap); moved to UtilFuncs
+        UtilFuncs.initManips(arm,carousel,this);
         colorSensor = new EbotsColorSensor(hardwareMap);
 
         motionController = EbotsMotionController.get(MecanumDrive.class, this);
