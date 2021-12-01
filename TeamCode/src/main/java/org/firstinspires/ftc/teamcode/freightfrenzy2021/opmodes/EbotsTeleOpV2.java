@@ -128,10 +128,6 @@ public class EbotsTeleOpV2 extends LinearOpMode {
             carousel.handleUserInput(gamepad2);
             bucket.handleUserInput(gamepad2);
             ebotsBlinkin.handleUserInput(gamepad2);
-            if(this.justDumped) {
-                arm.moveToLevel(Arm.Level.ONE);
-                justDumped = false;
-            }
             arm.handleUserInput(gamepad2);
 
             updateTelemetry();
@@ -168,11 +164,11 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         String twoDecimals = "%.2f";
         Telemetry.Item zeroHeadingLine = null;
         telemetry.addData("Motion Controller", motionController.getName());
-        telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getSpeed()));
-        telemetry.addData("Intake Speed", String.format(twoDecimals, intake.getSpeed()));
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
+        telemetry.addData("Arm State ", arm.getArmState());
+        telemetry.addData("Bucket State ", bucket.getBucketState());
         telemetry.addData("Freight Detected ", freightLoaded);
         telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
         telemetry.addData("Is Box ", freightDetector.getIsBox() + " ("

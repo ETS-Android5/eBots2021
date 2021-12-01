@@ -22,7 +22,7 @@ public class FreightDetector extends OpenCvPipeline {
     boolean isBall = false;
     double confidenceBox;
     double confidenceBall;
-    boolean hsvBoxDebug = true;
+    boolean hsvBoxDebug = false;
     boolean hsvBallDebug = false;
 
     //Check the co ordinates
@@ -184,7 +184,7 @@ public class FreightDetector extends OpenCvPipeline {
         double average = ((double) sum) / divisor;
         averageHue = (int) average;
 
-        logColorValues(hsv);
+//        logColorValues(hsv);
 
         return (int) average;
     }

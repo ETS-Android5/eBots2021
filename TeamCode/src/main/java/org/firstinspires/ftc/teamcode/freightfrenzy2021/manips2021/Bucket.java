@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
@@ -21,6 +22,7 @@ public class Bucket {
     private StopWatch stopWatchDump;
     private StopWatch stopWatchInput = new StopWatch();
     private LinearOpMode opMode;
+    private boolean dumpAchieved = false;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
@@ -31,7 +33,7 @@ public class Bucket {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Bucket(LinearOpMode opMode){
         this.opMode = opMode;
-        init(opMode.hardwareMap);
+        init(opMode);
 
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,8 +86,9 @@ public class Bucket {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public void init(HardwareMap hardwareMap){
-        bucketServo = hardwareMap.get(Servo.class,"bucket");
+    public void init(LinearOpMode opMode){
+        this.opMode = opMode;
+        bucketServo = opMode.hardwareMap.get(Servo.class,"bucket");
         bucketState = BucketState.COLLECT;
         bucketServo.setPosition(bucketState.getServoSetting());
         stopWatchDump = new StopWatch();
@@ -118,20 +121,26 @@ public class Bucket {
     }
 
     private void toggleState(){
+        Arm arm = Arm.getInstance(opMode);
         if (bucketState == BucketState.COLLECT){
             bucketState = BucketState.TRAVEL;
-        } else if(bucketState == BucketState.TRAVEL) {
+            dumpAchieved = false;
+        } else if(bucketState == BucketState.TRAVEL && (arm.getArmState() == Arm.ArmState.AT_LEVEL_1)) {
+            // only toggle to collect mode when at Level_1
             bucketState = BucketState.COLLECT;
+            dumpAchieved = false;
+        }else if(bucketState == BucketState.TRAVEL && !(arm.getArmState() == Arm.ArmState.AT_LEVEL_1)) {
+            // if requesting to go to collect but not at Level1 then deny bucket movement
+            Log.d("EBOTS", "Bucket tilt to Collect DENIED!!!");
+        } else if (bucketState == BucketState.DUMP && dumpAchieved){
+            // if state was DUMP and dump achieved them return arm to level 1
+            arm.moveToLevel(Arm.Level.ONE);
+            bucketState = BucketState.TRAVEL;
         } else {
-            // if state was DUMP them return arm to level 1
-            if (opMode instanceof EbotsTeleOp){
-                ((EbotsTeleOp) opMode).setJustDumped(true);
-            } else if(opMode instanceof EbotsTeleOpV2){
-                ((EbotsTeleOpV2) opMode).setJustDumped(true);
-            }
-            // whether state was TRAVEL or DUMP it sets it to collect
+            // otherwise set the bucket state to TRAVEL
             bucketState = BucketState.TRAVEL;
         }
+
         setPos(bucketState.getServoSetting());
     }
 
@@ -144,6 +153,7 @@ public class Bucket {
         long frequencyMillis = 100;
 
         long currentTime = stopWatchDump.getElapsedTimeMillis();
+        dumpAchieved = currentTime > dumpTime;
 
         long cycleTime = currentTime - dumpTime;
 

@@ -45,7 +45,7 @@ public class UtilFuncs {
     public static void initManips(Arm arm, Carousel carousel, LinearOpMode opMode){
         arm.init(opMode);
         carousel.initMotor(opMode.hardwareMap);
-        Bucket.getInstance(opMode).init(opMode.hardwareMap);
+        Bucket.getInstance(opMode).init(opMode);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
