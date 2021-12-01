@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes;
 
 import android.annotation.SuppressLint;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.FieldO
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
+@Disabled
 @TeleOp
 public class EbotsTeleOp extends LinearOpMode {
 

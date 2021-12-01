@@ -142,23 +142,23 @@ public class StateConfigureRoutine implements EbotsAutonState{
         Pose startingPose = new Pose(AllianceSingleton.getAlliance(), startingSide);
         autonOpMode.setCurrentPose(startingPose);
 
-//        if (delayTime == DelayTime.FIVE_SECONDS){
-//            // add delay to itinerary
-//            autonOpMode.appendStateToItinerary(StateDelayFiveSeconds.class);
-//        }else if (delayTime == DelayTime.TEN_SECONDS){
-//            // add delay to itinerary
-//            autonOpMode.appendStateToItinerary(StateDelayTenSeconds.class);
-//        }
-//
-//        EbotsAutonRoutine routine;
-//        if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){
-//            routine = new RoutineCarousel();
-//        } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
-//            routine = new RoutineBlueCarousel();
-//        } else {
-//            routine = new RoutineWarehouse();
-//        }
-//        autonOpMode.appendStatesToRoutineItinerary(routine);
+        if (delayTime == DelayTime.FIVE_SECONDS){
+            // add delay to itinerary
+            autonOpMode.appendStateToItinerary(StateDelayFiveSeconds.class);
+        }else if (delayTime == DelayTime.TEN_SECONDS){
+            // add delay to itinerary
+            autonOpMode.appendStateToItinerary(StateDelayTenSeconds.class);
+        }
+
+        EbotsAutonRoutine routine;
+        if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){
+            routine = new RoutineCarousel();
+        } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
+            routine = new RoutineBlueCarousel();
+        } else {
+            routine = new RoutineWarehouse();
+        }
+        autonOpMode.appendStatesToRoutineItinerary(routine);
         Log.d("EBOTS", "Completed StateConfigureRoutine");
     }
 }

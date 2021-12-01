@@ -153,6 +153,9 @@ public class FieldOrientedDrive implements EbotsMotionController {
         } else if(gamepad.right_bumper){
             spinOverrideActive = true;
             targetHeadingDeg = 0.0;
+        } else if(gamepad.left_bumper){
+            spinOverrideActive = true;
+            targetHeadingDeg = AllianceSingleton.isBlue() ? 30.0 : -30.0;
         }
 
         // If override active, calculate spin signal based on PID coefficients and heading error
