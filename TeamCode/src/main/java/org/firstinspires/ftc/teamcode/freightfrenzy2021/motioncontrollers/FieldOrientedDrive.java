@@ -135,7 +135,7 @@ public class FieldOrientedDrive implements EbotsMotionController {
         //   +Spin --> Counter clockwise
 
         // force an imu read;
-        double currentHeadingDeg = EbotsImu.getCurrentFieldHeadingDeg(true);
+        double currentHeadingDeg = ebotsImu.getCurrentFieldHeadingDeg(true);
 
         //Read in the gamepad inputs and update current heading
         double forwardInput = -gamepad.left_stick_y;  //reversing sign because up on gamepad is negative

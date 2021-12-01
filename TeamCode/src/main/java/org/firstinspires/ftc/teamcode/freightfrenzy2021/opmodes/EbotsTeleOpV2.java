@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
@@ -40,6 +41,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private Carousel carousel;
     public Bucket bucket;
     private Arm arm;
+    private EbotsBlinkin ebotsBlinkin;
+
     private boolean endGameRumbleIssued;
     private boolean justDumped = false;
     private OpenCvCamera camera;
@@ -66,9 +69,11 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         bucket.setState(BucketState.COLLECT);
 
         arm = Arm.getInstance(this);
-        //Re-Initialize Arm with new HardwareMap
-        //arm.init(hardwareMap); Moved to UtilFuncs
+
         UtilFuncs.initManips(arm,carousel,this);
+
+        ebotsBlinkin = new EbotsBlinkin(hardwareMap);
+        ebotsBlinkin.lightsOn();
 
         motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
@@ -102,6 +107,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
         while (! this.isStarted()){
             this.handleUserInput(gamepad1);
+            bucket.handleUserInput(gamepad2);
+            ebotsBlinkin.handleUserInput(gamepad2);
             rumbleIfFreightPresent();
             updateTelemetry();
         }
@@ -119,6 +126,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
             intake.handleUserInput(gamepad2);
             carousel.handleUserInput(gamepad2);
             bucket.handleUserInput(gamepad2);
+            ebotsBlinkin.handleUserInput(gamepad2);
             if(this.justDumped) {
                 arm.moveToLevel(Arm.Level.ONE);
                 justDumped = false;
@@ -127,6 +135,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
             updateTelemetry();
         }
+
+        ebotsBlinkin.lightsOff();
     }
 
     private void rumbleIfEndGame() {
@@ -142,8 +152,6 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         if(bucket.getBucketState() == BucketState.COLLECT){
             freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
-            //Log.d(logTag, "BucketState: " + bucket.getBucketState() + " freightLoaded: " + freightLoaded +
-            //        " freightRumbleLockedOut: " + freightRumbleLockedOut);
             if(freightLoaded && !freightRumbleLockedOut){
                 gamepad1.rumble(250);
                 gamepad2.rumble(250);
@@ -163,10 +171,12 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
-        telemetry.addData("Freight Detected ", freightDetector.getFrameConfidenceNoRed());
+        telemetry.addData("Freight Detected ", freightLoaded);
         telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
-        telemetry.addData("Is Box ", freightDetector.getIsBox());
-        telemetry.addData("Is Ball ", freightDetector.getIsBall());
+        telemetry.addData("Is Box ", freightDetector.getIsBox() + " ("
+                + String.format(twoDecimals, freightDetector.getConfidenceBox()) + ")");
+        telemetry.addData("Is Ball ", freightDetector.getIsBall()  + " ("
+                + String.format(twoDecimals, freightDetector.getConfidenceBall()) + ")");
 
         if (motionController instanceof FieldOrientedDrive){
             telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));

@@ -20,11 +20,17 @@ public class FreightDetector extends OpenCvPipeline {
     String logTag = "EBOTS";
     boolean isBox = false;
     boolean isBall = false;
+    double confidenceBox;
+    double confidenceBall;
+    boolean hsvBoxDebug = true;
+    boolean hsvBallDebug = false;
 
     //Check the co ordinates
-    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
-    float confidenceNoRed = 0.0f;
+//    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
+    Rect frameRect = new Rect(new Point(130, 50), new Point(190, 80));
     int averageHue = 0;
+    private boolean wasBall = false;
+    private boolean wasBox = false;
 
     public boolean isReadingConsumed() {
         return readingConsumed;
@@ -32,10 +38,6 @@ public class FreightDetector extends OpenCvPipeline {
 
     public int getReadingCount() {
         return readingCount;
-    }
-
-    public float getFrameConfidenceNoRed() {
-        return confidenceNoRed;
     }
 
     public float getAverageHue() {
@@ -50,26 +52,27 @@ public class FreightDetector extends OpenCvPipeline {
         return isBall;
     }
 
+    public double getConfidenceBox() {
+        return confidenceBox;
+    }
+
+    public double getConfidenceBall() {
+        return confidenceBall;
+    }
+
     @Override
     public void init(Mat firstFrame) {
         Log.d("EBOTS", "Mat size: " + firstFrame.size().toString());
         frameTargetMat = firstFrame.submat(frameRect);
         Log.d("EBOTS", "SubMat size: " + frameTargetMat.size().toString());
-
     }
+
 
     @Override
     public Mat processFrame(Mat input) {
-        double confidenceThreshold = 0.7;
-
         Imgproc.cvtColor(frameTargetMat, frameHsv, Imgproc.COLOR_RGB2HSV);
-        confidenceNoRed = calculateConfidenceNoRed(frameHsv);
         averageHue = calculateAverageHue(frameHsv);
-        isBox = calculateConfidenceBox(frameHsv) >= confidenceThreshold;
-        isBall = calculateConfidenceBall(frameHsv) >= confidenceThreshold;
-
-        readingConsumed = false;    // flat the current value as a new reading
-        readingCount++;
+        determineFreightPresence();
 
         if (firstPass) {
             Log.d("EBOTS", "hsv size: " + frameHsv.size().toString());
@@ -77,7 +80,6 @@ public class FreightDetector extends OpenCvPipeline {
             Log.d("EBOTS", "val1: " + Arrays.toString(frameHsv.get(0,0)));
             Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(input.rows()/2,input.cols()/2)));
             Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.rows()-1,input.cols()-1)));
-            Log.d("EBOTS", "Confidence Not Red: " + String.format("%.1f", confidenceNoRed));
             Log.d("EBOTS", "Average Hue: " + String.format("%d", averageHue));
         }
         // draw a bounding rectangle
@@ -88,32 +90,26 @@ public class FreightDetector extends OpenCvPipeline {
         return input;
     }
 
-    private float calculateConfidenceNoRed(Mat hsv) {
-        int noRed = 0;
-        int totalPixels = hsv.rows() * hsv.cols();
-        double valueThreshold = 50.0;
-        int validPixels = 0;
-        double pixelValue = 0;
-        for (int row = 0; row < hsv.rows(); row++) {
-            for (int col = 0; col < hsv.cols(); col++) {
+    private void determineFreightPresence() {
+        // calculate values for this loop
+        double confidenceThreshold = 0.7;
+        confidenceBox = calculateConfidenceBox(frameHsv);
+        confidenceBall = calculateConfidenceBall(frameHsv);
+        boolean nowBox = confidenceBox >= confidenceThreshold;
+        boolean nowBall = confidenceBall >= confidenceThreshold;
 
-                pixelValue = hsv.get(row, col)[2];
-                if (pixelValue > valueThreshold) {
-                    validPixels++;
-                    // if value is high enough (ignores black)
-                    double currentHue = hsv.get(row, col)[0];
-                    if (currentHue > 45 && currentHue < 150){
-                        noRed++;
-                    }
-                }
+        // set freight conditions
+        isBox = wasBox && nowBox;
+        isBall = wasBall && nowBall;
 
-            }
-        }
-        Log.d(logTag, "validPixels: " + String.format("%d", validPixels) + ", noRed: " + String.format("%d", noRed));
-        float percentValidPixels = ((float) validPixels) / totalPixels;
-        float noRedPercentage = (percentValidPixels > 0.40) ? ((float)noRed / validPixels) : 0.0f;
-        return  noRedPercentage;
+        // set the wasBall and wasBox conditions for next loop
+        wasBox = nowBox;
+        wasBall = nowBall;
+
+        readingConsumed = false;    // flat the current value as a new reading
+        readingCount++;
     }
+
 
     private double calculateConfidenceBox(Mat hsv){
         int pixelCount = 0;
@@ -121,7 +117,7 @@ public class FreightDetector extends OpenCvPipeline {
         double pixelSaturation;
         double pixelValue;
 
-        int cubeCount=0;
+        int boxCount=0;
         for (int row = 0; row < hsv.rows(); row++) {
             for (int col = 0; col < hsv.cols(); col++) {
                 pixelHue = hsv.get(row, col)[0];
@@ -129,14 +125,19 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
                 // if value is high enough (ignores black)
-                if ((pixelHue > 10 && pixelHue < 60) &&
-                        pixelSaturation > 200 && pixelValue > 150) {
-                    cubeCount++;
+                boolean hueFlag = (pixelHue >= 0.0 && pixelHue <= 40.0) | pixelHue >= 170.0;
+                boolean saturationFlag = pixelSaturation >= 85;
+                //boolean valueFlag = pixelValue >= 160.0;
+                boolean valueFlag = pixelValue >= 60.0;
+                if (hueFlag && saturationFlag && valueFlag) {
+                    boxCount++;
+                } else{
+                    if (hsvBoxDebug) Log.d(logTag, "Negative: " + Arrays.toString(hsv.get(row, col)));
                 }
             }
         }
-        double cubeConfidence = ((double) cubeCount) / pixelCount;
-        Log.d(logTag, "cubeCount / pixelCount: " + String.format("%.2f", cubeConfidence));
+        double cubeConfidence = ((double) boxCount) / pixelCount;
+        Log.d(logTag, "boxCount / pixelCount: " + String.format("%.2f", cubeConfidence));
         return cubeConfidence;
     }
 
@@ -153,10 +154,14 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelSaturation = hsv.get(row, col)[1];
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
+                boolean hueFlag = pixelHue >= 40.0 && pixelHue <= 80.0;
+                boolean saturationFlag = pixelSaturation >= 85.0;
+                boolean valueFlag = pixelValue > 150.0;
                 // if value is high enough (ignores black)
-                if ((pixelHue > 40 && pixelHue < 80)
-                        && pixelValue > 150) {
+                if (hueFlag && valueFlag) {
                     ballCount++;
+                } else{
+                    if (hsvBallDebug) Log.d(logTag, "Negative: " + Arrays.toString(hsv.get(row, col)));
                 }
             }
         }
@@ -182,8 +187,6 @@ public class FreightDetector extends OpenCvPipeline {
         logColorValues(hsv);
 
         return (int) average;
-
-
     }
 
     public void markReadingAsConsumed(){

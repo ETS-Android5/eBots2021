@@ -66,9 +66,9 @@ public class StateCollectFreight implements EbotsAutonState{
         leftMotors.add(backLeft);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake = new Intake(hardwareMap);
+        intake = Intake.getInstance(hardwareMap);
 
-        Bucket bucket = new Bucket(autonOpMode);
+        Bucket bucket = Bucket.getInstance(autonOpMode);
         bucket.setState(BucketState.COLLECT);
         freightDetector = new FreightDetector();
 

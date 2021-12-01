@@ -76,7 +76,7 @@ public class AutonOpMode_CollectFreight extends EbotsAutonOpMode {
         this.motionController = new AutonDrive(this);
 
         // put bucket in collect position
-        bucket = new Bucket(this);
+        bucket = Bucket.getInstance(this);
         bucket.setState(BucketState.TRAVEL);
 
         // Setup the pre-match autonStates
@@ -134,7 +134,7 @@ public class AutonOpMode_CollectFreight extends EbotsAutonOpMode {
 
     private void updateTelemetry(){
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
-        telemetry.addData("Current heading", EbotsImu.getCurrentFieldHeadingDeg(false));
+        telemetry.addData("Current heading", EbotsImu.getInstance(hardwareMap).getCurrentFieldHeadingDeg(false));
         telemetry.update();
     }
 
