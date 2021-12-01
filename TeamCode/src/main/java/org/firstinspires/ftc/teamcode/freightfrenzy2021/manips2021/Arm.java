@@ -50,6 +50,13 @@ public class Arm {
         }
     }
 
+    private enum ArmState{
+        AT_BOTTOM,
+        MOVING_UP,
+        MOVING_DOWN,
+        JUST_DUMPED
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
