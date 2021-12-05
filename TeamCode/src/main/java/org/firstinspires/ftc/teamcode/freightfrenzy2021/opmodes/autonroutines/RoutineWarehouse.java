@@ -28,18 +28,6 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public RoutineWarehouse(){
-//        itinerary.add(StatePushOff.class);
-//        itinerary.add(StateRotateToZeroDegreesV2.class);
-//        itinerary.add(StateMoveToHubX.class);
-//        itinerary.add(StateRotateForHubDump.class);
-//        itinerary.add(StateReverseToHubUsingImage.class);
-//        itinerary.add(StateDumpFreight.class);
-//        itinerary.add(StatePushOff.class);
-//        itinerary.add(StateRotateToZeroDegreesV2.class);
-//        itinerary.add(StateNavigateToWarehouse.class);
-//        itinerary.add(StateRotateToCollect.class);
-//        itinerary.add(StateCollectFreight.class);
-
 
         itinerary.add(StatePushOffWithEncoders.class);
         itinerary.add(StateStrafeRight.class);

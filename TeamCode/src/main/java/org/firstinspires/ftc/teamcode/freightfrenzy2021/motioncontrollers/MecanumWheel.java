@@ -17,6 +17,7 @@ public class MecanumWheel {
     private double wheelAngleRad;   // the orientation of the rollers on the mecanum wheel (either 45 or -45 deg)
     private WheelPosition wheelPosition;    //
     private double calculatedPower;
+    private double calculatedVelocity;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -46,8 +47,16 @@ public class MecanumWheel {
         return calculatedPower;
     }
 
+    public double getCalculatedVelocity() {
+        return calculatedVelocity;
+    }
+
     public void setCalculatedPower(double newPower){
         this.calculatedPower = newPower;
+    }
+
+    public void setCalculatedVelocity(double calculatedVelocity) {
+        this.calculatedVelocity = calculatedVelocity;
     }
 
     public int getMotorClicks(){

@@ -20,34 +20,16 @@ public class RoutineBlueCarousel extends EbotsAutonRoutine{
     Constructors
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public RoutineBlueCarousel(){
-//        itinerary.add(StatePushOff.class);
-//        itinerary.add(StateRotateToZeroDegreesV2.class);
-//        itinerary.add(StateDriveToCarousel.class);
-//        itinerary.add(StateDeliverDuck.class);
-//        itinerary.add(StatePushOff.class);
-//        itinerary.add(StateRotateToZeroDegreesV2.class);
-//        itinerary.add(StateMoveToHubXWithEncoders.class);
-//        itinerary.add(StateRotateForHubDump.class);
-//        itinerary.add(StateReverseToHubUsingImage.class);
-//        itinerary.add(StateDumpFreight.class);
-//        itinerary.add(StatePushOff.class);
-//        itinerary.add(StateRotateToZeroDegreesV2.class);
-//        itinerary.add(StateNavigateToWarehouse.class);
-//        itinerary.add(StateRotateToCollect.class);
-//        itinerary.add(StateCollectFreight.class);
 
         itinerary.add(StatePushOffWithEncodersBlue.class);
         itinerary.add(StateRotateForDeliverDuck.class);
         itinerary.add(StateReverseToCarouselWithEncoders.class);
-        //itinerary.add(StateDriveToCarouselWithDeadReckoningNav.class);
         itinerary.add(StateRotateToDeliverDuckBlue.class);
         itinerary.add(StateDeliverDuck.class);
         itinerary.add(StatePushOffWithEncoders.class);
         itinerary.add(StateRotateToFieldCenter.class);
-        //itinerary.add(StateMoveToHubXWithEncoders.class);
         itinerary.add(StateMoveToHubY.class);
         itinerary.add(StateRotate180.class);
-        //itinerary.add(StateRotateForHubDump.class);
         itinerary.add(StateReverseToHubUsingEncoders.class);
         itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOffWithEncoders.class);

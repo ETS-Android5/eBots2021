@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.List;
-
+@Deprecated
 public class StateObserveBarCode implements EbotsAutonState{
     //TODO: Update logic if BLUE Warehouse
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode
 
 import java.util.List;
 
+@Deprecated
 public class StateObserveTeamShippingElement implements EbotsAutonState{
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -30,7 +30,6 @@ public class Arm {
     private static Arm armInstance = null;
     private Level targetLevel;
     HardwareMap hardwareMap;
-    Bucket bucket;
 
     private LinearOpMode opMode;
     private ArmState armState;
@@ -180,7 +179,6 @@ public class Arm {
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setPower(0.0);
 
-        bucket = Bucket.getInstance(opMode);
     }
 
     public void zeroArmHeight(){
@@ -233,7 +231,7 @@ public class Arm {
         Log.d(logTag, "Enter move to level");
 
         rotateBucketToTravelPosition();
-
+        Bucket bucket = Bucket.getInstance(opMode);
         boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
         if (!isZeroed | !bucketInTravelPosition) return;
 
@@ -246,6 +244,7 @@ public class Arm {
         private void rotateBucketToTravelPosition(){
         StopWatch stopWatch = new StopWatch();
         long rotateTime = 400L;
+        Bucket bucket = Bucket.getInstance(opMode);
         boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
         if (!bucketInTravelPosition) bucket.setState(BucketState.TRAVEL);
         while (opMode.opModeIsActive() && !bucketInTravelPosition) {

@@ -44,7 +44,7 @@ public class StateRotateToDeliverDuckBlue implements EbotsAutonState{
         this.autonOpMode = autonOpMode;
         this.motionController = autonOpMode.getMotionController();
         this.motionController.setSpeed(Speed.SLOW);
-        targetHeadingDeg = -60;
+        targetHeadingDeg = -75;
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

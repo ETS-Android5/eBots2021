@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveT
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class StateMoveToHubXWithEncoders implements EbotsAutonState{
 
     StopWatch stopWatch = new StopWatch();

@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.EbotsMotionController;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.FieldOrientedDrive;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.FieldOrientedVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.MecanumDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -75,7 +76,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         ebotsBlinkin = new EbotsBlinkin(hardwareMap);
         ebotsBlinkin.lightsOn();
 
-        motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
+        motionController = EbotsMotionController.get(FieldOrientedVelocityControl.class, this);
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -164,6 +165,10 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         String twoDecimals = "%.2f";
         Telemetry.Item zeroHeadingLine = null;
         telemetry.addData("Motion Controller", motionController.getName());
+        if(motionController instanceof FieldOrientedVelocityControl){
+            ((FieldOrientedVelocityControl) motionController).addVelocitiesToTelemetry(telemetry);
+        }
+
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
@@ -176,10 +181,6 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Is Ball ", freightDetector.getIsBall()  + " ("
                 + String.format(twoDecimals, freightDetector.getConfidenceBall()) + ")");
 
-        if (motionController instanceof FieldOrientedDrive){
-            telemetry.addData("Field Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getCurrentHeadingDeg()));
-            telemetry.addData("Initial Heading", String.format(twoDecimals, ((FieldOrientedDrive) motionController).getZeroHeadingDeg()));
-        }
         telemetry.update();
     }
 
@@ -193,6 +194,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
         if(gamepad.left_bumper && gamepad.right_stick_button){
             if (motionController instanceof MecanumDrive){
+                motionController = EbotsMotionController.get(FieldOrientedVelocityControl.class, this);
+            } else if (motionController instanceof FieldOrientedVelocityControl){
                 motionController = EbotsMotionController.get(FieldOrientedDrive.class, this);
             } else if (motionController instanceof FieldOrientedDrive){
                 motionController = EbotsMotionController.get(MecanumDrive.class, this);

@@ -12,56 +12,30 @@ public interface EbotsAutonState {
 
     public static EbotsAutonState get(Class targetState, EbotsAutonOpMode autonOpMode){
         EbotsAutonState newState = null;
-        if (targetState == StateDriveToCarousel.class){
-            newState = new StateDriveToCarousel(autonOpMode);
-        } else if (targetState == StateDeliverDuck.class){
+        if (targetState == StateDeliverDuck.class){
             newState = new StateDeliverDuck(autonOpMode);
-        } else if (targetState == StateObserveBarCode.class){
-            newState = new StateObserveBarCode(autonOpMode);
         } else if (targetState == StateConfigureRoutine.class){
             newState = new StateConfigureRoutine(autonOpMode);
         } else if (targetState == StateNavigateToWarehouse.class){
             newState = new StateNavigateToWarehouse(autonOpMode);
         } else if (targetState == StateMoveToHubX.class){
             newState = new StateMoveToHubX(autonOpMode);
-        } else if (targetState == StateReverseToHub.class){
-            newState = new StateReverseToHub(autonOpMode);
-        } else if (targetState == StatePushOff.class){
-            newState = new StatePushOff(autonOpMode);
-        } else if (targetState == StateRotateNinetyDegrees.class){
-            newState = new StateRotateNinetyDegrees(autonOpMode);
-        } else if (targetState == StateRotateToZeroDegrees.class){
-            newState = new StateRotateToZeroDegrees(autonOpMode);
-        } else if (targetState == StateMoveToWarehouseY.class){
-            newState = new StateMoveToWarehouseY(autonOpMode);
-        } else if (targetState == StateObserveBarCodeMarkers.class){
-            newState = new StateObserveBarCodeMarkers(autonOpMode);
-        } else if (targetState == StateReverseToHubUsingImage.class){
-            newState = new StateReverseToHubUsingImage(autonOpMode);
-        } else if (targetState == StateObserveTeamShippingElement.class){
-            newState = new StateObserveTeamShippingElement(autonOpMode);
         } else if (targetState == StateDumpFreight.class){
             newState = new StateDumpFreight(autonOpMode);
-        } else if (targetState == StateRotateForHubDump.class){
-            newState = new StateRotateForHubDump(autonOpMode);
         } else if (targetState == StateRotateToZeroDegreesV2.class){
-        newState = new StateRotateToZeroDegreesV2(autonOpMode);
+            newState = new StateRotateToZeroDegreesV2(autonOpMode);
         }  else if (targetState == StateRotateToCollect.class){
             newState = new StateRotateToCollect(autonOpMode);
         } else if (targetState == StateCollectFreight.class){
             newState = new StateCollectFreight(autonOpMode);
         } else if (targetState == StateCalibrateHubX.class){
             newState = new StateCalibrateHubX(autonOpMode);
-        } else if (targetState == StateMoveToHubXWithEncoders.class){
-            newState = new StateMoveToHubXWithEncoders(autonOpMode);
         } else if (targetState == StateOpenCVObserve.class){
             newState = new StateOpenCVObserve(autonOpMode);
         } else if (targetState == StatePushOffWithEncoders.class){
             newState = new StatePushOffWithEncoders(autonOpMode);
         } else if (targetState == StateRotateForDeliverDuck.class){
             newState = new StateRotateForDeliverDuck(autonOpMode);
-        } else if (targetState == StateDriveToCarouselWithDeadReckoningNav.class){
-            newState = new StateDriveToCarouselWithDeadReckoningNav(autonOpMode);
         } else if (targetState == StatePushOffAllianceHub.class){
             newState = new StatePushOffAllianceHub(autonOpMode);
         } else if (targetState == StateReverseToHubUsingEncoders.class){
@@ -90,6 +64,32 @@ public interface EbotsAutonState {
             newState = new StateDelayTenSeconds(autonOpMode);
         } else if (targetState == StateStrafeRightForWarehouse.class) {
             newState = new StateStrafeRightForWarehouse(autonOpMode);
+        } else if (targetState == StateDriveToCarousel.class) {
+            newState = new StateDriveToCarousel(autonOpMode);
+        } else if (targetState == StateObserveBarCode.class){
+            newState = new StateObserveBarCode(autonOpMode);
+        } else if (targetState == StateDriveToCarouselWithDeadReckoningNav.class){
+            newState = new StateDriveToCarouselWithDeadReckoningNav(autonOpMode);
+        } else if (targetState == StateMoveToHubXWithEncoders.class){
+            newState = new StateMoveToHubXWithEncoders(autonOpMode);
+        } else if (targetState == StateRotateForHubDump.class){
+            newState = new StateRotateForHubDump(autonOpMode);
+        } else if (targetState == StateReverseToHub.class){
+            newState = new StateReverseToHub(autonOpMode);
+        } else if (targetState == StatePushOff.class){
+            newState = new StatePushOff(autonOpMode);
+        } else if (targetState == StateRotateNinetyDegrees.class){
+            newState = new StateRotateNinetyDegrees(autonOpMode);
+        } else if (targetState == StateRotateToZeroDegrees.class){
+            newState = new StateRotateToZeroDegrees(autonOpMode);
+        } else if (targetState == StateMoveToWarehouseY.class){
+            newState = new StateMoveToWarehouseY(autonOpMode);
+        } else if (targetState == StateObserveBarCodeMarkers.class){
+            newState = new StateObserveBarCodeMarkers(autonOpMode);
+        } else if (targetState == StateReverseToHubUsingImage.class){
+            newState = new StateReverseToHubUsingImage(autonOpMode);
+        } else if (targetState == StateObserveTeamShippingElement.class){
+            newState = new StateObserveTeamShippingElement(autonOpMode);
         }
 
         return newState;

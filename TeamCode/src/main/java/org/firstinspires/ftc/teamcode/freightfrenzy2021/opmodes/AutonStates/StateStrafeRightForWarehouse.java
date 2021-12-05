@@ -22,7 +22,6 @@ public class StateStrafeRightForWarehouse implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 4.0;
 
     public StateStrafeRightForWarehouse(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering StatePushOffWithEncoders constructor");
@@ -31,13 +30,11 @@ public class StateStrafeRightForWarehouse implements EbotsAutonState{
         motionController = new DriveToEncoderTarget(autonOpMode);
 
         targetClicks = 900;
-        double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = 2000;
         stopWatch = new StopWatch();
         int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
         motionController.strafe(90 * allianceSign, targetClicks);
         Log.d(logTag, "Constructor complete");
-
     }
 
     @Override
@@ -64,16 +61,6 @@ public class StateStrafeRightForWarehouse implements EbotsAutonState{
         Log.d(logTag, "Inside transitional Actions...");
         motionController.stop();
         motionController.logAllEncoderClicks();
-        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
-
-        // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
-        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

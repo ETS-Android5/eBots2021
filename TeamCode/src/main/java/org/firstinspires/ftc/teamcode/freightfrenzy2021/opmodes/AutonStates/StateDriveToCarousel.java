@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class StateDriveToCarousel implements EbotsAutonState{
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Class Attributes

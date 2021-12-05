@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class StateDriveToCarouselWithDeadReckoningNav implements EbotsAutonState{
     private final EbotsAutonOpMode autonOpMode;
     private final Telemetry telemetry;

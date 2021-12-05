@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
+@Deprecated
 public class StateReverseToHubUsingImage implements EbotsAutonState{
     private final EbotsAutonOpMode autonOpMode;
     private final Telemetry telemetry;

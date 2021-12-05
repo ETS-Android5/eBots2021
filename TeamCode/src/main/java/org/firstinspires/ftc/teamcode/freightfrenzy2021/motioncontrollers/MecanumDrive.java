@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.WheelPosition;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
@@ -172,6 +173,12 @@ public class MecanumDrive implements EbotsMotionController {
         // set the calculated power to each wheel
         for(MecanumWheel mecanumWheel: mecanumWheels){
             mecanumWheel.getMotor().setPower(mecanumWheel.getCalculatedPower());
+        }
+    }
+
+    public void addVelocitiesToTelemetry(Telemetry telemetry){
+        for (MecanumWheel mecanumWheel: mecanumWheels){
+            telemetry.addData(mecanumWheel.getWheelPosition().toString(),mecanumWheel.getMotor().getVelocity());
         }
     }
 
