@@ -259,7 +259,7 @@ public class AutonDriveVelocityControl implements EbotsMotionController {
         // Step 6:  Apply a soft start if early in run
         long softStartDuration = 1000L;
         long currentTime = stopWatch.getElapsedTimeMillis();
-        boolean softStartActive = currentTime < softStartDuration;
+        boolean softStartActive = (currentTime < softStartDuration);
         if (softStartActive){
             double scaleFactor = ((double) currentTime / softStartDuration);
             this.applyScaleToCalculatedVelocity(scaleFactor);

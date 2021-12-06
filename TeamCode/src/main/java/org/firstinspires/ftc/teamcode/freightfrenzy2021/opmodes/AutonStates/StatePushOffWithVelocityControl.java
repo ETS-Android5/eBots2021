@@ -100,7 +100,7 @@ public class StatePushOffWithVelocityControl implements EbotsAutonState{
     }
 
     private void updateLocationAndError(){
-        boolean debugOn = true;
+        boolean debugOn = false;
 
         // Manage the loop duration for integrator error term
         loopDuration = stopWatchLoop.getElapsedTimeMillis();
@@ -118,6 +118,9 @@ public class StatePushOffWithVelocityControl implements EbotsAutonState{
         // offset currentPose field position
         currentPose.getFieldPosition().offsetInPlace(currentTravel);
         poseError.calculateError(currentPose, targetPose, loopDuration);
+
+        // update last average clicks
+        lastAvgClicks = currentAvgClicks;
 
         if (debugOn){
             Log.d(logTag, currentPose.toString());
