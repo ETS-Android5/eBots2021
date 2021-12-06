@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOpV2;
@@ -23,6 +24,7 @@ public class Bucket {
     private StopWatch stopWatchInput = new StopWatch();
     private LinearOpMode opMode;
     private boolean dumpAchieved = false;
+    private EbotsBlinkin ebotsBlinkin;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
@@ -121,15 +123,20 @@ public class Bucket {
     }
 
     private void toggleState(){
+        ebotsBlinkin = EbotsBlinkin.getInstance(opMode.hardwareMap);
         Arm arm = Arm.getInstance(opMode);
+
         if (bucketState == BucketState.COLLECT){
+            // if bucket at Collect, move to Travel
             bucketState = BucketState.TRAVEL;
+            ebotsBlinkin.lightsOff();
             dumpAchieved = false;
         } else if(bucketState == BucketState.TRAVEL && (arm.getArmState() == Arm.ArmState.AT_LEVEL_1)) {
             // only toggle to collect mode when at Level_1
             bucketState = BucketState.COLLECT;
+            ebotsBlinkin.lightsOn();
             dumpAchieved = false;
-        }else if(bucketState == BucketState.TRAVEL && !(arm.getArmState() == Arm.ArmState.AT_LEVEL_1)) {
+        } else if(bucketState == BucketState.TRAVEL && !(arm.getArmState() == Arm.ArmState.AT_LEVEL_1)) {
             // if requesting to go to collect but not at Level1 then deny bucket movement
             Log.d("EBOTS", "Bucket tilt to Collect DENIED!!!");
         } else if (bucketState == BucketState.DUMP && dumpAchieved){

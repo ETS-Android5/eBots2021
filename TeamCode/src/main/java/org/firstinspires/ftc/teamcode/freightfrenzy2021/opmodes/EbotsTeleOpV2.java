@@ -73,7 +73,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
         UtilFuncs.initManips(arm,carousel,this);
 
-        ebotsBlinkin = new EbotsBlinkin(hardwareMap);
+        ebotsBlinkin = EbotsBlinkin.getInstance(hardwareMap);
         ebotsBlinkin.lightsOn();
 
         motionController = EbotsMotionController.get(FieldOrientedVelocityControl.class, this);
@@ -210,6 +210,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private void rotateBucketIfArmAtBottom(){
         if (arm.shouldBucketCollect()) {
             bucket.setState(BucketState.COLLECT);
+            ebotsBlinkin.lightsOn();
         }
     }
 }

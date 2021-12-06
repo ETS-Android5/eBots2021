@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 public class Arm {
@@ -241,10 +242,12 @@ public class Arm {
 
     }
 
-        private void rotateBucketToTravelPosition(){
-        StopWatch stopWatch = new StopWatch();
-        long rotateTime = 400L;
+    private void rotateBucketToTravelPosition(){
         Bucket bucket = Bucket.getInstance(opMode);
+        EbotsBlinkin ebotsBlinkin = EbotsBlinkin.getInstance(opMode.hardwareMap);
+        ebotsBlinkin.lightsOff();
+        long rotateTime = 400L;
+        StopWatch stopWatch = new StopWatch();
         boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
         if (!bucketInTravelPosition) bucket.setState(BucketState.TRAVEL);
         while (opMode.opModeIsActive() && !bucketInTravelPosition) {

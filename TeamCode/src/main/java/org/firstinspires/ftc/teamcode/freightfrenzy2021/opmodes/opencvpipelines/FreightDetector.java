@@ -23,7 +23,7 @@ public class FreightDetector extends OpenCvPipeline {
     double confidenceBox;
     double confidenceBall;
     boolean hsvBoxDebug = false;
-    boolean hsvBallDebug = false;
+    boolean hsvBallDebug = true;
 
     //Check the co ordinates
 //    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
@@ -154,11 +154,11 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelSaturation = hsv.get(row, col)[1];
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
-                boolean hueFlag = pixelHue >= 40.0 && pixelHue <= 80.0;
-                boolean saturationFlag = pixelSaturation >= 85.0;
-                boolean valueFlag = pixelValue > 150.0;
+                boolean hueFlag = pixelHue >= 110.0 && pixelHue <= 160.0;
+                boolean saturationFlag = pixelSaturation >= 10 && pixelSaturation <=100;
+                boolean valueFlag = pixelValue > 110.0;
                 // if value is high enough (ignores black)
-                if (hueFlag && valueFlag) {
+                if (hueFlag && saturationFlag && valueFlag) {
                     ballCount++;
                 } else{
                     if (hsvBallDebug) Log.d(logTag, "Negative: " + Arrays.toString(hsv.get(row, col)));
