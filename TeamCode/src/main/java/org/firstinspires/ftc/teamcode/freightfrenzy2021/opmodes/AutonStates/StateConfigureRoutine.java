@@ -150,15 +150,19 @@ public class StateConfigureRoutine implements EbotsAutonState{
             autonOpMode.appendStateToItinerary(StateDelayTenSeconds.class);
         }
 
-        EbotsAutonRoutine routine;
-        if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){
-            routine = new RoutineCarousel();
-        } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
-            routine = new RoutineBlueCarousel();
-        } else {
-            routine = new RoutineWarehouse();
-        }
-        autonOpMode.appendStatesToRoutineItinerary(routine);
+//        EbotsAutonRoutine routine;
+//        if (startingSide == StartingSide.CAROUSEL && !AllianceSingleton.isBlue()){
+//            routine = new RoutineCarousel();
+//        } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
+//            routine = new RoutineBlueCarousel();
+//        } else {
+//            routine = new RoutineWarehouse();
+//        }
+//        autonOpMode.appendStatesToRoutineItinerary(routine);
+
+
+        autonOpMode.appendStateToItinerary(StatePushOffWithVelocityControl.class);
+
         Log.d("EBOTS", "Completed StateConfigureRoutine");
     }
 }

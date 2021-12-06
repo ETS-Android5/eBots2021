@@ -232,7 +232,7 @@ public class FieldOrientedVelocityControl implements EbotsMotionController {
     public void drive(){
         // set the calculated power to each wheel
         for(MecanumWheel mecanumWheel: mecanumWheels){
-            mecanumWheel.getMotor().setVelocity(mecanumWheel.getCalculatedVelocity());
+            mecanumWheel.energizeWithCalculatedVelocity();
         }
     }
 

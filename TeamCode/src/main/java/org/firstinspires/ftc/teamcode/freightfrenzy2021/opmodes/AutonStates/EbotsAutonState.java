@@ -64,6 +64,8 @@ public interface EbotsAutonState {
             newState = new StateDelayTenSeconds(autonOpMode);
         } else if (targetState == StateStrafeRightForWarehouse.class) {
             newState = new StateStrafeRightForWarehouse(autonOpMode);
+        } else if (targetState == StatePushOffWithVelocityControl.class) {
+            newState = new StatePushOffWithVelocityControl(autonOpMode);
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

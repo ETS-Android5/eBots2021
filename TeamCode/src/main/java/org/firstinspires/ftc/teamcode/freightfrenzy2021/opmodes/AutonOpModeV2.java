@@ -124,6 +124,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
         try{
             Log.d(logTag, "State #" + strStateCount + " created type " + newState.getClass().getSimpleName());
+            String poseString = currentPose == null ? "NULL" : currentPose.toString();
+            Log.d(logTag, "Pose when state created: " + poseString);
         } catch (NullPointerException e){
             Log.d(logTag, "Error creating state #" + strStateCount + ".  Returned Null");
             Log.d(logTag, e.getStackTrace().toString());

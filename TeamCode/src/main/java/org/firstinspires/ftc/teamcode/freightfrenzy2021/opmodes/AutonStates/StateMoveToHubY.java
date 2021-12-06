@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 public class StateMoveToHubY implements EbotsAutonState{
@@ -99,7 +98,7 @@ public class StateMoveToHubY implements EbotsAutonState{
         double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
         FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
         FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
+        startingFieldPosition.offsetInPlace(deltaFieldPosition);
         Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
     }

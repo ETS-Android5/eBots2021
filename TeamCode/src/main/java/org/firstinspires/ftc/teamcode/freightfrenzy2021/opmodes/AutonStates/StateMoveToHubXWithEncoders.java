@@ -2,15 +2,8 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
@@ -19,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-import java.util.ArrayList;
 @Deprecated
 public class StateMoveToHubXWithEncoders implements EbotsAutonState{
 
@@ -102,7 +94,7 @@ public class StateMoveToHubXWithEncoders implements EbotsAutonState{
         double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
         FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
         FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
+        startingFieldPosition.offsetInPlace(deltaFieldPosition);
         Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
     }

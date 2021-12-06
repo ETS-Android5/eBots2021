@@ -71,7 +71,7 @@ public class StatePushOffWithEncodersBlue implements EbotsAutonState{
         double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
         FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
         FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
+        startingFieldPosition.offsetInPlace(deltaFieldPosition);
         Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());

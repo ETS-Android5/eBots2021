@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
+
 public interface EbotsMotionController {
     public String getName();
 
@@ -20,7 +22,12 @@ public interface EbotsMotionController {
             outputMotionController = new FieldOrientedDrive(opMode);
         } else if(targetClass == FieldOrientedVelocityControl.class){
             outputMotionController = new FieldOrientedVelocityControl(opMode);
+        } else if(targetClass == AutonDriveVelocityControl.class){
+            if (opMode instanceof EbotsAutonOpMode){
+                outputMotionController = new AutonDriveVelocityControl((EbotsAutonOpMode) opMode);
+            }
         }
+
         return outputMotionController;
     }
 

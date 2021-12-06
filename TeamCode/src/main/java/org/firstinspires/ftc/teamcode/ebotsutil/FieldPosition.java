@@ -95,9 +95,16 @@ public class FieldPosition {
         return Math.toDegrees(Math.atan2(yPosition, xPosition));
     }
 
-    public void offset(FieldPosition offset){
+    public void offsetInPlace(FieldPosition offset){
         this.xPosition += offset.xPosition;
         this.yPosition += offset.yPosition;
+    }
+
+    public FieldPosition offsetFunc(FieldPosition offset){
+        FieldPosition newFieldPosition = new FieldPosition(this.xPosition, this.yPosition);
+        newFieldPosition.xPosition += offset.xPosition;
+        newFieldPosition.yPosition += offset.yPosition;
+        return newFieldPosition;
     }
 
     @Override

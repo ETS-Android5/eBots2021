@@ -5,7 +5,6 @@ import android.util.Log;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
@@ -72,7 +71,7 @@ public class StatePushOffWithEncoders implements EbotsAutonState{
         double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
         FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
         FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
+        startingFieldPosition.offsetInPlace(deltaFieldPosition);
         Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());

@@ -59,11 +59,14 @@ public class MecanumWheel {
         this.calculatedVelocity = calculatedVelocity;
     }
 
+    public void stopVelocity(){
+        this.calculatedVelocity = 0.0;
+        this.energizeWithCalculatedVelocity();
+    }
+
     public int getMotorClicks(){
         return motor.getCurrentPosition();
     }
-
-
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
@@ -74,5 +77,9 @@ public class MecanumWheel {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public void zeroMotorEncoders(){
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void energizeWithCalculatedVelocity(){
+        this.motor.setVelocity(calculatedVelocity);
     }
 }
