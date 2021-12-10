@@ -32,8 +32,6 @@ public class StateCalibrateHubX implements EbotsAutonState{
     private long driveTime;
 
     DistanceSensor backDistanceSensor;
-    DistanceSensor leftDistanceSensor;
-    DistanceSensor rightDistanceSensor;
 
 
 
@@ -55,8 +53,6 @@ public class StateCalibrateHubX implements EbotsAutonState{
         stopWatch.reset();
 
         backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backDistanceSensor");
-        leftDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
-        rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightDistanceSensor");
 
 
         if(autonOpMode.getStartingSide() == StartingSide.CAROUSEL){
@@ -115,8 +111,6 @@ public class StateCalibrateHubX implements EbotsAutonState{
         }
 
         autonOpMode.telemetry.addData("Back Distance", backDistanceSensor.getDistance(DistanceUnit.INCH));
-        autonOpMode.telemetry.addData("Left Distance", leftDistanceSensor.getDistance(DistanceUnit.INCH));
-        autonOpMode.telemetry.addData("Right Distance", rightDistanceSensor.getDistance(DistanceUnit.INCH));
 
     }
 }

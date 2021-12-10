@@ -30,8 +30,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
     long touchSensorTimer;
     StartingSide startingSide;
     private Telemetry telemetry;
-    private DigitalChannel allianceTouchSensor;
-    private DigitalChannel startingSideTouchSensor;
     private EbotsAutonOpMode autonOpMode;
     private DelayTime delayTime = DelayTime.ZERO;
 
@@ -49,11 +47,6 @@ public class StateConfigureRoutine implements EbotsAutonState{
         this.telemetry = autonOpMode.telemetry;
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         startingSide = autonOpMode.getStartingSide();
-
-        allianceTouchSensor = hardwareMap.get(DigitalChannel.class, "allianceTouchSensor");
-        startingSideTouchSensor = hardwareMap.get(DigitalChannel.class, "startingSideTouchSensor");
-        startingSideTouchSensor.setMode(DigitalChannel.Mode.INPUT);
-        allianceTouchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         stopWatch = new StopWatch();
         touchSensorTimer  = 500;
@@ -83,9 +76,9 @@ public class StateConfigureRoutine implements EbotsAutonState{
     public void performStateActions() {
         boolean lockOutActive = stopWatch.getElapsedTimeMillis() <= touchSensorTimer;
         boolean allianceToggleRequested = autonOpMode.gamepad1.left_bumper &&
-                (!allianceTouchSensor.getState() | autonOpMode.gamepad1.triangle);
+                autonOpMode.gamepad1.triangle;
         boolean startingSideToggleRequested = autonOpMode.gamepad1.left_bumper &&
-                (!startingSideTouchSensor.getState() | autonOpMode.gamepad1.cross);
+                autonOpMode.gamepad1.cross;
 
         boolean moreDelayRequested = autonOpMode.gamepad1.left_bumper &&
                 autonOpMode.gamepad1.dpad_right;

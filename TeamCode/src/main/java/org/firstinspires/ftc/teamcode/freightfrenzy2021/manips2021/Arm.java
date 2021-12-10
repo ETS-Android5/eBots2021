@@ -177,7 +177,7 @@ public class Arm {
         //****************************************
 
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setPower(0.0);
 
     }
@@ -195,7 +195,7 @@ public class Arm {
         boolean isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         while (!isAtBottom() && !isTimedOut && opMode.opModeIsActive()){
             armMotor.setPower(-0.25);
@@ -211,7 +211,7 @@ public class Arm {
             int currentPosition = armMotor.getCurrentPosition();
             armMotor.setTargetPosition(currentPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
 
@@ -222,7 +222,7 @@ public class Arm {
         isZeroed = true;
         opMode.gamepad2.rumble(350);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armState = ArmState.AT_LEVEL_1;
         targetLevel = Level.ONE;
         wasAtLevelOne = true;
