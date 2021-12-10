@@ -149,7 +149,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         //Log.d(logTag, "Inside rumbleIfFreightPresent....");
         if(bucket.getBucketState() == BucketState.COLLECT){
 //            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
-            freightLoaded = freightDetector.getIsBox();
+            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
             if(freightLoaded && !freightRumbleLockedOut){
                 gamepad1.rumble(250);
