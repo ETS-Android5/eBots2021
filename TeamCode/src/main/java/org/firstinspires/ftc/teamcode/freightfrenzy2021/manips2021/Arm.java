@@ -91,6 +91,10 @@ public class Arm {
         return armState;
     }
 
+    public LinearOpMode getOpMode() {
+        return opMode;
+    }
+
     private void setTargetLevel(Level level){
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
@@ -152,6 +156,13 @@ public class Arm {
     public static Arm getInstance(LinearOpMode opMode){
         if (armInstance == null){
             armInstance = new Arm(opMode);
+            Log.d(logTag, "Arm::getInstance --> Arm was null, new arm created");
+
+        } else if(armInstance.getOpMode() != opMode){
+            armInstance = new Arm(opMode);
+            Log.d(logTag, "Arm::getInstance --> Arm instance instantiated because opMode didn't match");
+        } else{
+            Log.d(logTag, "Arm::getInstance --> Existing instance of arm provided");
         }
         return armInstance;
     }

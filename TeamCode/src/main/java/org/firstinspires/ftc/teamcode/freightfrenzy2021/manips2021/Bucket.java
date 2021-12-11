@@ -25,6 +25,7 @@ public class Bucket {
     private LinearOpMode opMode;
     private boolean dumpAchieved = false;
     private EbotsBlinkin ebotsBlinkin;
+    private static String logTag = "EBOTS";
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
@@ -53,6 +54,10 @@ public class Bucket {
         return bucketState;
     }
 
+    public LinearOpMode getOpMode() {
+        return opMode;
+    }
+
     public void setState(BucketState targetState){
         if(targetState == BucketState.DUMP) {
             // If asking to dump but state was previously collect then toggle state
@@ -79,6 +84,12 @@ public class Bucket {
 
         if (ebotsBucket == null){
             ebotsBucket = new Bucket(opMode);
+            Log.d(logTag, "Bucket::getInstance --> Bucket instance instantiated because opMode didn't match");
+        } else if(ebotsBucket.getOpMode() != opMode){
+            ebotsBucket = new Bucket(opMode);
+            Log.d(logTag, "Bucket::getInstance --> Bucket instance instantiated because opMode didn't match");
+        } else{
+            Log.d(logTag, "Bucket::getInstance --> existing bucket instance provided");
         }
 
         return ebotsBucket;
