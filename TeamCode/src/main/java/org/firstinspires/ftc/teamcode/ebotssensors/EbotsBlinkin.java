@@ -45,9 +45,10 @@ public class EbotsBlinkin {
             Class Methods
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public static EbotsBlinkin getInstance(HardwareMap hardwareMap){
-        if (ebotsBlinkin == null){
-            ebotsBlinkin = new EbotsBlinkin(hardwareMap);
-        }
+//        if (ebotsBlinkin == null){
+//            ebotsBlinkin = new EbotsBlinkin(hardwareMap);
+//        }
+        ebotsBlinkin = new EbotsBlinkin(hardwareMap);
         return ebotsBlinkin;
     }
 

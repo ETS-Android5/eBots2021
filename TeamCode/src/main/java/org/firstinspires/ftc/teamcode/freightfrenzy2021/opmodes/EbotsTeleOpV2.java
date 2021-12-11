@@ -174,6 +174,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
         telemetry.addData("Arm State ", arm.getArmState());
         telemetry.addData("Bucket State ", bucket.getBucketState());
+        telemetry.addData("LED State ", ebotsBlinkin.getLedState());
         telemetry.addData("Freight Detected ", freightLoaded);
         telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
         telemetry.addData("Is Box ", freightDetector.getIsBox() + " ("
