@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -54,6 +56,8 @@ public class Carousel {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public void initMotor (HardwareMap hardwareMap){
          carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
+         carouselMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         carouselMotor.setDirection(DcMotorSimple.Direction.REVERSE);
          speed = carouselMotor.getPower();
     }
 

@@ -53,7 +53,7 @@ public class StateReverseToCarouselWithEncoders implements EbotsAutonState{
 
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = (AllianceSingleton.isBlue()) ? -675 : -450;
+        targetClicks = (AllianceSingleton.isBlue()) ? -675 : -500;
 //        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = 1000;

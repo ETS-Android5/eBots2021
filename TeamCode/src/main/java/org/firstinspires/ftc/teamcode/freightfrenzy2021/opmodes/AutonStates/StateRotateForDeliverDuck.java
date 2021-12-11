@@ -80,13 +80,21 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
 
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
+        if (isTargetHeadingSustained) Log.d(logTag, "Exited because target heading sustained");
+        if (stateTimedOut) Log.d(logTag, "Exited because timed out");
+        if (!autonOpMode.opModeIsActive()) {
+            Log.d(logTag, "opMode not active");
+            Log.d(logTag, autonOpMode.getClass().getSimpleName());
+        }
         updateTelemetry();
 
-        return isTargetHeadingSustained | stateTimedOut | autonOpMode.isStopRequested();
+        return isTargetHeadingSustained | stateTimedOut | !autonOpMode.opModeIsActive();
+//        return isTargetHeadingSustained | stateTimedOut;
     }
 
     @Override
     public void performStateActions() {
+        Log.d(logTag, "in state actions for " + autonOpMode.getClass().getSimpleName());
         motionController.rotateToFieldHeadingFromError(headingErrorDeg);
     }
 

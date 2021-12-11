@@ -118,7 +118,7 @@ public class AutonDrive implements EbotsMotionController {
             DcMotorEx motor = mecanumWheel.getMotor();
             motor.setPower(0.0);
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            if(mecanumWheel.getWheelPosition().getRobotSide() == RobotSide.RIGHT) {
+            if(mecanumWheel.getWheelPosition().getRobotSide() != RobotSide.RIGHT) {
                 mecanumWheel.getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
             }
 

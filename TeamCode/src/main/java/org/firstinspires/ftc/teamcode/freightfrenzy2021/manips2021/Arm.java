@@ -259,20 +259,29 @@ public class Arm {
         Log.d(logTag, "Enter move to level auton");
 
         rotateBucketToTravelPosition();
+        Bucket bucket = Bucket.getInstance(opMode);
 
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
 
-        boolean travelingDown = (targetPosition < currentPosition);
-        if (travelingDown) {
-            armState = ArmState.MOVING_DOWN;
-        } else {
-            armState = ArmState.MOVING_UP;
-        }
 
-        double targetPower = travelingDown ? 0.25 : 0.5;
-        armMotor.setTargetPosition(targetPosition);
-        armMotor.setPower(targetPower);
+        boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
+        if (!isZeroed | !bucketInTravelPosition) return;
+
+        setTargetLevel(level);
+//        if(level != Level.ONE) wasAtLevelOne = false;
+        wasAtLevelOne = false;
+
+//        boolean travelingDown = (targetPosition < currentPosition);
+//        if (travelingDown) {
+//            armState = ArmState.MOVING_DOWN;
+//        } else {
+//            armState = ArmState.MOVING_UP;
+//        }
+//
+//        double targetPower = travelingDown ? 0.25 : 0.5;
+//        armMotor.setTargetPosition(targetPosition);
+//        armMotor.setPower(targetPower);
 
     }
 
