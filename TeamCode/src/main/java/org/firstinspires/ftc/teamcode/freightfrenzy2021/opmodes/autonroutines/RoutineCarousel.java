@@ -31,9 +31,9 @@ public class RoutineCarousel extends EbotsAutonRoutine{
     public RoutineCarousel(){
 
         itinerary.add(StatePushOffWithEncoders.class);
-        if (AllianceSingleton.isBlue()) {
-            itinerary.add(StatePushOffWithEncoders.class);
-        }
+//        if (AllianceSingleton.isBlue()) {
+//            itinerary.add(StatePushOffWithEncoders.class);
+//        }
         itinerary.add(StateRotateForDeliverDuck.class);
         itinerary.add(StateReverseToCarouselWithEncoders.class);
         itinerary.add(StateDeliverDuck.class);

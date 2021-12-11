@@ -59,11 +59,13 @@ public class StateReverseToHubUsingEncoders implements EbotsAutonState{
 
 //        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = 2000;
+        stateTimeLimit = 4000;
         Log.d(logTag, "Expected travel time: " + String.format("%d", stateTimeLimit));
         StartingSide startingSide = autonOpMode.getStartingSide();
-        if(startingSide==StartingSide.CAROUSEL){
+        if(startingSide==StartingSide.CAROUSEL && !AllianceSingleton.isBlue()) {
             targetClicks = -985;
+        } else if (startingSide==StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
+            targetClicks = -1300;
         } else if(AllianceSingleton.isBlue()){
             targetClicks = -450;
         } else{

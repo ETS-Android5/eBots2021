@@ -5,14 +5,13 @@ import android.util.Log;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateParkInStorageUnit implements EbotsAutonState{
+public class StateBackToAllianceHubAfterCollect implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -23,20 +22,20 @@ public class StateParkInStorageUnit implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 4.0;
+    private double travelDistance = 24.0;
 
-    public StateParkInStorageUnit(EbotsAutonOpMode autonOpMode){
-        Log.d(logTag, "Entering StatePushOffWithEncoders constructor");
+
+    public StateBackToAllianceHubAfterCollect(EbotsAutonOpMode autonOpMode){
+        Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = (AllianceSingleton.isBlue()) ? 550 : 600;
+        targetClicks = autonOpMode.getForwardClicksCollect();
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();
-        int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
-        motionController.strafe(-90 * allianceSign, targetClicks);
+        motionController.setEncoderTarget(-targetClicks);
         Log.d(logTag, "Constructor complete");
 
     }
@@ -66,6 +65,12 @@ public class StateParkInStorageUnit implements EbotsAutonState{
         motionController.stop();
         motionController.logAllEncoderClicks();
         Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
+
+        // Now pass the strafe clicks to the opmode for processing
+        int avgClicksTraveled = motionController.getAverageClicks();
+        autonOpMode.setForwardClicksCollect(avgClicksTraveled);
+        Log.d(logTag, "Setting forward clicks to " + String.format("%d", avgClicksTraveled));
+
 
         // Update the robots pose in autonOpMode
         double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));

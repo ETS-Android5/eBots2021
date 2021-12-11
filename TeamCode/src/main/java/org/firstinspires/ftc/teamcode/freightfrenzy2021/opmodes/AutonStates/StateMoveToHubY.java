@@ -58,7 +58,7 @@ public class StateMoveToHubY implements EbotsAutonState{
         motionController = new DriveToEncoderTarget(autonOpMode);
         StartingSide startingSide = autonOpMode.getStartingSide();
         if (startingSide==StartingSide.CAROUSEL) {
-            targetClicks = (AllianceSingleton.isBlue() ? 1350 : 1370);
+            targetClicks = (AllianceSingleton.isBlue() ? 950 : 1370);
         } else{
             targetClicks = (AllianceSingleton.isBlue() ? 1425 : 1370);
         }

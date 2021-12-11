@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,11 +13,15 @@ public class Intake {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private DcMotorEx intakeMotor;
     private static Intake intakeInstance = null;
+    private HardwareMap hardwareMap;
+
+    private static String logTag = "EBOTS";
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Intake(HardwareMap hardwareMap) {
+        this.hardwareMap = hardwareMap;
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
     }
 
@@ -33,6 +39,12 @@ public class Intake {
     public static Intake getInstance(HardwareMap hardwareMap){
         if (intakeInstance == null){
             intakeInstance = new Intake(hardwareMap);
+            Log.d(logTag, "Creating new intake because null");
+        } else if(hardwareMap != intakeInstance.hardwareMap){
+            intakeInstance = new Intake(hardwareMap);
+            Log.d(logTag, "Creating new intake because hardwaremap doesn't match");
+        } else{
+            Log.d(logTag, "passing existing intake instace");
         }
 
         return intakeInstance;
@@ -46,6 +58,13 @@ public class Intake {
     }
     public void stop(){
         intakeMotor.setPower(0.0);
+    }
+    public void fullPower(){
+        intakeMotor.setPower(1.0);
+    }
+
+    public void purge(){
+        intakeMotor.setPower(-1.0);
     }
 
     public void handleUserInput(Gamepad gamepad) {

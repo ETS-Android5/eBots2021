@@ -2,17 +2,17 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateParkInStorageUnit implements EbotsAutonState{
+public class StateStrafeToAllianceHubAfterCollect implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -23,22 +23,24 @@ public class StateParkInStorageUnit implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 4.0;
 
-    public StateParkInStorageUnit(EbotsAutonOpMode autonOpMode){
-        Log.d(logTag, "Entering StatePushOffWithEncoders constructor");
+
+
+    public StateStrafeToAllianceHubAfterCollect(EbotsAutonOpMode autonOpMode){
+        Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
+        motionController.setSpeed(0.5);
 
-        targetClicks = (AllianceSingleton.isBlue()) ? 550 : 600;
-        double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
-        stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
+        targetClicks = autonOpMode.getStrafeClicksCollect();
+        stateTimeLimit = 2000;
         stopWatch = new StopWatch();
-        int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
-        motionController.strafe(-90 * allianceSign, targetClicks);
-        Log.d(logTag, "Constructor complete");
+        int allianceSign = (AllianceSingleton.isBlue()) ? -1 : 1;
+        motionController.strafe(90 * allianceSign, targetClicks);
 
+
+        Log.d(logTag, "Constructor complete");
     }
 
     @Override
@@ -49,7 +51,10 @@ public class StateParkInStorageUnit implements EbotsAutonState{
         }
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
+
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
+        if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
+
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }
 
@@ -65,17 +70,11 @@ public class StateParkInStorageUnit implements EbotsAutonState{
         Log.d(logTag, "Inside transitional Actions...");
         motionController.stop();
         motionController.logAllEncoderClicks();
-        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
-
-        // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
-        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
-
+        // Now pass the strafe clicks to the opmode for processing
+        int avgClicksTraveled = motionController.getAverageClicks();
+        autonOpMode.setStrafeClicksCollect(avgClicksTraveled);
+        Log.d(logTag, "Setting strafe clicks to " + String.format("%d", avgClicksTraveled));
+        Bucket.getInstance(autonOpMode).setState(BucketState.COLLECT);
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();
     }

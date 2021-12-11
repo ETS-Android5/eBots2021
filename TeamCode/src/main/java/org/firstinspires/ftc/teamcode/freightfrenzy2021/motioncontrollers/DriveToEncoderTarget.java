@@ -64,6 +64,10 @@ public class DriveToEncoderTarget implements EbotsMotionController{
         }
     }
 
+    public void setSpeed(double speed){
+        this.speed = speed;
+    }
+
     public void strafe(double direction, int encoderTarget){
         this.encoderTarget = encoderTarget;
         for(DcMotorEx motor: motors) {

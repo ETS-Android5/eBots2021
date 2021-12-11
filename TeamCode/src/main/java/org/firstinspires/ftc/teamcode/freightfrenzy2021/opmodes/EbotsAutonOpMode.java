@@ -42,6 +42,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     public Bucket bucket;
     private EbotsImu ebotsimu;
 
+    private int strafeClicksCollect = 0;
+    private int forwardClicksCollect = 0;
+
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -88,6 +92,22 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public EbotsWebcam getFrontWebcam() {
         return frontWebcam;
+    }
+
+    public int getStrafeClicksCollect() {
+        return strafeClicksCollect;
+    }
+
+    public void setStrafeClicksCollect(int strafeClicksCollect) {
+        this.strafeClicksCollect = strafeClicksCollect;
+    }
+
+    public int getForwardClicksCollect() {
+        return forwardClicksCollect;
+    }
+
+    public void setForwardClicksCollect(int forwardClicksCollect) {
+        this.forwardClicksCollect = forwardClicksCollect;
     }
 
     public void setStartingSide(StartingSide startingSide){

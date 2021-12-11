@@ -23,7 +23,7 @@ public class FreightDetector extends OpenCvPipeline {
     double confidenceBox;
     double confidenceBall;
     boolean hsvBoxDebug = false;
-    boolean hsvBallDebug = true;
+    boolean hsvBallDebug = false;
 
     //Check the co ordinates
 //    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
