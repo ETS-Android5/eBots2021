@@ -22,6 +22,7 @@ public class StateStrafeToTouchWall implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
+    private boolean isSpeedSlow = false;
 
     private DigitalChannel frontRollerTouch;
     private DigitalChannel backRollerTouch;
@@ -32,7 +33,6 @@ public class StateStrafeToTouchWall implements EbotsAutonState{
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
-        motionController.setSpeed(0.35);
 
         targetClicks = 2500;
         stateTimeLimit = 4000;
@@ -79,6 +79,10 @@ public class StateStrafeToTouchWall implements EbotsAutonState{
 
     @Override
     public void performStateActions() {
+        if (!isSpeedSlow && motionController.getAverageClicks() > targetClicks*0.8) {
+            motionController.setSpeed(0.35);
+            isSpeedSlow = true;
+        }
         telemetry.addData("Avg Clicks", motionController.getAverageClicks());
         telemetry.addData("Position Reached", motionController.isTargetReached());
         telemetry.addLine(stopWatch.toString());

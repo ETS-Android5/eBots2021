@@ -19,8 +19,8 @@ public enum Speed {
     private double s_i;  //for spin integrator
     private double s_d;  //for spin derivative
 
-    private final double measuredTranslateSpeed = 45.26; // in / s
-    private final double measuredAngularSpeedDeg = 233.6;;  //  degrees / s
+    private final double measuredTranslateSpeed; // in / s
+    private final double measuredAngularSpeedDeg;;  //  degrees / s
 
     /**  CONSTRUCTOR    **************/
     Speed(double speed, double turnSpeed, double pGain, double iGain, double dGain, double spinPGain, double spinIGain, double spinDGain){
@@ -32,6 +32,9 @@ public enum Speed {
         this.s_p = spinPGain;
         this.s_i = spinIGain;
         this.s_d = spinDGain;
+        this.measuredTranslateSpeed = 45.26 * maxSpeed;
+        this.measuredAngularSpeedDeg = 233.6 * maxSpeed;
+
     }
     /**  ENUM GETTERS AND SETTERS  ***********/
     public double getMaxSpeed(){return this.maxSpeed;}

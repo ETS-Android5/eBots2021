@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.Ro
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineCarousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineWarehouse;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.RoutineWarehouseWithCollect;
 
 public class StateConfigureRoutine implements EbotsAutonState{
 
@@ -149,7 +150,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
         } else if(startingSide == StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
             routine = new RoutineBlueCarousel();
         } else {
-            routine = new RoutineWarehouse();
+            routine = new RoutineWarehouseWithCollect();
         }
         autonOpMode.appendStatesToRoutineItinerary(routine);
         Log.d("EBOTS", "Completed StateConfigureRoutine");

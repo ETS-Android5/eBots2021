@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
@@ -36,6 +38,11 @@ public class StateEnterWarehouseForCollect implements EbotsAutonState{
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();
         motionController.setEncoderTarget(targetClicks);
+
+        Bucket bucket = Bucket.getInstance(autonOpMode);
+        bucket.setState(BucketState.COLLECT);
+
+
         Log.d(logTag, "Constructor complete");
 
     }
@@ -68,18 +75,18 @@ public class StateEnterWarehouseForCollect implements EbotsAutonState{
 
         // Now pass the strafe clicks to the opmode for processing
         int avgClicksTraveled = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksCollect(avgClicksTraveled);
-        Log.d(logTag, "Setting forward clicks to " + String.format("%d", avgClicksTraveled));
+        autonOpMode.setForwardClicksEnterWarehouse(avgClicksTraveled);
+        Log.d(logTag, "Setting forwardClicksEnterWarehouse to " + String.format("%d", avgClicksTraveled));
 
 
         // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
-        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
+//        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
+//        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
+//        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
+//        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
+//        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
+//        startingFieldPosition.offset(deltaFieldPosition);
+//        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

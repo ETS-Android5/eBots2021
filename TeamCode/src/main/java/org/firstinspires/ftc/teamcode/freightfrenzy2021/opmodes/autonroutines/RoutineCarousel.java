@@ -40,10 +40,12 @@ public class RoutineCarousel extends EbotsAutonRoutine{
         itinerary.add(StatePushOffWithEncoders.class);
         itinerary.add(StateRotateToFieldCenter.class);
         itinerary.add(StateMoveToHubY.class);
+        // can be removed if manage field heading during travel
         itinerary.add(StateRotate180.class);
         itinerary.add(StateReverseToHubUsingEncoders.class);
         itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOffWithEncoders.class);
+        // can be removed if manage field heading during travel
         itinerary.add(StateRotate180.class);
         itinerary.add(StateDriveToWall.class);
         itinerary.add(StateParkInStorageUnit.class);

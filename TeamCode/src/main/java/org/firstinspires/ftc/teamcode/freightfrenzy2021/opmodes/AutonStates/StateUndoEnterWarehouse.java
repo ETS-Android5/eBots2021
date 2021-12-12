@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateBackToAllianceHubAfterCollect implements EbotsAutonState{
+public class StateUndoEnterWarehouse implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -25,13 +25,13 @@ public class StateBackToAllianceHubAfterCollect implements EbotsAutonState{
     private double travelDistance = 24.0;
 
 
-    public StateBackToAllianceHubAfterCollect(EbotsAutonOpMode autonOpMode){
+    public StateUndoEnterWarehouse(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = autonOpMode.getForwardClicksCollect();
+        targetClicks = autonOpMode.getForwardClicksEnterWarehouse();
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();
@@ -49,6 +49,8 @@ public class StateBackToAllianceHubAfterCollect implements EbotsAutonState{
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
+        if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
+        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opmode inactivated. ");
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }
 
@@ -64,22 +66,17 @@ public class StateBackToAllianceHubAfterCollect implements EbotsAutonState{
         Log.d(logTag, "Inside transitional Actions...");
         motionController.stop();
         motionController.logAllEncoderClicks();
-        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
-
-        // Now pass the strafe clicks to the opmode for processing
-        int avgClicksTraveled = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksCollect(avgClicksTraveled);
-        Log.d(logTag, "Setting forward clicks to " + String.format("%d", avgClicksTraveled));
 
 
         // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offset(deltaFieldPosition);
-        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
+//        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
+//        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
+//        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
+//        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
+//        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
+//        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
+//        startingFieldPosition.offset(deltaFieldPosition);
+//        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

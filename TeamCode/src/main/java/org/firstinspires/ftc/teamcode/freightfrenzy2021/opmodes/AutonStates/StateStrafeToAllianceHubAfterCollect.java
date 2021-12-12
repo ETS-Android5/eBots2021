@@ -31,7 +31,6 @@ public class StateStrafeToAllianceHubAfterCollect implements EbotsAutonState{
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
-        motionController.setSpeed(0.5);
 
         targetClicks = autonOpMode.getStrafeClicksCollect();
         stateTimeLimit = 2000;
@@ -54,6 +53,7 @@ public class StateStrafeToAllianceHubAfterCollect implements EbotsAutonState{
 
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
         if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
+        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opmode inactivated. ");
 
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }

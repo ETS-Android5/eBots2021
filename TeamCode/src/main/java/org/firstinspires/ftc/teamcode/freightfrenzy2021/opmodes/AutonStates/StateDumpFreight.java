@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
@@ -20,6 +22,7 @@ public class StateDumpFreight implements EbotsAutonState{
     private final long dumpTime;
     private Arm.Level targetLevel;
     private boolean targetLevelAchieved = false;
+    private String logTag = "EBOTS";
 
     public StateDumpFreight(EbotsAutonOpMode autonOpMode){
         this.autonOpMode = autonOpMode;
@@ -31,7 +34,7 @@ public class StateDumpFreight implements EbotsAutonState{
         stopWatchState = new StopWatch();
         stopWatchDump = new StopWatch();
         stateTimeLimit = 5000L;
-        dumpTime = 2000L;
+        dumpTime = 1250L;
         BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
 
         //BarCodePosition barCodePosition = BarCodePosition.RIGHT;
@@ -65,6 +68,9 @@ public class StateDumpFreight implements EbotsAutonState{
         boolean dumpTimeCompleted = stopWatchDump.getElapsedTimeMillis() > dumpTime;
         boolean dumpComplete = targetLevelAchieved && dumpTimeCompleted;
         boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;
+        if(dumpComplete) Log.d(logTag, "State exited because dump complete");
+        if(stateTimedOut) Log.d(logTag, "State exited because timed out");
+        if(!autonOpMode.opModeIsActive()) Log.d(logTag, "State exited because opmode inactivated");
         return stateTimedOut | dumpComplete | !autonOpMode.opModeIsActive();
     }
 

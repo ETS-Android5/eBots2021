@@ -44,6 +44,8 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     private int strafeClicksCollect = 0;
     private int forwardClicksCollect = 0;
+    private int forwardClicksPushOff = 0;
+    private int forwardClicksEnterWarehouse = 0;
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,6 +106,22 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public int getForwardClicksCollect() {
         return forwardClicksCollect;
+    }
+
+    public int getForwardClicksPushOff() {
+        return forwardClicksPushOff;
+    }
+
+    public void setForwardClicksPushOff(int forwardClicksPushOff) {
+        this.forwardClicksPushOff = forwardClicksPushOff;
+    }
+
+    public int getForwardClicksEnterWarehouse() {
+        return forwardClicksEnterWarehouse;
+    }
+
+    public void setForwardClicksEnterWarehouse(int forwardClicksEnterWarehouse) {
+        this.forwardClicksEnterWarehouse = forwardClicksEnterWarehouse;
     }
 
     public void setForwardClicksCollect(int forwardClicksCollect) {
