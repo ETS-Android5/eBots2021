@@ -66,7 +66,7 @@ public class Carousel {
         if(AllianceSingleton.getAlliance() == Alliance.BLUE){
             spinSign = -1;
         }
-        carouselMotor.setPower(0.35 * spinSign);
+        carouselMotor.setPower(0.27 * spinSign);
     }
 
     public void stopMotor (){carouselMotor.setPower(0);}
