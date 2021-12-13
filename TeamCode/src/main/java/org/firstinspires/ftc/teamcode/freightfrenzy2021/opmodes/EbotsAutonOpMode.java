@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDriveVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
@@ -80,7 +81,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public AutonDrive getMotionController() {
         // because motors may be in the wrong mode, must init the motors when passing to a State
-        motionController.initMotorModes();
+//        motionController.initMotorModes();
         return motionController;
     }
 

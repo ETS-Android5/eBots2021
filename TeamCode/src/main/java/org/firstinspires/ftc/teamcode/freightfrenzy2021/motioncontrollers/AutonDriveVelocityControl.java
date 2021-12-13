@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// merged into AutonDrive
+@Deprecated
 public class AutonDriveVelocityControl implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Attributes
@@ -88,7 +90,7 @@ public class AutonDriveVelocityControl implements EbotsMotionController {
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //  Reverse motor depending on side
-            if(pos.getRobotSide() == RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
+            if(pos.getRobotSide() != RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
             // set the angle of the rollers, modifying sign if needed
             double wheelAngleDeg = 45;

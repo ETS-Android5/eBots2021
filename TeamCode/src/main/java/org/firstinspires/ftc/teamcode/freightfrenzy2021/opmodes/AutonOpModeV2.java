@@ -12,9 +12,12 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDelayTenSeconds;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveTeamShippingElement;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateOpenCVObserve;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithEncoders;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
@@ -52,7 +55,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         }
 
         // Cleanup the resources from Vuforia
-        navigatorVuforia.deactivateTargets();
+//        navigatorVuforia.deactivateTargets();
 
     }
 
@@ -74,7 +77,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         frontWebcam = new EbotsWebcam(hardwareMap, "Webcam 1", RobotSide.FRONT, 0,-3.25f, 9.0f);
 
         // initialize Navigator(s) (optional) and Arbitrator if more than 1
-        navigatorVuforia = new NavigatorVuforia(frontWebcam, hardwareMap);
+//        navigatorVuforia = new NavigatorVuforia(frontWebcam, hardwareMap);
 
         // motion controller
         this.motionController = new AutonDrive(this);
@@ -86,7 +89,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
-//        itinerary.add(StateObserveTeamShippingElement.class);
+        itinerary.add(StatePushOffWithVelocityControl.class);
+        itinerary.add(StateDelayTenSeconds.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();
