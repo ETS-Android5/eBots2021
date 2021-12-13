@@ -38,6 +38,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Execute the pre-match state machine
         // Requires that the opMode is Started and the state is flagged as completed, which ensures transitional actions happen
         while (!isStarted() && !stateComplete | !isStopRequested()) {
+//            Log.d(logTag, this.getClass().getSimpleName() + " : " + this.opModeIsActive());
             transitionToNextState();
             executeStateMachine();
         }

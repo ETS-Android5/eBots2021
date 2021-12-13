@@ -92,11 +92,12 @@ public class FreightDetector extends OpenCvPipeline {
 
     private void determineFreightPresence() {
         // calculate values for this loop
-        double confidenceThreshold = 0.7;
+        double confidenceThresholdBox = 0.7;
+        double confidenceThresholdBall = 0.85;
         confidenceBox = calculateConfidenceBox(frameHsv);
         confidenceBall = calculateConfidenceBall(frameHsv);
-        boolean nowBox = confidenceBox >= confidenceThreshold;
-        boolean nowBall = confidenceBall >= confidenceThreshold;
+        boolean nowBox = confidenceBox >= confidenceThresholdBox;
+        boolean nowBall = confidenceBall >= confidenceThresholdBall;
 
         // set freight conditions
         isBox = wasBox && nowBox;
@@ -154,11 +155,11 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelSaturation = hsv.get(row, col)[1];
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
-                boolean hueFlag = pixelHue >= 40.0 && pixelHue <= 80.0;
-                boolean saturationFlag = pixelSaturation >= 85.0;
-                boolean valueFlag = pixelValue > 150.0;
+                boolean hueFlag = pixelHue >= 90.0 && pixelHue <= 170;
+                boolean saturationFlag = pixelSaturation >= 0 && pixelSaturation <=150;
+                boolean valueFlag = pixelValue > 110.0;
                 // if value is high enough (ignores black)
-                if (hueFlag && valueFlag) {
+                if (hueFlag && saturationFlag && valueFlag) {
                     ballCount++;
                 } else{
                     if (hsvBallDebug) Log.d(logTag, "Negative: " + Arrays.toString(hsv.get(row, col)));

@@ -66,6 +66,26 @@ public interface EbotsAutonState {
             newState = new StateStrafeRightForWarehouse(autonOpMode);
         } else if (targetState == StatePushOffWithVelocityControl.class) {
             newState = new StatePushOffWithVelocityControl(autonOpMode);
+        } else if (targetState == StateStrafeToTouchWall.class) {
+            newState = new StateStrafeToTouchWall(autonOpMode);
+        } else if (targetState == StateEnterWarehouseForCollect.class) {
+            newState = new StateEnterWarehouseForCollect(autonOpMode);
+        } else if (targetState == StateCollectFreightWithEncoders.class) {
+            newState = new StateCollectFreightWithEncoders(autonOpMode);
+        } else if (targetState == StateUndoEnterWarehouse.class) {
+            newState = new StateUndoEnterWarehouse(autonOpMode);
+        } else if (targetState == StateStrafeToAllianceHubAfterCollect.class) {
+            newState = new StateStrafeToAllianceHubAfterCollect(autonOpMode);
+        } else if (targetState == StateStrafeAlignToWall.class) {
+            newState = new StateStrafeAlignToWall(autonOpMode);
+        } else if (targetState == StateStrafeToAllianceHubYWithOvertravel.class) {
+            newState = new StateStrafeToAllianceHubYWithOvertravel(autonOpMode);
+        } else if (targetState == StateStrafeToUndoOvertravel.class) {
+            newState = new StateStrafeToUndoOvertravel(autonOpMode);
+        } else if (targetState == StateUndoCollectTravel.class) {
+            newState = new StateUndoCollectTravel(autonOpMode);
+        } else if (targetState == StateUndoPushOff.class) {
+            newState = new StateUndoPushOff(autonOpMode);
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

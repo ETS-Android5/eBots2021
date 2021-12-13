@@ -67,7 +67,7 @@ public class AutonDrive implements EbotsMotionController {
             DcMotorEx motor = autonOpMode.hardwareMap.get(DcMotorEx.class, motorName);
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //  Reverse motor depending on side
-            if(pos.getRobotSide() == RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
+            if(pos.getRobotSide() != RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
             // set the angle of the rollers, modifying sign if needed
             double wheelAngleDeg = 45;
@@ -118,7 +118,7 @@ public class AutonDrive implements EbotsMotionController {
             DcMotorEx motor = mecanumWheel.getMotor();
             motor.setPower(0.0);
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            if(mecanumWheel.getWheelPosition().getRobotSide() == RobotSide.RIGHT) {
+            if(mecanumWheel.getWheelPosition().getRobotSide() != RobotSide.RIGHT) {
                 mecanumWheel.getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
             }
 

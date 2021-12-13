@@ -73,7 +73,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
 
         UtilFuncs.initManips(arm,carousel,this);
 
-        ebotsBlinkin = new EbotsBlinkin(hardwareMap);
+        ebotsBlinkin = EbotsBlinkin.getInstance(hardwareMap);
         ebotsBlinkin.lightsOn();
 
         motionController = EbotsMotionController.get(FieldOrientedVelocityControl.class, this);
@@ -149,7 +149,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         //Log.d(logTag, "Inside rumbleIfFreightPresent....");
         if(bucket.getBucketState() == BucketState.COLLECT){
 //            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
-            freightLoaded = freightDetector.getIsBox();
+            freightLoaded = freightDetector.getIsBox() | freightDetector.getIsBall();
             boolean freightRumbleLockedOut = stopWatchFreightRumble.getElapsedTimeMillis() < freightRumbleTimeLimit;
             if(freightLoaded && !freightRumbleLockedOut){
                 gamepad1.rumble(250);
@@ -174,6 +174,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
         telemetry.addData("Arm State ", arm.getArmState());
         telemetry.addData("Bucket State ", bucket.getBucketState());
+        telemetry.addData("LED State ", ebotsBlinkin.getLedState());
         telemetry.addData("Freight Detected ", freightLoaded);
         telemetry.addData("Bucket Hue ", freightDetector.getAverageHue());
         telemetry.addData("Is Box ", freightDetector.getIsBox() + " ("
@@ -210,6 +211,7 @@ public class EbotsTeleOpV2 extends LinearOpMode {
     private void rotateBucketIfArmAtBottom(){
         if (arm.shouldBucketCollect()) {
             bucket.setState(BucketState.COLLECT);
+            ebotsBlinkin.lightsOn();
         }
     }
 }

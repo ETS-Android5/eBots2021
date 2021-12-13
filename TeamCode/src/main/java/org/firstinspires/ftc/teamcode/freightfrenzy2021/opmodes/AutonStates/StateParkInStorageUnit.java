@@ -30,7 +30,7 @@ public class StateParkInStorageUnit implements EbotsAutonState{
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = 650;
+        targetClicks = (AllianceSingleton.isBlue()) ? 550 : 600;
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();

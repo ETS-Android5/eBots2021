@@ -37,8 +37,8 @@ public class DriveToEncoderTarget implements EbotsMotionController{
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motors.add(frontLeft);
         motors.add(frontRight);
@@ -64,6 +64,10 @@ public class DriveToEncoderTarget implements EbotsMotionController{
         }
     }
 
+    public void setSpeed(double speed){
+        this.speed = speed;
+    }
+
     public void strafe(double direction, int encoderTarget){
         this.encoderTarget = encoderTarget;
         for(DcMotorEx motor: motors) {
@@ -72,8 +76,8 @@ public class DriveToEncoderTarget implements EbotsMotionController{
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         if (direction == 90){

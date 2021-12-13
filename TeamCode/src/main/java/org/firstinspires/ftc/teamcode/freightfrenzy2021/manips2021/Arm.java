@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 
 public class Arm {
@@ -90,6 +91,10 @@ public class Arm {
         return armState;
     }
 
+    public LinearOpMode getOpMode() {
+        return opMode;
+    }
+
     private void setTargetLevel(Level level){
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
@@ -151,6 +156,13 @@ public class Arm {
     public static Arm getInstance(LinearOpMode opMode){
         if (armInstance == null){
             armInstance = new Arm(opMode);
+            Log.d(logTag, "Arm::getInstance --> Arm was null, new arm created");
+
+        } else if(armInstance.getOpMode() != opMode){
+            armInstance = new Arm(opMode);
+            Log.d(logTag, "Arm::getInstance --> Arm instance instantiated because opMode didn't match");
+        } else{
+            Log.d(logTag, "Arm::getInstance --> Existing instance of arm provided");
         }
         return armInstance;
     }
@@ -176,7 +188,7 @@ public class Arm {
         //****************************************
 
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setPower(0.0);
 
     }
@@ -194,7 +206,7 @@ public class Arm {
         boolean isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         while (!isAtBottom() && !isTimedOut && opMode.opModeIsActive()){
             armMotor.setPower(-0.25);
@@ -210,7 +222,7 @@ public class Arm {
             int currentPosition = armMotor.getCurrentPosition();
             armMotor.setTargetPosition(currentPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
 
@@ -221,7 +233,7 @@ public class Arm {
         isZeroed = true;
         opMode.gamepad2.rumble(350);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armState = ArmState.AT_LEVEL_1;
         targetLevel = Level.ONE;
         wasAtLevelOne = true;
@@ -241,10 +253,12 @@ public class Arm {
 
     }
 
-        private void rotateBucketToTravelPosition(){
-        StopWatch stopWatch = new StopWatch();
-        long rotateTime = 400L;
+    private void rotateBucketToTravelPosition(){
         Bucket bucket = Bucket.getInstance(opMode);
+        EbotsBlinkin ebotsBlinkin = EbotsBlinkin.getInstance(opMode.hardwareMap);
+        ebotsBlinkin.lightsOff();
+        long rotateTime = 400L;
+        StopWatch stopWatch = new StopWatch();
         boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
         if (!bucketInTravelPosition) bucket.setState(BucketState.TRAVEL);
         while (opMode.opModeIsActive() && !bucketInTravelPosition) {
@@ -256,20 +270,29 @@ public class Arm {
         Log.d(logTag, "Enter move to level auton");
 
         rotateBucketToTravelPosition();
+        Bucket bucket = Bucket.getInstance(opMode);
 
         int targetPosition = level.getEncoderPosition();
         int currentPosition = armMotor.getCurrentPosition();
 
-        boolean travelingDown = (targetPosition < currentPosition);
-        if (travelingDown) {
-            armState = ArmState.MOVING_DOWN;
-        } else {
-            armState = ArmState.MOVING_UP;
-        }
 
-        double targetPower = travelingDown ? 0.25 : 0.5;
-        armMotor.setTargetPosition(targetPosition);
-        armMotor.setPower(targetPower);
+        boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
+        if (!isZeroed | !bucketInTravelPosition) return;
+
+        setTargetLevel(level);
+//        if(level != Level.ONE) wasAtLevelOne = false;
+        wasAtLevelOne = false;
+
+//        boolean travelingDown = (targetPosition < currentPosition);
+//        if (travelingDown) {
+//            armState = ArmState.MOVING_DOWN;
+//        } else {
+//            armState = ArmState.MOVING_UP;
+//        }
+//
+//        double targetPower = travelingDown ? 0.25 : 0.5;
+//        armMotor.setTargetPosition(targetPosition);
+//        armMotor.setPower(targetPower);
 
     }
 

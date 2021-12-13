@@ -50,7 +50,7 @@ public class MecanumDrive implements EbotsMotionController {
             String motorName = pos.getMotorName();
             DcMotorEx motor = hardwareMap.get(DcMotorEx.class, motorName);
             //  Reverse motor depending on side
-            if(pos.getRobotSide() == RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
+            if(pos.getRobotSide() != RobotSide.RIGHT) motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
             // set the angle of the rollers, modifying sign if needed
             double wheelAngleDeg = 45;

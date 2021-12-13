@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StatePushOffAllianceHub implements EbotsAutonState{
+public class StateUndoEnterWarehouse implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -22,19 +22,20 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 8.0;
+    private double travelDistance = 24.0;
 
-    public StatePushOffAllianceHub(EbotsAutonOpMode autonOpMode){
+
+    public StateUndoEnterWarehouse(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
 
-        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
+        targetClicks = autonOpMode.getForwardClicksEnterWarehouse();
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();
-        motionController.setEncoderTarget(targetClicks);
+        motionController.setEncoderTarget(-targetClicks);
         Log.d(logTag, "Constructor complete");
 
     }
@@ -47,10 +48,9 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
         }
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
-
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
         if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
-        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opmode not active. ");
+        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opmode inactivated. ");
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }
 
@@ -67,11 +67,8 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
         motionController.stop();
         motionController.logAllEncoderClicks();
 
-        int avgClicks = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksPushOff(avgClicks);
-        Log.d(logTag, "Setting forwardClicksPushOff to " + String.format("%d", avgClicks));
 
-//        // Update the robots pose in autonOpMode
+        // Update the robots pose in autonOpMode
 //        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
 //        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
 //        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreight;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreight;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateEnterWarehouseForCollect;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubX;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubXWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubY;
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesV2;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeRight;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeRightForWarehouse;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToTouchWall;
 
 public class RoutineWarehouse extends EbotsAutonRoutine{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,11 +39,9 @@ public class RoutineWarehouse extends EbotsAutonRoutine{
         itinerary.add(StateReverseToHubUsingEncoders.class);
         itinerary.add(StateDumpFreight.class);
         itinerary.add(StatePushOffAllianceHub.class);
-        itinerary.add(StateStrafeRightForWarehouse.class);
-        itinerary.add(StateRotateToZeroDegreesV2.class);
-        itinerary.add(StateNavigateToWarehouse.class);
-//        itinerary.add(StateRotateToCollect.class);
-//        itinerary.add(StateCollectFreight.class);
+        itinerary.add(StateStrafeToTouchWall.class);
+        itinerary.add(StateEnterWarehouseForCollect.class);
+
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

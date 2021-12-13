@@ -3,15 +3,17 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StatePushOffAllianceHub implements EbotsAutonState{
+public class StateEnterWarehouseForCollect implements EbotsAutonState{
     private EbotsAutonOpMode autonOpMode;
     private Telemetry telemetry;
 
@@ -22,9 +24,10 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 8.0;
+    private double travelDistance = 24.0;
 
-    public StatePushOffAllianceHub(EbotsAutonOpMode autonOpMode){
+
+    public StateEnterWarehouseForCollect(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
@@ -35,6 +38,11 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
         stopWatch = new StopWatch();
         motionController.setEncoderTarget(targetClicks);
+
+        Bucket bucket = Bucket.getInstance(autonOpMode);
+        bucket.setState(BucketState.COLLECT);
+
+
         Log.d(logTag, "Constructor complete");
 
     }
@@ -47,10 +55,7 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
         }
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
-
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
-        if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
-        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opmode not active. ");
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }
 
@@ -66,13 +71,15 @@ public class StatePushOffAllianceHub implements EbotsAutonState{
         Log.d(logTag, "Inside transitional Actions...");
         motionController.stop();
         motionController.logAllEncoderClicks();
+        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
 
-        int avgClicks = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksPushOff(avgClicks);
-        Log.d(logTag, "Setting forwardClicksPushOff to " + String.format("%d", avgClicks));
+        // Now pass the strafe clicks to the opmode for processing
+        int avgClicksTraveled = motionController.getAverageClicks();
+        autonOpMode.setForwardClicksEnterWarehouse(avgClicksTraveled);
+        Log.d(logTag, "Setting forwardClicksEnterWarehouse to " + String.format("%d", avgClicksTraveled));
 
-//        // Update the robots pose in autonOpMode
-//        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
+
+        // Update the robots pose in autonOpMode
 //        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
 //        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
 //        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
