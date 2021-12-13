@@ -107,12 +107,13 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
                 freightDetector.markReadingAsConsumed();
                 if (freightDetector.getIsBall()) Log.d(logTag, "!!! Ball Detected !!!");
                 if (freightDetector.getIsBox()) Log.d(logTag, "!!! Box Detected !!!");
+                telemetry.addData("Box Present", freightDetector.getIsBox());
+                telemetry.addData("Ball Present", freightDetector.getIsBall());
             }
         } catch(NullPointerException e){
             telemetry.addLine("Freight Detector NULL in Collect Freight State");
         }
-        telemetry.addData("Box Present", freightDetector.getIsBox());
-        telemetry.addData("Ball Present", freightDetector.getIsBall());
+
     }
 
 
