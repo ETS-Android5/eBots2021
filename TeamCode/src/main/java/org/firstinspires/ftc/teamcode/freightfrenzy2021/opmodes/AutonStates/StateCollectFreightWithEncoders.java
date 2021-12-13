@@ -39,9 +39,9 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
     private boolean firstPass = true;
     private double travelDistance = 24.0;
 
-    FreightDetector freightDetector;
+    private FreightDetector freightDetector;
     boolean freightPresent = false;
-    OpenCvCamera camera;
+    //OpenCvCamera camera;
 
 
 
@@ -61,7 +61,9 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         Bucket bucket = Bucket.getInstance(autonOpMode);
         bucket.setState(BucketState.COLLECT);
         Intake.getInstance(hardwareMap).fullPower();
-        freightDetector = new FreightDetector();
+
+        //OpenCV pipeline from the opmode
+        freightDetector = this.autonOpMode.getFreightDetector();
 
         EbotsBlinkin.getInstance(hardwareMap).lightsOn();
 
@@ -99,11 +101,15 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
     }
 
     private void updateFreightPresent(){
-        if (!freightDetector.isReadingConsumed()) {
-            freightPresent = freightDetector.getIsBall() | freightDetector.getIsBox();
-            freightDetector.markReadingAsConsumed();
-            if (freightDetector.getIsBall()) Log.d(logTag, "!!! Ball Detected !!!");
-            if (freightDetector.getIsBox()) Log.d(logTag, "!!! Box Detected !!!");
+        try {
+            if (!freightDetector.isReadingConsumed()) {
+                freightPresent = freightDetector.getIsBall() | freightDetector.getIsBox();
+                freightDetector.markReadingAsConsumed();
+                if (freightDetector.getIsBall()) Log.d(logTag, "!!! Ball Detected !!!");
+                if (freightDetector.getIsBox()) Log.d(logTag, "!!! Box Detected !!!");
+            }
+        } catch(NullPointerException e){
+            telemetry.addLine("Freight Detector NULL in Collect Freight State");
         }
         telemetry.addData("Box Present", freightDetector.getIsBox());
         telemetry.addData("Ball Present", freightDetector.getIsBall());

@@ -31,8 +31,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     int statesCreated = 0;
     private EbotsAutonState currentState;
     private EbotsImu ebotsimu;
-    FreightDetector freightDetector;
-    OpenCvCamera camera;
+    private OpenCvCamera camera;
     private boolean stateComplete = false;
 
 
@@ -96,9 +95,6 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
-//        itinerary.add(StateObserveTeamShippingElement.class);
-
-
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();
@@ -156,13 +152,12 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     private void startCamera(){
         freightDetector = new FreightDetector();
 
-        //No Longer needed when using overloaded function createWebcam(webCabName)
+
         //int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         //Log.d(logTag, "cameraMonitorViewId set");
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
         WebcamName webcamName = bucketWebCam.getWebcamName();
         // With live preview
-        //why did we change from createWebcam(webCabName, viewportContainerId) as to createWebcam(webCabName)
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
         Log.d(logTag, "camera instantiated");
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()

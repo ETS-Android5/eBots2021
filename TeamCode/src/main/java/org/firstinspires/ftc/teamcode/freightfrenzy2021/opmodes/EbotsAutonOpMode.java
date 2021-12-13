@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines.EbotsAutonRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
 
     public Bucket bucket;
     private EbotsImu ebotsimu;
+    public FreightDetector freightDetector;
 
     private int strafeClicksCollect = 0;
     private int forwardClicksCollect = 0;
@@ -105,6 +107,11 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
     public int getForwardClicksCollect() {
         return forwardClicksCollect;
     }
+
+    public FreightDetector getFreightDetector() {
+        return freightDetector;
+    }
+
 
     public void setForwardClicksCollect(int forwardClicksCollect) {
         this.forwardClicksCollect = forwardClicksCollect;
