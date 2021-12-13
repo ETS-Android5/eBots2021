@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
@@ -18,6 +19,10 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
 public class AutonOpModeV2 extends EbotsAutonOpMode {
@@ -26,6 +31,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     int statesCreated = 0;
     private EbotsAutonState currentState;
     private EbotsImu ebotsimu;
+    FreightDetector freightDetector;
+    OpenCvCamera camera;
     private boolean stateComplete = false;
 
 
@@ -42,6 +49,9 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
             transitionToNextState();
             executeStateMachine();
         }
+
+        //open the camera for freight detection
+        startCamera();
 
         waitForStart();
 
@@ -87,6 +97,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
 //        itinerary.add(StateObserveTeamShippingElement.class);
+
+
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();
@@ -138,6 +150,41 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         telemetry.addData("Current State", currentState.getClass().getSimpleName());
         telemetry.addData("Current heading", ebotsimu.getCurrentFieldHeadingDeg(false));
         telemetry.update();
+    }
+
+    //Open up the camera for Freight Detection
+    private void startCamera(){
+        freightDetector = new FreightDetector();
+
+        //No Longer needed when using overloaded function createWebcam(webCabName)
+        //int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //Log.d(logTag, "cameraMonitorViewId set");
+        EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
+        WebcamName webcamName = bucketWebCam.getWebcamName();
+        // With live preview
+        //why did we change from createWebcam(webCabName, viewportContainerId) as to createWebcam(webCabName)
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
+        Log.d(logTag, "camera instantiated");
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                Log.d(logTag, "The camera is now open...");
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.setPipeline(freightDetector);
+
+            }
+            @Override
+            public void onError(int errorCode)
+            {
+                Log.d(logTag, "There was an error");
+            }
+        });
+        Log.d(logTag, "Camera for Freight Detector Instantiated");
+
+        Log.d(logTag, "Constructor complete");
+
     }
 
 }

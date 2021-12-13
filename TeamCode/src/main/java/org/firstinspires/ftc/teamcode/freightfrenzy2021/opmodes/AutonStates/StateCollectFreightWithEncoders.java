@@ -64,6 +64,9 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         freightDetector = new FreightDetector();
 
         EbotsBlinkin.getInstance(hardwareMap).lightsOn();
+
+        //Moved to opmode issue#2
+        /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         Log.d(logTag, "cameraMonitorViewId set");
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
@@ -90,6 +93,8 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         Log.d(logTag, "Camera for Freight Detector Instantiated");
 
         Log.d(logTag, "Constructor complete");
+        */
+
 
     }
 
