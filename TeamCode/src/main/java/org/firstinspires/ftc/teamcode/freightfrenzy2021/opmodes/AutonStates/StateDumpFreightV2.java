@@ -37,7 +37,6 @@ public class StateDumpFreightV2 extends EbotsAutonStateVelConBase{
         if(dumpComplete) Log.d(logTag, "State exited because dump complete");
         if(stateTimedOut) Log.d(logTag, "State exited because timed out");
         if(!autonOpMode.opModeIsActive()) Log.d(logTag, "State exited because opmode inactivated");
-        Log.d(logTag, stopWatchState.toString());
         return stateTimedOut | dumpComplete | !autonOpMode.opModeIsActive();
     }
 
@@ -56,6 +55,7 @@ public class StateDumpFreightV2 extends EbotsAutonStateVelConBase{
 
     @Override
     public void performTransitionalActions() {
+        Log.d(logTag, stopWatchState.toString());
         telemetry.addLine("Transitional Actions of " + this.getClass().getSimpleName());
         arm.moveToLevel(Arm.Level.ONE);
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());

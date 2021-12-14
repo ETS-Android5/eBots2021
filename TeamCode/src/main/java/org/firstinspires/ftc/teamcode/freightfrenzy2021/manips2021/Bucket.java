@@ -62,6 +62,7 @@ public class Bucket {
         if(targetState == BucketState.DUMP) {
             // If asking to dump but state was previously collect then toggle state
             if (bucketState == BucketState.COLLECT) toggleState();
+            bucketState = BucketState.DUMP;
             setPos(getDumpPositionWithVibrate());
         } else if(targetState == BucketState.TRAVEL) {
             bucketState = BucketState.TRAVEL;

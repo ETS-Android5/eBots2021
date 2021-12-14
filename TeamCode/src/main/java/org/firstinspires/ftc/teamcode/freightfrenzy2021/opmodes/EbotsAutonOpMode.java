@@ -99,6 +99,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         return frontWebcam;
     }
 
+    public FreightDetector getFreightDetector() {
+        return freightDetector;
+    }
+
     public int getStrafeClicksCollect() {
         return strafeClicksCollect;
     }

@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDelayTenSeconds;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreightV2;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianeHubWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllianceHubAfterCollectVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToTouchWallVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeTowardWarehouseForDump;
@@ -33,10 +35,10 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public RoutineWarehouseWithCollect(){
 
-        itinerary.add(StatePushOffWithEncoders.class);
+        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
         itinerary.add(StateStrafeTowardWarehouseForDump.class);
         // Rotate to zero and strafe to hub
-        itinerary.add(StateRotateToZeroDegreesV2.class);
+        itinerary.add(StateRotateToZeroDegreesVelocityControl.class);
 
         // add alignment to wall here to square up
         //itinerary.add(StateStrafeAlignToWall.class);
@@ -57,37 +59,39 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
         itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
 
         // this is used to determine Y travel  set strafeClicksCollect during transitional actions
-        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
+//        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
+//
+//        // actual clicks traveled needs to set forwardClicksEnterWarehouse during transitional actions
+//        itinerary.add(StateEnterWarehouseForCollect.class);
+//
+//        // alignment only, no need to pass click count to opMode
+//        itinerary.add(StateStrafeAlignToWall.class);
+//
+//        // need heading control during this state to keep from veering off course set forwardClicksCollect during transitional actions
+//        itinerary.add(StateCollectFreightWithVelocityControl.class);
+//
+//        // Must add state to back up to entry point, reverse travel during StateCollectFreightWithEncoders
+//        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
+//
+//        // alignment only, no need for passing to opMode
+//        itinerary.add(StateStrafeAlignToWall.class);
+//
+//        // Move back to alliance hub for strafing
+//        itinerary.add(StateUndoEnterWarehouseWithVelocityControl.class);
+//
+//        // strafe back to the hub y position previously used
+//        itinerary.add(StateStrafeToAllianceHubAfterCollectVelocityControl.class);
+//
+//        // Prepare to dump in alliance hub
+//        itinerary.add(StateUndoPushOffAllianceHubVelocityControl.class);
+//
+//        itinerary.add(StateDumpFreightV2.class);
+//
+//        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
+//        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
+//        itinerary.add(StateEnterWarehouseForCollect.class);
 
-        // actual clicks traveled needs to set forwardClicksEnterWarehouse during transitional actions
-        itinerary.add(StateEnterWarehouseForCollect.class);
-
-        // alignment only, no need to pass click count to opMode
-        itinerary.add(StateStrafeAlignToWall.class);
-
-        // need heading control during this state to keep from veering off course set forwardClicksCollect during transitional actions
-        itinerary.add(StateCollectFreightWithVelocityControl.class);
-
-        // Must add state to back up to entry point, reverse travel during StateCollectFreightWithEncoders
-        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
-
-        // alignment only, no need for passing to opMode
-        itinerary.add(StateStrafeAlignToWall.class);
-
-        // Move back to alliance hub for strafing
-        itinerary.add(StateUndoEnterWarehouseWithVelocityControl.class);
-
-        // strafe back to the hub y position previously used
-        itinerary.add(StateStrafeToAllianceHubAfterCollectVelocityControl.class);
-
-        // Prepare to dump in alliance hub
-        itinerary.add(StateUndoPushOffAllianceHubVelocityControl.class);
-
-        itinerary.add(StateDumpFreightV2.class);
-
-        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
-        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
-        itinerary.add(StateEnterWarehouseForCollect.class);
+        itinerary.add(StateDelayTenSeconds.class);
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters

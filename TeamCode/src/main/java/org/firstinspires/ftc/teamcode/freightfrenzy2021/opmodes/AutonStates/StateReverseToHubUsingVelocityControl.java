@@ -19,6 +19,7 @@ public class StateReverseToHubUsingVelocityControl extends EbotsAutonStateVelCon
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
+        motionController.setSpeed(Speed.MEDIUM);
 
         StartingSide startingSide = autonOpMode.getStartingSide();
         if(startingSide==StartingSide.CAROUSEL && !AllianceSingleton.isBlue()) {
