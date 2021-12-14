@@ -39,9 +39,9 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
     private boolean firstPass = true;
     private double travelDistance = 24.0;
 
-    FreightDetector freightDetector;
+    private FreightDetector freightDetector;
     boolean freightPresent = false;
-    OpenCvCamera camera;
+    //OpenCvCamera camera;
 
 
 
@@ -51,26 +51,24 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         this.hardwareMap = autonOpMode.hardwareMap;
         this.telemetry = autonOpMode.telemetry;
         motionController = new DriveToEncoderTarget(autonOpMode);
-        motionController.setSpeed(0.2);
+        motionController.setSpeed(0.25);
 
         targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
-        stateTimeLimit = 3500;
+        stateTimeLimit = 3000;
         stopWatch = new StopWatch();
         motionController.setEncoderTarget(targetClicks);
 
-        // Make sure the bucket is ready for collect
         Bucket bucket = Bucket.getInstance(autonOpMode);
-        if (bucket.getBucketState() != BucketState.COLLECT) {
-            bucket.setState(BucketState.COLLECT);
-        }
-
+        bucket.setState(BucketState.COLLECT);
         Intake.getInstance(hardwareMap).fullPower();
-        freightDetector = new FreightDetector();
 
-        // turn on the lights
+        //OpenCV pipeline from the opmode
+        freightDetector = this.autonOpMode.getFreightDetector();
+
         EbotsBlinkin.getInstance(hardwareMap).lightsOn();
 
-        // receive a reference to Freight detector instead of this code.
+        //Moved to opmode issue#2
+        /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         Log.d(logTag, "cameraMonitorViewId set");
         EbotsWebcam bucketWebCam = new EbotsWebcam(hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
@@ -83,7 +81,7 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
             @Override
             public void onOpened()
             {
-                Log.d(logTag, "The camera is now open..." + stopWatch.toString());
+                Log.d(logTag, "The camera is now open...");
                 camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
                 camera.setPipeline(freightDetector);
 
@@ -97,18 +95,25 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         Log.d(logTag, "Camera for Freight Detector Instantiated");
 
         Log.d(logTag, "Constructor complete");
+        */
+
 
     }
 
     private void updateFreightPresent(){
-        if (!freightDetector.isReadingConsumed()) {
-            freightPresent = freightDetector.getIsBall() | freightDetector.getIsBox();
-            freightDetector.markReadingAsConsumed();
-            if (freightDetector.getIsBall()) Log.d(logTag, "!!! Ball Detected !!!");
-            if (freightDetector.getIsBox()) Log.d(logTag, "!!! Box Detected !!!");
+        try {
+            if (!freightDetector.isReadingConsumed()) {
+                freightPresent = freightDetector.getIsBall() | freightDetector.getIsBox();
+                freightDetector.markReadingAsConsumed();
+                if (freightDetector.getIsBall()) Log.d(logTag, "!!! Ball Detected !!!");
+                if (freightDetector.getIsBox()) Log.d(logTag, "!!! Box Detected !!!");
+                telemetry.addData("Box Present", freightDetector.getIsBox());
+                telemetry.addData("Ball Present", freightDetector.getIsBall());
+            }
+        } catch(NullPointerException e){
+            telemetry.addLine("Freight Detector NULL in Collect Freight State");
         }
-        telemetry.addData("Box Present", freightDetector.getIsBox());
-        telemetry.addData("Ball Present", freightDetector.getIsBall());
+
     }
 
 
@@ -125,7 +130,6 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
         if (stateTimedOut) Log.d(logTag, "Exited because timed out during " + this.getClass().getSimpleName());
         if(freightPresent) Log.d(logTag, "Exiting because freight detected during " + this.getClass().getSimpleName());
         if(targetTravelCompleted) Log.d(logTag, "Exiting because target travel completed during " + this.getClass().getSimpleName());
-        if(!autonOpMode.opModeIsActive()) Log.d(logTag, "Exiting because opmode inactivated during " + this.getClass().getSimpleName());
 
         return freightPresent | stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
     }
@@ -149,20 +153,29 @@ public class StateCollectFreightWithEncoders implements EbotsAutonState{
 
         // Now pass the strafe clicks to the opmode for processing
         int avgClicksTraveled = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksCollect(avgClicksTraveled);
-        Log.d(logTag, "Setting forwardClicksCollect to " + String.format("%d", avgClicksTraveled));
+        int previousForwardTravel = autonOpMode.getForwardClicksCollect();
+        int totalTravel = avgClicksTraveled + previousForwardTravel;
+        autonOpMode.setForwardClicksCollect(totalTravel);
+        Log.d(logTag, "Setting forward clicks to " + String.format("%d", totalTravel));
 
-        // move the bucket to travel position
-        Bucket.getInstance(autonOpMode). setState(BucketState.TRAVEL);
+        // Reverse the intake for a few seconds to make sure we don't have multiple elements
+        StopWatch stopWatchPurge = new StopWatch();
+        long purgeTimeLimit = 750;
+        Intake intake = Intake.getInstance(hardwareMap);
+        intake.purge();
+        while (autonOpMode.opModeIsActive() && stopWatchPurge.getElapsedTimeMillis() < purgeTimeLimit){
+            // Just wait for the purge
+        }
+        intake.stop();
 
         // Update the robots pose in autonOpMode
-//        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-//        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-//        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-//        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-//        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-//        startingFieldPosition.offset(deltaFieldPosition);
-//        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
+        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
+        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
+        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
+        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
+        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
+        startingFieldPosition.offset(deltaFieldPosition);
+        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();
