@@ -25,7 +25,6 @@ public class StateStrafeToAllianceHubAfterCollect implements EbotsAutonState{
     private boolean firstPass = true;
 
 
-
     public StateStrafeToAllianceHubAfterCollect(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
         this.autonOpMode = autonOpMode;

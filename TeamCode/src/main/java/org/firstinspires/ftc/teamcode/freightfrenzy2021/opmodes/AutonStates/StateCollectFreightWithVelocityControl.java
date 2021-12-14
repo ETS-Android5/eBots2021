@@ -51,11 +51,7 @@ public class StateCollectFreightWithVelocityControl extends EbotsAutonStateVelCo
         initAutonState();
         setDriveTarget();
 
-        Log.d(logTag, "Constructor complete");
-
-
         stateTimeLimit = 3500;
-
 
         Intake.getInstance(autonOpMode.hardwareMap).fullPower();
         freightDetector = new FreightDetector();
@@ -130,7 +126,7 @@ public class StateCollectFreightWithVelocityControl extends EbotsAutonStateVelCo
         Log.d(logTag, "Setting forwardClicksCollect to " + String.format("%d", avgClicksTraveled));
 
         // move the bucket to travel position
-        Bucket.getInstance(autonOpMode). setState(BucketState.TRAVEL);
+        Bucket.getInstance(autonOpMode).setState(BucketState.TRAVEL);
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

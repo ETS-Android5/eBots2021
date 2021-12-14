@@ -100,6 +100,14 @@ public interface EbotsAutonState {
             newState = new StateStrafeToTouchWallVelocityControl(autonOpMode);
         } else if (targetState == StateCollectFreightWithVelocityControl.class) {
             newState = new StateCollectFreightWithVelocityControl(autonOpMode);
+        } else if (targetState == StateUndoCollectTravelWithVelocityControl.class) {
+            newState = new StateUndoCollectTravelWithVelocityControl(autonOpMode);
+        } else if (targetState == StateUndoEnterWarehouseWithVelocityControl.class) {
+            newState = new StateUndoEnterWarehouseWithVelocityControl(autonOpMode);
+        } else if (targetState == StateStrafeToAllianceHubAfterCollectVelocityControl.class) {
+            newState = new StateStrafeToAllianceHubAfterCollectVelocityControl(autonOpMode);
+        } else if (targetState == StateUndoPushOffAllianceHubVelocityControl.class) {
+            newState = new StateUndoPushOffAllianceHubVelocityControl(autonOpMode);
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

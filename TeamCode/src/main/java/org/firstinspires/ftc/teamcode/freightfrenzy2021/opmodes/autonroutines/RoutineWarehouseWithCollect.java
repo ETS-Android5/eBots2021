@@ -4,8 +4,10 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreightV2;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianeHubWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllianceHubAfterCollectVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToTouchWallVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeTowardWarehouseForDump;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoCollectTravelWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoEnterWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreight;
@@ -21,7 +23,9 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToTouchWall;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToUndoOvertravel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoCollectTravel;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoEnterWarehouseWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoPushOff;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoPushOffAllianceHubVelocityControl;
 
 public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,24 +69,24 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
         itinerary.add(StateCollectFreightWithVelocityControl.class);
 
         // Must add state to back up to entry point, reverse travel during StateCollectFreightWithEncoders
-        itinerary.add(StateUndoCollectTravel.class);
+        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
 
         // alignment only, no need for passing to opMode
         itinerary.add(StateStrafeAlignToWall.class);
 
         // Move back to alliance hub for strafing
-        itinerary.add(StateUndoEnterWarehouse.class);
+        itinerary.add(StateUndoEnterWarehouseWithVelocityControl.class);
 
         // strafe back to the hub y position previously used
-        itinerary.add(StateStrafeToAllianceHubAfterCollect.class);
+        itinerary.add(StateStrafeToAllianceHubAfterCollectVelocityControl.class);
 
         // Prepare to dump in alliance hub
-        itinerary.add(StateUndoPushOff.class);
+        itinerary.add(StateUndoPushOffAllianceHubVelocityControl.class);
 
-        itinerary.add(StateDumpFreight.class);
+        itinerary.add(StateDumpFreightV2.class);
 
-        itinerary.add(StatePushOffAllianceHub.class);
-        itinerary.add(StateStrafeToTouchWall.class);
+        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
+        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
         itinerary.add(StateEnterWarehouseForCollect.class);
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
