@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines;
 
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreightV2;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianeHubWithVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToTouchWallVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeTowardWarehouseForDump;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoEnterWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreight;
@@ -24,29 +30,30 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
     public RoutineWarehouseWithCollect(){
 
         itinerary.add(StatePushOffWithEncoders.class);
-        itinerary.add(StateStrafeRight.class);
+        itinerary.add(StateStrafeTowardWarehouseForDump.class);
         // Rotate to zero and strafe to hub
         itinerary.add(StateRotateToZeroDegreesV2.class);
 
         // add alignment to wall here to square up
-        itinerary.add(StateStrafeAlignToWall.class);
+        //itinerary.add(StateStrafeAlignToWall.class);
 
         // Over-travel a bit and reverse to make sure marker is out of the way
         itinerary.add(StateStrafeToAllianceHubYWithOvertravel.class);
 
         // Undo over-travel from previous state (get distance of over-travel from previous state)
+        // Move bucket to target level during this move
         itinerary.add(StateStrafeToUndoOvertravel.class);
 
         // figure out why this times out
-        itinerary.add(StateReverseToHubUsingEncoders.class);
+        itinerary.add(StateReverseToHubUsingVelocityControl.class);
 
-        itinerary.add(StateDumpFreight.class);
+        itinerary.add(StateDumpFreightV2.class);
 
         // actual clicks traveled needs to set forwardClicksPushOff during transitional actions
-        itinerary.add(StatePushOffAllianceHub.class);
+        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
 
         // this is used to determine Y travel  set strafeClicksCollect during transitional actions
-        itinerary.add(StateStrafeToTouchWall.class);
+        itinerary.add(StateStrafeToTouchWallVelocityControl.class);
 
         // actual clicks traveled needs to set forwardClicksEnterWarehouse during transitional actions
         itinerary.add(StateEnterWarehouseForCollect.class);
@@ -55,7 +62,7 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
         itinerary.add(StateStrafeAlignToWall.class);
 
         // need heading control during this state to keep from veering off course set forwardClicksCollect during transitional actions
-        itinerary.add(StateCollectFreightWithEncoders.class);
+        itinerary.add(StateCollectFreightWithVelocityControl.class);
 
         // Must add state to back up to entry point, reverse travel during StateCollectFreightWithEncoders
         itinerary.add(StateUndoCollectTravel.class);

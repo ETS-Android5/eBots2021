@@ -5,40 +5,23 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateStrafeAlignToWall implements EbotsAutonState{
-    private EbotsAutonOpMode autonOpMode;
-    private Telemetry telemetry;
-
-    private int targetClicks;
-    private long stateTimeLimit;
-    private StopWatch stopWatch;
-    private DriveToEncoderTarget motionController;
-
-    private String logTag = "EBOTS";
+public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelConBase{
     private boolean firstPass = true;
+    private boolean isSpeedSlow = false;
 
     private DigitalChannel frontRollerTouch;
     private DigitalChannel backRollerTouch;
 
 
-    public StateStrafeAlignToWall(EbotsAutonOpMode autonOpMode){
+    public StateStrafeToTouchWallVelocityControl(EbotsAutonOpMode autonOpMode){
+        super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
-        this.autonOpMode = autonOpMode;
-        this.telemetry = autonOpMode.telemetry;
-        motionController = new DriveToEncoderTarget(autonOpMode);
-        motionController.setSpeed(0.35);
-
-        targetClicks = 1500;
-        stateTimeLimit = 1000;
-        stopWatch = new StopWatch();
-        int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
-        motionController.strafe(90 * allianceSign, targetClicks);
-
 
         if (AllianceSingleton.isBlue()){
             frontRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "leftFrontTouch");
@@ -47,6 +30,17 @@ public class StateStrafeAlignToWall implements EbotsAutonState{
             frontRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "rightFrontTouch");
             backRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "rightBackTouch");
         }
+
+        // Must define
+
+        travelDistance = 54.0;
+        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
+        targetHeadingDeg = 0.0;
+
+        initAutonState();
+        setDriveTarget();
+
+        stateTimeLimit += 2000L;    // add some extra time for slow travel and touch
 
         Log.d(logTag, "Constructor complete");
     }
@@ -57,41 +51,39 @@ public class StateStrafeAlignToWall implements EbotsAutonState{
 
     @Override
     public boolean shouldExit() {
-        if(firstPass){
-            Log.d(logTag, "Inside shouldExit...");
-            firstPass = false;
-        }
-        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
-        boolean targetTravelCompleted = motionController.isTargetReached();
-
+        // standard conditions include opMode inactivated, travel complete, state timed out
+        boolean standardExitConditions = super.shouldExit();
         boolean frontTouchPressed = isPressed(frontRollerTouch);
         boolean backTouchPressed = isPressed(backRollerTouch);
         boolean touchingWall = frontTouchPressed && backTouchPressed;
-        if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
-        if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed. ");
         if (frontTouchPressed) Log.d(logTag, "Front Roller is contacting wall. ");
         if (backTouchPressed) Log.d(logTag, "Back Roller is contacting wall. ");
         if (touchingWall) Log.d(logTag, "Exiting because both rollers touching ");
 
-        return stateTimedOut | targetTravelCompleted | touchingWall | !autonOpMode.opModeIsActive();
+        return standardExitConditions| touchingWall;
     }
 
     @Override
     public void performStateActions() {
-        telemetry.addData("Avg Clicks", motionController.getAverageClicks());
-        telemetry.addData("Position Reached", motionController.isTargetReached());
-        telemetry.addLine(stopWatch.toString());
+        super.performStateActions();
+        if (!isSpeedSlow && motionController.getAverageClicks() > targetClicks*0.8) {
+            motionController.setSpeed(Speed.SLOW);
+            Log.d(logTag, "Shifted to slower speed for wall touch at " +
+                    String.format(intFmt, motionController.getAverageClicks()) +
+                    " of target travel " + String.format(intFmt, targetClicks));
+            isSpeedSlow = true;
+        }
     }
 
     @Override
     public void performTransitionalActions() {
+        super.performTransitionalActions();
         Log.d(logTag, "Inside transitional Actions...");
-        motionController.stop();
-        motionController.logAllEncoderClicks();
+
         // Now pass the strafe clicks to the opmode for processing
         int avgClicksTraveled = motionController.getAverageClicks();
-//        autonOpMode.setStrafeClicksCollect(avgClicksTraveled);
-        Log.d(logTag, "Clicks moved:  " + String.format("%d", avgClicksTraveled));
+        autonOpMode.setStrafeClicksCollect(avgClicksTraveled);
+        Log.d(logTag, "Setting strafe clicks to " + String.format(intFmt, avgClicksTraveled));
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

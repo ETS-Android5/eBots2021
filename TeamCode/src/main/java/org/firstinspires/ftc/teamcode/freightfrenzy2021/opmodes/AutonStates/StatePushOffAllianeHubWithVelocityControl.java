@@ -2,16 +2,11 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
-import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
-import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDriveVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
+public class StatePushOffAllianeHubWithVelocityControl extends EbotsAutonStateVelConBase{
 
     /**
      * Within this constructor the following variables must be set:
@@ -21,21 +16,20 @@ public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
 
      * @param autonOpMode
      */
-    public StatePushOffWithVelocityControl(EbotsAutonOpMode autonOpMode){
+    public StatePushOffAllianeHubWithVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
 
-        travelDistance = 6.0;
-        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
-        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
+        travelDistance = 8.0;
+        travelFieldHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
 
         initAutonState();
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
-
     }
 
 

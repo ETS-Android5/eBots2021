@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
+import android.util.Log;
+
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
@@ -15,6 +18,7 @@ Instance Attributes
     StopWatch stopWatch;
     EbotsAutonOpMode autonOpMode;
     long stateTimeLimit;
+    int loopCount = 0;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Constructors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -46,6 +50,12 @@ Instance Methods
     @Override
     public void performStateActions() {
         autonOpMode.telemetry.addLine(stopWatch.toString());
+        boolean debugOn = loopCount % 100 == 0;
+        if (debugOn){
+            double currentHeading = EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true);
+            Log.d("EBOTS", "Current Heading:" + String.format("%.2f", currentHeading));
+        }
+        loopCount ++;
     }
 
     @Override

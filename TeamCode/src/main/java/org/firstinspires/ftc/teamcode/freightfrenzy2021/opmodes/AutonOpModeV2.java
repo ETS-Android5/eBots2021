@@ -20,6 +20,11 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesV2;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllianceHubYWithOvertravel;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToUndoOvertravel;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeTowardWarehouseForDump;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.navigators.NavigatorVuforia;
 
 @Autonomous
@@ -89,7 +94,13 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
-        itinerary.add(StatePushOffWithVelocityControl.class);
+
+        itinerary.add(StatePushOffWithEncoders.class);
+        itinerary.add(StateStrafeTowardWarehouseForDump.class);
+        itinerary.add(StateRotateToZeroDegreesV2.class);
+        itinerary.add(StateStrafeToAllianceHubYWithOvertravel.class);
+        itinerary.add(StateStrafeToUndoOvertravel.class);
+
         itinerary.add(StateDelayTenSeconds.class);
 
         telemetry.addLine("Initialization complete!");

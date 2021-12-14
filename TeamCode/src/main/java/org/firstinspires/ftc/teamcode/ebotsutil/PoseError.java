@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.ebotsutil;
 
 import static java.lang.String.format;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.ebotsenums.CoordinateSystem;
 import org.firstinspires.ftc.teamcode.ebotsenums.CsysDirection;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
@@ -25,6 +27,8 @@ public class PoseError {
     private ArrayList<ErrorSum> errorSums;      //Arraylist of all error Sums (X, Y, Spin)
 
     private EbotsAutonOpMode opMode;
+
+    private String logTag = "EBOTS";
 
     /***************************************************************
      ******    SIMPLE GETTERS AND SETTERS
@@ -125,11 +129,16 @@ public class PoseError {
     }
 
     private void updateErrorSums(long loopDuration){
+        boolean debugOn = false;
+
         Speed speed = this.opMode.getMotionController().getSpeed();
+        if(debugOn){
+            Log.d(logTag, "Updating error sums, speed: " + speed.name());
+        }
         for(ErrorSum errorSum:errorSums){
             CsysDirection dir = errorSum.getCsysDirection();
             boolean isIntegratorOn = speed.isIntegratorOn(dir);
-
+            if (debugOn) Log.d(logTag, "for direction: " + dir.name() + " integratorOn: " + isIntegratorOn);
             // if integrator is off for current direction then skip the rest of the loop and move to next one
             if (! isIntegratorOn) continue;
 

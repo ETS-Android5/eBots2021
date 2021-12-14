@@ -147,6 +147,10 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.currentPose = currentPose;
     }
 
+    public void setMotionController(AutonDrive motionController) {
+        this.motionController = motionController;
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

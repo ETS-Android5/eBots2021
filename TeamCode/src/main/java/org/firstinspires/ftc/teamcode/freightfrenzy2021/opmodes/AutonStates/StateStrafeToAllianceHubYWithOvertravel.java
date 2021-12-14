@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
+import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
@@ -10,21 +12,11 @@ import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateStrafeToAllianceHubYWithOvertravel implements EbotsAutonState{
-    private EbotsAutonOpMode autonOpMode;
-    private Telemetry telemetry;
-
-    private int targetClicks;
-    private long stateTimeLimit;
-    private StopWatch stopWatch;
-    private DriveToEncoderTarget motionController;
-
-    private String logTag = "EBOTS";
-    private boolean firstPass = true;
-    private double travelDistance;
+public class StateStrafeToAllianceHubYWithOvertravel extends EbotsAutonStateVelConBase{
 
     private final double HUB_DISTANCE_FROM_WALL = 48.0;
     private final double ROBOT_HALF_WIDTH = RobotSize.ySize.getSizeValue();
@@ -32,28 +24,32 @@ public class StateStrafeToAllianceHubYWithOvertravel implements EbotsAutonState{
     private final static double OVERTRAVEL_INCHES = 6.0;
 
 
-    public StateStrafeToAllianceHubYWithOvertravel(EbotsAutonOpMode autonOpMode){
+    public StateStrafeToAllianceHubYWithOvertravel (EbotsAutonOpMode autonOpMode){
+        super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
-        this.autonOpMode = autonOpMode;
-        this.telemetry = autonOpMode.telemetry;
-        motionController = new DriveToEncoderTarget(autonOpMode);
+
+        // Must define
+
         int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
 
         // because the bucket position is asymmetrical, the drive distance from the wall must
         // be adjusted based on alliance.  If red, subtract from travel distance.  add if blue
 
-        travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_WIDTH +
+        double pushOffDistance = StatePushOffWithVelocityControl.getTravelDistance();
+        Log.d(logTag, "Acquired travelDistance from StatePushOffWithVelocityControl: " +
+                String.format(twoDec, pushOffDistance));
+
+        travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_WIDTH - pushOffDistance +
                 (BUCKET_CENTER_OFFSET * allianceSign) + OVERTRAVEL_INCHES;
 
-        targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
+        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
+        targetHeadingDeg = 0.0;
 
-        double maxTranslateSpeed = Speed.MEDIUM.getMeasuredTranslateSpeed();
-        stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);
-        stopWatch = new StopWatch();
+        initAutonState();
+        setDriveTarget();
+        moveArmToTargetLevel();
 
-        motionController.strafe(-90 * allianceSign, targetClicks);
         Log.d(logTag, "Constructor complete");
-
     }
 
     public static double getOvertravelInches() {
@@ -62,40 +58,28 @@ public class StateStrafeToAllianceHubYWithOvertravel implements EbotsAutonState{
 
     @Override
     public boolean shouldExit() {
-        if(firstPass){
-            Log.d(logTag, "Inside shouldExit...");
-            firstPass = false;
-        }
-        boolean stateTimedOut = stopWatch.getElapsedTimeMillis() > stateTimeLimit;
-        boolean targetTravelCompleted = motionController.isTargetReached();
-        if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
-        return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
+        return super.shouldExit();
     }
 
     @Override
     public void performStateActions() {
-        telemetry.addData("Avg Clicks", motionController.getAverageClicks());
-        telemetry.addData("Position Reached", motionController.isTargetReached());
-        telemetry.addLine(stopWatch.toString());
+        super.performStateActions();
     }
 
     @Override
     public void performTransitionalActions() {
-        Log.d(logTag, "Inside transitional Actions...");
-        motionController.stop();
-        motionController.logAllEncoderClicks();
-        Log.d(logTag, "Pose before offset: " + autonOpMode.getCurrentPose().toString());
+        super.performTransitionalActions();
+    }
 
-        // Update the robots pose in autonOpMode
-        double currentHeadingRad = Math.toRadians(EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-        double xTravelDelta = travelDistance * Math.cos(currentHeadingRad);
-        double yTravelDelta = travelDistance * Math.sin(currentHeadingRad);
-        FieldPosition deltaFieldPosition = new FieldPosition(xTravelDelta, yTravelDelta);
-        FieldPosition startingFieldPosition = autonOpMode.getCurrentPose().getFieldPosition();
-        startingFieldPosition.offsetInPlace(deltaFieldPosition);
-        Log.d(logTag, "Pose after offset: " + autonOpMode.getCurrentPose().toString());
-
-        telemetry.addLine("Exiting " + this.getClass().getSimpleName());
-        telemetry.update();
+    private void moveArmToTargetLevel() {
+        BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
+        Arm.Level targetLevel = Arm.Level.ONE;
+        if (barCodePosition == BarCodePosition.MIDDLE) {
+            targetLevel = Arm.Level.TWO;
+        } else if (barCodePosition == BarCodePosition.RIGHT) {
+            targetLevel = Arm.Level.THREE;
+        }
+        Arm arm = Arm.getInstance(autonOpMode);
+        arm.moveToLevel(targetLevel);
     }
 }

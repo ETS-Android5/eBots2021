@@ -34,9 +34,9 @@ public class AutonDrive implements EbotsMotionController {
     private double requestedTranslateVelocity;
     @Deprecated private double requestedTranslateMagnitude;
     private double translateAngleRad;
-    double maxWheelVelocity;    // Property of the robot
-    double maxAllowedVelocity;     // between 0-maxWheelVelocity
-    double maxAllowedSpinVelocity;     // between 0-maxWheelVelocity to reduce spin power
+    private final double maxWheelVelocity;    // Property of the robot
+    private double maxAllowedVelocity;     // between 0-maxWheelVelocity
+    private double maxAllowedSpinVelocity;     // between 0-maxWheelVelocity to reduce spin power
 
     private EbotsAutonOpMode autonOpMode;
     private Speed speed;
@@ -49,6 +49,7 @@ public class AutonDrive implements EbotsMotionController {
 
     private int targetClicks = 0;
     private final int allowableErrorInClicks = 25;
+    private final double allowableHeadingErrorDeg = 3.0;
 
     private PoseError poseError;
     private double xSignal;
@@ -60,6 +61,7 @@ public class AutonDrive implements EbotsMotionController {
     private final String logTag = "EBOTS";
     private int loopCount = 0;
     private final double clicksPerInch = 48.9;
+    private final double clicksPerDegree = 8.59;
 
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,6 +167,8 @@ public class AutonDrive implements EbotsMotionController {
 
     public void setSpeed(Speed speed) {
         this.speed = speed;
+        maxAllowedVelocity = speed.getMaxSpeed() * maxWheelVelocity;
+        maxAllowedSpinVelocity = speed.getTurnSpeed() * maxWheelVelocity;
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,18 +178,6 @@ public class AutonDrive implements EbotsMotionController {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    public void initMotorModes(){
-        for(MecanumWheel mecanumWheel: mecanumWheels){
-            DcMotorEx motor = mecanumWheel.getMotor();
-            motor.setPower(0.0);
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            if(mecanumWheel.getWheelPosition().getRobotSide() != RobotSide.RIGHT) {
-                mecanumWheel.getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
-            }
-
-        }
-    }
-
     public boolean isSignalSaturated(CsysDirection csysDirection){
         boolean isSignalSaturated = true;
 
@@ -449,20 +441,33 @@ public class AutonDrive implements EbotsMotionController {
         return maxCalculatedVelocityMagnitude;
     }
 
-    public void setEncoderTarget(double travelDistanceInches, double travelDirection){
+    public void setEncoderTarget(PoseError poseError){
+        double travelDistanceInches = poseError.getMagnitude();
         targetClicks = (int) Math.round(travelDistanceInches * clicksPerInch);
+
+        int spinClicks = (int) Math.round(poseError.getHeadingErrorDeg() * clicksPerDegree);
 
         // must consider the robot's heading when determining encoder targets
         double currentHeadingDeg = ebotsImu.getCurrentFieldHeadingDeg(true);
-        double driveAngleRad = translateAngleRad - Math.toRadians(currentHeadingDeg);
+        double driveAngleRad =  Math.toRadians(poseError.getFieldErrorDirectionDeg() - currentHeadingDeg);
 
         // Set the motor targets
         for(MecanumWheel mecanumWheel: mecanumWheels){
             mecanumWheel.stopVelocity();
             // each wheel will spin forward or backwards proportional with its orientation to travel direction
             double wheelSign = Math.signum(Math.cos(driveAngleRad - mecanumWheel.getWheelAngleRad()));
+            int translateClicks = (int) (targetClicks * wheelSign);
+
+            // calculate the spin clicks
+            int wheelSpinClicks = (int) (spinClicks * mecanumWheel.getWheelPosition().getSpinSign());
             // distance each wheel travels is function of wheelFactor orientation and travel distance
-            mecanumWheel.getMotor().setTargetPosition((int) (targetClicks * wheelSign));
+            mecanumWheel.getMotor().setTargetPosition(translateClicks + wheelSpinClicks);
+            Log.d(logTag, "Encoder target for " + mecanumWheel.getWheelPosition() + " set to " +
+                    String.format("%d", translateClicks + wheelSpinClicks) + ".  " +
+                    "translateClicks: " + String.format("%d", translateClicks) + "  " +
+                    "spinClicks: " + String.format("%d", spinClicks) + "  " +
+                    "translateAngle:  " + String.format("%.1f", Math.toDegrees(translateAngleRad)) + "  " +
+                    "driveAngle: " + String.format("%.1f", Math.toDegrees(driveAngleRad)));
 
         }
         Log.d(logTag, "Encoders after setEncoderTarget---------------");

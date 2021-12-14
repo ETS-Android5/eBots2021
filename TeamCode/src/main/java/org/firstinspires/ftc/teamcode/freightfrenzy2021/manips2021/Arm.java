@@ -266,6 +266,7 @@ public class Arm {
         }
     }
 
+    @Deprecated
     public void moveToLevelAuton(Level level){
         Log.d(logTag, "Enter move to level auton");
 

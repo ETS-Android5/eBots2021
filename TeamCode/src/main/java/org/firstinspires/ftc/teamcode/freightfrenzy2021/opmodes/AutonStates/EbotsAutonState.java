@@ -86,6 +86,20 @@ public interface EbotsAutonState {
             newState = new StateUndoCollectTravel(autonOpMode);
         } else if (targetState == StateUndoPushOff.class) {
             newState = new StateUndoPushOff(autonOpMode);
+        } else if (targetState == StateRotateToZeroDegreesVelocityControl.class) {
+            newState = new StateRotateToZeroDegreesVelocityControl(autonOpMode);
+        } else if (targetState == StateStrafeTowardWarehouseForDump.class) {
+            newState = new StateStrafeTowardWarehouseForDump(autonOpMode);
+        } else if (targetState == StateReverseToHubUsingVelocityControl.class) {
+            newState = new StateReverseToHubUsingVelocityControl(autonOpMode);
+        } else if (targetState == StateDumpFreightV2.class) {
+            newState = new StateDumpFreightV2(autonOpMode);
+        } else if (targetState == StatePushOffAllianeHubWithVelocityControl.class) {
+            newState = new StatePushOffAllianeHubWithVelocityControl(autonOpMode);
+        } else if (targetState == StateStrafeToTouchWallVelocityControl.class) {
+            newState = new StateStrafeToTouchWallVelocityControl(autonOpMode);
+        } else if (targetState == StateCollectFreightWithVelocityControl.class) {
+            newState = new StateCollectFreightWithVelocityControl(autonOpMode);
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

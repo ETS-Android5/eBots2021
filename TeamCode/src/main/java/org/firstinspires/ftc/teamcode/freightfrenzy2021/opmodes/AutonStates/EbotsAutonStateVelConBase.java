@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.Accuracy;
+import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDriveVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
@@ -29,6 +30,7 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     protected long loopDuration = 0L;
 
     protected AutonDrive motionController;
+    protected EbotsImu ebotsImu;
 
     protected final String logTag = "EBOTS";
     protected final String intFmt = "%d";
@@ -36,13 +38,16 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     protected final String twoDec = "%.2f";
 
     protected boolean firstPass = true;
-    protected double travelDistance = 0.0;
+    protected static double travelDistance = 0.0;
     protected double travelFieldHeadingDeg = 0;
     protected double targetHeadingDeg = 0;
+    protected boolean rotationOnly = false;
+    Accuracy accuracy = Accuracy.STANDARD;
 
     protected Pose currentPose;
     protected Pose targetPose;
     protected PoseError poseError;
+    protected boolean wasRotationAchieved = false;
 
     protected int lastAvgClicks = 0;
 
@@ -54,11 +59,10 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         this.autonOpMode = autonOpMode;
         this.telemetry = autonOpMode.telemetry;
         motionController = new AutonDrive(autonOpMode);
+        autonOpMode.setMotionController(motionController);
+        ebotsImu = EbotsImu.getInstance(autonOpMode.hardwareMap);
 
         currentPose = autonOpMode.getCurrentPose();
-//        travelDistance = 0.0;
-//        travelFieldHeadingDeg = 0;
-//        targetHeadingDeg = currentPose.getHeadingDeg();
 
         stopWatchState = new StopWatch();
         stopWatchLoop = new StopWatch();
@@ -70,7 +74,10 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
+    public static double getTravelDistance() {
+        return travelDistance;
+    }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -86,7 +93,14 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
             firstPass = false;
         }
         updateLocationAndError();
-        return testStandardExitConditions();
+
+        boolean exitVerdict = false;
+        if (!rotationOnly){
+            exitVerdict = translateExitTest();
+        } else {
+            exitVerdict = rotateExitTest();
+        }
+        return exitVerdict;
     }
 
     @Override
@@ -121,6 +135,9 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     }
 
     protected void calculateTravel(){
+        if (travelDistance == 0.0 && targetHeadingDeg != currentPose.getHeadingDeg()){
+            rotationOnly = true;
+        }
         double xTravel = Math.cos(Math.toRadians(travelFieldHeadingDeg)) * travelDistance;
         double yTravel = Math.sin(Math.toRadians(travelFieldHeadingDeg)) * travelDistance;
         FieldPosition requestedTravel = new FieldPosition(xTravel, yTravel);
@@ -141,16 +158,29 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
                 String.format(twoDec, travelDistance) + " and travelFieldHeading: " +
                 String.format(twoDec, travelFieldHeadingDeg));
         // Note, the auton motion controller is limited to travel in 4 cardinal directions
-        motionController.setEncoderTarget(travelDistance, travelFieldHeadingDeg);
+        motionController.setEncoderTarget(poseError);
     }
 
-    protected boolean testStandardExitConditions(){
+    protected boolean translateExitTest(){
         boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;
         boolean targetTravelCompleted = motionController.isTargetReached();
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
         if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed");
         if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opMode is no longer active");
         return stateTimedOut | targetTravelCompleted | !autonOpMode.opModeIsActive();
+    }
+
+    protected boolean rotateExitTest(){
+        boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;
+        boolean targetRotationCompleted = isTargetRotationSustained();
+
+        if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
+        if (targetRotationCompleted) Log.d(logTag, "Exited because rotation angle achieved.  " +
+                        "Target: " + String.format(oneDec, targetPose.getHeadingDeg()) +
+                        " Achieved: " + String.format(oneDec, currentPose.getHeadingDeg()) +
+                        " Heading error: " + String.format(oneDec, poseError.getHeadingErrorDeg()));
+        if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opMode is no longer active");
+        return stateTimedOut | targetRotationCompleted | !autonOpMode.opModeIsActive();
     }
 
     protected void updateLocationAndError(){
@@ -160,6 +190,27 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         loopDuration = stopWatchLoop.getElapsedTimeMillis();
         stopWatchLoop.reset();
 
+        if (travelDistance > 0.0) {
+            FieldPosition fieldPositionChange = calculateChangeInFieldPosition();
+            // offset currentPose field position
+            currentPose.getFieldPosition().offsetInPlace(fieldPositionChange);
+        }
+
+        // update heading with last imu reading
+        double newHeading = ebotsImu.getCurrentFieldHeadingDeg(false);
+        currentPose.setHeadingDeg(newHeading);
+
+        // refresh the pose error
+        poseError.calculateError(currentPose, targetPose, loopDuration);
+
+
+        if (debugOn){
+            Log.d(logTag, currentPose.toString());
+            Log.d(logTag, poseError.toString());
+        }
+    }
+
+    private FieldPosition calculateChangeInFieldPosition(){
         // get the current avg clicks and figure out translation distance
         int currentAvgClicks = motionController.getAverageClicks();
         double translationInches = (currentAvgClicks - lastAvgClicks) / motionController.getClicksPerInch();
@@ -170,16 +221,34 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         double yTravel = Math.sin(Math.toRadians(travelFieldHeadingDeg)) * translationInches;
         FieldPosition currentTravel = new FieldPosition(xTravel, yTravel);
 
-        // offset currentPose field position
-        currentPose.getFieldPosition().offsetInPlace(currentTravel);
-        poseError.calculateError(currentPose, targetPose, loopDuration);
-
         // update last average clicks
         lastAvgClicks = currentAvgClicks;
 
-        if (debugOn){
-            Log.d(logTag, currentPose.toString());
-            Log.d(logTag, poseError.toString());
+        return currentTravel;
+    }
+
+    private boolean isTargetRotationAchieved(){
+        double allowableHeadingErrorDeg = accuracy.STANDARD.getHeadingAccuracyDeg();
+        double headingError = poseError.getHeadingErrorDeg();
+//        double headingIntegrator = poseError.getHeadingErrorDegSum();
+        boolean headingAchieved =  Math.abs(headingError) <= allowableHeadingErrorDeg;
+        return headingAchieved;
+    }
+
+    private boolean isTargetRotationSustained(){
+        boolean rotationAchieved = isTargetRotationAchieved();
+        boolean sustainedVerdict = false;
+        if (rotationAchieved && wasRotationAchieved){
+            // if currently achieved and previously achieved
+            sustainedVerdict = true;
+            wasRotationAchieved = true;
+        } else if(rotationAchieved){
+            // is currently achieved but not previously achieved
+            wasRotationAchieved = true;
+        } else{
+            // not currently achieved
+            wasRotationAchieved = false;
         }
+        return sustainedVerdict;
     }
 }
