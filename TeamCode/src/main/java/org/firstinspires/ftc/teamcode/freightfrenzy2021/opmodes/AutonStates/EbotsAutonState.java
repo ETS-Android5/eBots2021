@@ -80,8 +80,8 @@ public interface EbotsAutonState {
             newState = new StateStrafeAlignToWall(autonOpMode);
         } else if (targetState == StateStrafeToAllianceHubYWithOvertravel.class) {
             newState = new StateStrafeToAllianceHubYWithOvertravel(autonOpMode);
-        } else if (targetState == StateStrafeToUndoOvertravel.class) {
-            newState = new StateStrafeToUndoOvertravel(autonOpMode);
+        } else if (targetState == StateStrafeToUndoOvertravelVelocityControl.class) {
+            newState = new StateStrafeToUndoOvertravelVelocityControl(autonOpMode);
         } else if (targetState == StateUndoCollectTravel.class) {
             newState = new StateUndoCollectTravel(autonOpMode);
         } else if (targetState == StateUndoPushOff.class) {
@@ -98,16 +98,29 @@ public interface EbotsAutonState {
             newState = new StatePushOffAllianeHubWithVelocityControl(autonOpMode);
         } else if (targetState == StateStrafeToTouchWallVelocityControl.class) {
             newState = new StateStrafeToTouchWallVelocityControl(autonOpMode);
+
+        } else if (targetState == StateUndoOverTravel.class) {
+            newState = new StateUndoOverTravel(autonOpMode);
         } else if (targetState == StateCollectFreightWithVelocityControl.class) {
             newState = new StateCollectFreightWithVelocityControl(autonOpMode);
+
         } else if (targetState == StateUndoCollectTravelWithVelocityControl.class) {
             newState = new StateUndoCollectTravelWithVelocityControl(autonOpMode);
+
         } else if (targetState == StateUndoEnterWarehouseWithVelocityControl.class) {
             newState = new StateUndoEnterWarehouseWithVelocityControl(autonOpMode);
+
         } else if (targetState == StateStrafeToAllianceHubAfterCollectVelocityControl.class) {
             newState = new StateStrafeToAllianceHubAfterCollectVelocityControl(autonOpMode);
+
+        } else if (targetState == StateAlignToMoveTSEVelocityControl.class) {
+            newState = new StateAlignToMoveTSEVelocityControl(autonOpMode);
+
         } else if (targetState == StateUndoPushOffAllianceHubVelocityControl.class) {
             newState = new StateUndoPushOffAllianceHubVelocityControl(autonOpMode);
+
+        } else if (targetState == StateStrafeRightToAlignTSE.class) {
+            newState = new StateStrafeRightToAlignTSE(autonOpMode);
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

@@ -152,7 +152,7 @@ public class StateConfigureRoutine implements EbotsAutonState{
         } else {
             routine = new RoutineWarehouseWithCollect();
         }
-//        autonOpMode.appendStatesToRoutineItinerary(routine);
+        autonOpMode.appendStatesToRoutineItinerary(routine);
         Log.d("EBOTS", "Completed StateConfigureRoutine");
     }
 }

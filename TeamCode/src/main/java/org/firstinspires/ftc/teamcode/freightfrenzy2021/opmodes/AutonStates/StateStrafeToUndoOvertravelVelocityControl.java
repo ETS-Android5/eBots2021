@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateStrafeToUndoOvertravel extends EbotsAutonStateVelConBase{
+public class StateStrafeToUndoOvertravelVelocityControl extends EbotsAutonStateVelConBase{
 
 
-    public StateStrafeToUndoOvertravel(EbotsAutonOpMode autonOpMode){
+    public StateStrafeToUndoOvertravelVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
@@ -24,7 +24,7 @@ public class StateStrafeToUndoOvertravel extends EbotsAutonStateVelConBase{
 
         travelDistance = StateStrafeToAllianceHubYWithOvertravel.getOvertravelInches();
         travelFieldHeadingDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
-        targetHeadingDeg = 0.0;
+        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();
         setDriveTarget();

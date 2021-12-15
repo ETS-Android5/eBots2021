@@ -26,7 +26,7 @@ public class DriveToEncoderTarget implements EbotsMotionController{
     private ArrayList<DcMotorEx> motors = new ArrayList<>();
 
     private int encoderTarget;
-    private int allowableErrorInClicks = 10;
+    private int allowableErrorInClicks = 30;
     private double speed = 0.5;
 
 

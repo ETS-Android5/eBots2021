@@ -138,7 +138,7 @@ public class FreightDetector extends OpenCvPipeline {
             }
         }
         double cubeConfidence = ((double) boxCount) / pixelCount;
-        Log.d(logTag, "boxCount / pixelCount: " + String.format("%.2f", cubeConfidence));
+//        Log.d(logTag, "boxCount / pixelCount: " + String.format("%.2f", cubeConfidence));
         return cubeConfidence;
     }
 
@@ -167,7 +167,7 @@ public class FreightDetector extends OpenCvPipeline {
             }
         }
         double ballConfidence = ((double) ballCount) / pixelCount;
-        Log.d(logTag, "ballCount / pixelCount: " + String.format("%.2f", ballConfidence));
+//        Log.d(logTag, "ballCount / pixelCount: " + String.format("%.2f", ballConfidence));
         return ballConfidence;
     }
 

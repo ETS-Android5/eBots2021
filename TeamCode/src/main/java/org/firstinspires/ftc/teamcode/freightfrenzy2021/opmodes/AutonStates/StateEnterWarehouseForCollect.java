@@ -23,7 +23,8 @@ public class StateEnterWarehouseForCollect extends EbotsAutonStateVelConBase{
 
         // Must define
 
-        travelDistance = 24.0;
+        motionController.setSpeed(Speed.MEDIUM);
+        travelDistance = 32.0;
         travelFieldHeadingDeg = 0.0;
         targetHeadingDeg = 0.0;
 
@@ -39,12 +40,12 @@ public class StateEnterWarehouseForCollect extends EbotsAutonStateVelConBase{
 
     @Override
     public boolean shouldExit() {
-        return shouldExit();
+        return super.shouldExit();
     }
 
     @Override
     public void performStateActions() {
-        performStateActions();
+        super.performStateActions();
     }
 
     @Override

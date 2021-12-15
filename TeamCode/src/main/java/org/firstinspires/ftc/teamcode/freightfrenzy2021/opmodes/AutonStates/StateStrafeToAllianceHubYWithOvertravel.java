@@ -29,7 +29,7 @@ public class StateStrafeToAllianceHubYWithOvertravel extends EbotsAutonStateVelC
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
-
+        motionController.setSpeed(Speed.MEDIUM);
         int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
 
         // because the bucket position is asymmetrical, the drive distance from the wall must
@@ -40,10 +40,10 @@ public class StateStrafeToAllianceHubYWithOvertravel extends EbotsAutonStateVelC
                 String.format(twoDec, pushOffDistance));
 
         travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_WIDTH - pushOffDistance +
-                (BUCKET_CENTER_OFFSET * allianceSign) + OVERTRAVEL_INCHES;
+                (BUCKET_CENTER_OFFSET * allianceSign) + OVERTRAVEL_INCHES + 6.0;
 
         travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
-        targetHeadingDeg = 0.0;
+        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();
         setDriveTarget();
