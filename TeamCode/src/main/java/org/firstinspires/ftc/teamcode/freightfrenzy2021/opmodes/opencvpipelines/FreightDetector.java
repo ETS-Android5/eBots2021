@@ -23,7 +23,7 @@ public class FreightDetector extends OpenCvPipeline {
     double confidenceBox;
     double confidenceBall;
     boolean hsvBoxDebug = false;
-    boolean hsvBallDebug = false;
+    boolean hsvBallDebug = true;
 
     //Check the co ordinates
 //    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
@@ -78,8 +78,8 @@ public class FreightDetector extends OpenCvPipeline {
             Log.d("EBOTS", "hsv size: " + frameHsv.size().toString());
             Log.d("EBOTS", "hsv cols: " + String.format("%d", frameHsv.cols()));
             Log.d("EBOTS", "val1: " + Arrays.toString(frameHsv.get(0,0)));
-            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(input.rows()/2,input.cols()/2)));
-            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.rows()-1,input.cols()-1)));
+            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(input.cols()/2,input.rows()/2)));
+            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.cols()-1,input.rows()-1)));
             Log.d("EBOTS", "Average Hue: " + String.format("%d", averageHue));
         }
         // draw a bounding rectangle
@@ -126,7 +126,7 @@ public class FreightDetector extends OpenCvPipeline {
                 pixelValue = hsv.get(row, col)[2];
                 pixelCount++;
                 // if value is high enough (ignores black)
-                boolean hueFlag = (pixelHue >= 0.0 && pixelHue <= 40.0) | pixelHue >= 170.0;
+                boolean hueFlag = (pixelHue >= 0.0 && pixelHue <= 40.0) | pixelHue >= 160.0;
                 boolean saturationFlag = pixelSaturation >= 85;
                 //boolean valueFlag = pixelValue >= 160.0;
                 boolean valueFlag = pixelValue >= 60.0;

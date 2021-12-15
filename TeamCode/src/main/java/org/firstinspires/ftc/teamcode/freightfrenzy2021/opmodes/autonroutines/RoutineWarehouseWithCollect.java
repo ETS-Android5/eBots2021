@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.autonroutines;
 
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDumpFreightV2;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianeHubWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAlignTSEVelocityControl;
@@ -35,18 +36,13 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
         // Rotate to zero and strafe to hub
         itinerary.add(StateRotateToZeroDegreesVelocityControl.class);
 
-        // add alignment to wall here to square up
-        //itinerary.add(StateStrafeAlignToWall.class);
-
-
-
         // figure out why this times out
         itinerary.add(StateReverseToHubUsingVelocityControl.class);
 
         itinerary.add(StateDumpFreightV2.class);
 
         // actual clicks traveled needs to set forwardClicksPushOff during transitional actions
-//        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
+        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);
 
         // this is used to determine Y travel  set strafeClicksCollect during transitional actions
         itinerary.add(StateStrafeToTouchWallVelocityControl.class);

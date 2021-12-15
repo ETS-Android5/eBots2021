@@ -10,6 +10,7 @@ public class StateStrafeToAlignTSEVelocityControl extends EbotsAutonStateVelConB
 
     // this static class must be created specific for this state, otherwise will fall to abstract class
     private static double stateUndoTravelDistance = 0.0;
+    private static double stateStrafeDistance = 4.2;
 
     /**
      * Within this constructor the following variables must be set:
@@ -30,9 +31,14 @@ public class StateStrafeToAlignTSEVelocityControl extends EbotsAutonStateVelConB
         if (barCodePosition == BarCodePosition.MIDDLE){
             multiplier = 1.0;
         }
-        travelDistance = 4.2 * multiplier;
 
-        stateUndoTravelDistance = 4.2 - travelDistance;
+        Log.d(logTag, "In StateStrafeToAlignTSEVelocityControl barCodePosition: " + barCodePosition.name() +
+                " multiplier: " + String.format(oneDec, multiplier) +
+                " travelDistance: " + String.format(twoDec, stateStrafeDistance * multiplier));
+
+        travelDistance = stateStrafeDistance * multiplier;
+
+        stateUndoTravelDistance = stateStrafeDistance - travelDistance;
         travelFieldHeadingDeg = 0.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
@@ -49,6 +55,9 @@ public class StateStrafeToAlignTSEVelocityControl extends EbotsAutonStateVelConB
         return stateUndoTravelDistance;
     }
 
+    public static double getStateStrafeDistance() {
+        return stateStrafeDistance;
+    }
 
     @Override
     public boolean shouldExit() {

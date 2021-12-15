@@ -26,11 +26,10 @@ public class StateReverseToHubUsingVelocityControl extends EbotsAutonStateVelCon
             travelDistance = 20.14;
         } else if (startingSide==StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
             travelDistance = 26.58;
-        } else if(AllianceSingleton.isBlue()){
+        } else {
             // starting side is Warehouse
-            travelDistance = 9.2;
-        } else{
-            travelDistance = 3.58;
+            double additionalTravel = 2.0;
+            travelDistance = additionalTravel + StateStrafeToAlignTSEVelocityControl.getStateStrafeDistance();
         }
         travelFieldHeadingDeg = startingSide==StartingSide.CAROUSEL ? 0.0 : 180.0;
         targetHeadingDeg = startingSide==StartingSide.CAROUSEL ? 180.0 : 0.0;

@@ -22,7 +22,7 @@ public class StatePushOffAllianeHubWithVelocityControl extends EbotsAutonStateVe
 
         // Must define
 
-        travelDistance = 8.0;
+        travelDistance = 2.0;
         travelFieldHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
         targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
 

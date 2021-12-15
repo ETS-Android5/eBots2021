@@ -238,7 +238,7 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         double currentPositionError = poseError.getMagnitude();
         return currentPositionError <= accuracy.getPositionalAccuracy();
     }
-    private boolean isTargetRotationAchieved(){
+    public boolean isTargetRotationAchieved(){
         double allowableHeadingErrorDeg = accuracy.getHeadingAccuracyDeg();
         double headingError = poseError.getHeadingErrorDeg();
         boolean headingAchieved =  Math.abs(headingError) <= allowableHeadingErrorDeg;

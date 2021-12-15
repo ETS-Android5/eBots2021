@@ -27,10 +27,10 @@ public class StateUndoCollectTravelWithVelocityControl extends EbotsAutonStateVe
 
 
         // Must define
-        targetClicks = autonOpMode.getForwardClicksCollect();
 
 
-        travelDistance = targetClicks / motionController.getClicksPerInch();
+
+        travelDistance = StateCollectFreightWithVelocityControl.getStateUndoTravelDistance();
         travelFieldHeadingDeg = 180.0;
         targetHeadingDeg = 0.0;
 

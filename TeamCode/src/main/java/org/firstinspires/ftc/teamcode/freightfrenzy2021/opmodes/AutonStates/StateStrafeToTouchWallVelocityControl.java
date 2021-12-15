@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
+import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
@@ -17,6 +19,7 @@ public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelCon
 
     private DigitalChannel frontRollerTouch;
     private DigitalChannel backRollerTouch;
+    private final Pose startPose;
 
 
     public StateStrafeToTouchWallVelocityControl(EbotsAutonOpMode autonOpMode){
@@ -30,6 +33,8 @@ public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelCon
             frontRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "rightFrontTouch");
             backRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "rightBackTouch");
         }
+
+        startPose = new Pose(currentPose.getX(),currentPose.getY(), currentPose.getHeadingDeg());
 
         // Must define
 
@@ -66,11 +71,13 @@ public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelCon
     @Override
     public void performStateActions() {
         super.performStateActions();
-        if (!isSpeedSlow && motionController.getAverageClicks() > targetClicks*0.8) {
+        double distanceTraveled = new PoseError(startPose, currentPose, autonOpMode).getMagnitude();
+
+        if (!isSpeedSlow && distanceTraveled > travelDistance*0.8) {
             motionController.setSpeed(Speed.SLOW);
             Log.d(logTag, "Shifted to slower speed for wall touch at " +
-                    String.format(intFmt, motionController.getAverageClicks()) +
-                    " of target travel " + String.format(intFmt, targetClicks));
+                    String.format(twoDec, distanceTraveled) +
+                    " of target travel " + String.format(twoDec, travelDistance));
             isSpeedSlow = true;
         }
     }
