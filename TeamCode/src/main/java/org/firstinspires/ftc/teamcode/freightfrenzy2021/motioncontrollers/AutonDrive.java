@@ -233,7 +233,8 @@ public class AutonDrive implements EbotsMotionController {
         //      +X --> Forward, +Y is Left, +Z is up
         //   +Spin --> Counter clockwise
 
-        boolean debugOn = (loopCount % 5 == 0);
+        boolean debugOn = false;
+//        boolean debugOn = (loopCount % 5 == 0);
         String oneDec = "%.1f";
 
         // force an imu read;
@@ -509,6 +510,9 @@ public class AutonDrive implements EbotsMotionController {
     }
 
 
+    @Deprecated
+    //This is the old criteria that was based on motor clicks
+    //  Instead, use the field position based check in EbotsAutonStateVelConBase
     public boolean isTargetReached(){
         boolean targetReached = false;
         int error = getAverageError();
@@ -517,6 +521,8 @@ public class AutonDrive implements EbotsMotionController {
         }
         return targetReached;
     }
+
+
 
     @Deprecated
     public void drive(){

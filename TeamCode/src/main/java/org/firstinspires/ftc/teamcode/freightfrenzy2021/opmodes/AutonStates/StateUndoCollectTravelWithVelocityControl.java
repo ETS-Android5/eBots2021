@@ -38,7 +38,6 @@ public class StateUndoCollectTravelWithVelocityControl extends EbotsAutonStateVe
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
-
     }
 
     @Override

@@ -13,7 +13,14 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDelayTenSeconds;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateEnterWarehouseForCollectVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToAllianceHubYWithOvertravelVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateOpenCVObserve;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAlignTSEVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllowTurnToAllianceHubVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoEnterWarehouseWithVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateUndoOvertravelVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -90,6 +97,9 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
+        itinerary.add(StateEnterWarehouseForCollectVelocityControl.class);
+        itinerary.add(StateUndoEnterWarehouseWithVelocityControl.class);
+        itinerary.add(StateDelayTenSeconds.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();

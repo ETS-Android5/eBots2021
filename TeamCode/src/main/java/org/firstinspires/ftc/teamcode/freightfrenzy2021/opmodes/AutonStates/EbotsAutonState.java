@@ -68,8 +68,8 @@ public interface EbotsAutonState {
             newState = new StatePushOffWithVelocityControl(autonOpMode);
         } else if (targetState == StateStrafeToTouchWall.class) {
             newState = new StateStrafeToTouchWall(autonOpMode);
-        } else if (targetState == StateEnterWarehouseForCollect.class) {
-            newState = new StateEnterWarehouseForCollect(autonOpMode);
+        } else if (targetState == StateEnterWarehouseForCollectVelocityControl.class) {
+            newState = new StateEnterWarehouseForCollectVelocityControl(autonOpMode);
         } else if (targetState == StateCollectFreightWithEncoders.class) {
             newState = new StateCollectFreightWithEncoders(autonOpMode);
         } else if (targetState == StateUndoEnterWarehouse.class) {
@@ -78,10 +78,10 @@ public interface EbotsAutonState {
             newState = new StateStrafeToAllianceHubAfterCollect(autonOpMode);
         } else if (targetState == StateStrafeAlignToWall.class) {
             newState = new StateStrafeAlignToWall(autonOpMode);
-        } else if (targetState == StateStrafeToAllianceHubYWithOvertravel.class) {
-            newState = new StateStrafeToAllianceHubYWithOvertravel(autonOpMode);
-        } else if (targetState == StateStrafeToUndoOvertravelVelocityControl.class) {
-            newState = new StateStrafeToUndoOvertravelVelocityControl(autonOpMode);
+        } else if (targetState == StateMoveToAllianceHubYWithOvertravelVelocityControl.class) {
+            newState = new StateMoveToAllianceHubYWithOvertravelVelocityControl(autonOpMode);
+        } else if (targetState == StateUndoOvertravelVelocityControl.class) {
+            newState = new StateUndoOvertravelVelocityControl(autonOpMode);
         } else if (targetState == StateUndoCollectTravel.class) {
             newState = new StateUndoCollectTravel(autonOpMode);
         } else if (targetState == StateUndoPushOff.class) {
@@ -101,6 +101,7 @@ public interface EbotsAutonState {
 
         } else if (targetState == StateUndoOverTravel.class) {
             newState = new StateUndoOverTravel(autonOpMode);
+
         } else if (targetState == StateCollectFreightWithVelocityControl.class) {
             newState = new StateCollectFreightWithVelocityControl(autonOpMode);
 
@@ -113,14 +114,19 @@ public interface EbotsAutonState {
         } else if (targetState == StateStrafeToAllianceHubAfterCollectVelocityControl.class) {
             newState = new StateStrafeToAllianceHubAfterCollectVelocityControl(autonOpMode);
 
-        } else if (targetState == StateAlignToMoveTSEVelocityControl.class) {
-            newState = new StateAlignToMoveTSEVelocityControl(autonOpMode);
+        } else if (targetState == StateStrafeToAlignTSEVelocityControl.class) {
+            newState = new StateStrafeToAlignTSEVelocityControl(autonOpMode);
 
         } else if (targetState == StateUndoPushOffAllianceHubVelocityControl.class) {
             newState = new StateUndoPushOffAllianceHubVelocityControl(autonOpMode);
 
         } else if (targetState == StateStrafeRightToAlignTSE.class) {
             newState = new StateStrafeRightToAlignTSE(autonOpMode);
+
+        } else if (targetState == StateStrafeToAllowTurnToAllianceHubVelocityControl.class) {
+            newState = new StateStrafeToAllowTurnToAllianceHubVelocityControl(autonOpMode);
+
+
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

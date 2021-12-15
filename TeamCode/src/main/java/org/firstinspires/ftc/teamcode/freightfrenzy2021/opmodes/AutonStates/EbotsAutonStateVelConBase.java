@@ -78,6 +78,10 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     public static double getTravelDistance() {
         return travelDistance;
     }
+
+    public static void setTravelDistance(double distance){
+        travelDistance = distance;
+    }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Class Methods
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -143,10 +147,12 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         FieldPosition requestedTravel = new FieldPosition(xTravel, yTravel);
         FieldPosition targetFieldPosition = currentPose.getFieldPosition().offsetFunc(requestedTravel);
         targetPose = new Pose(targetFieldPosition, targetHeadingDeg);
+        Log.d(logTag, "Target pose for state created: " + targetPose.toString());
     }
 
     protected void updateError(){
         poseError = new PoseError(currentPose, targetPose, autonOpMode);
+        Log.d(logTag, "Starting Error for state: \n" + poseError.toString());
     }
 
     protected void calculateTimeLimit(){
@@ -155,15 +161,16 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
 
     protected void setDriveTarget(){
         Log.d(logTag, "Setting drive target with travelDistance: " +
-                String.format(twoDec, travelDistance) + " and travelFieldHeading: " +
-                String.format(twoDec, travelFieldHeadingDeg));
+                String.format(twoDec, travelDistance) + ", " +
+                "travelFieldHeading: " + String.format(twoDec, travelFieldHeadingDeg) + ", " +
+                "targetHeading: " + String.format(twoDec, targetHeadingDeg));
         // Note, the auton motion controller is limited to travel in 4 cardinal directions
         motionController.setEncoderTarget(poseError);
     }
 
     protected boolean translateExitTest(){
         boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;
-        boolean targetTravelCompleted = motionController.isTargetReached();
+        boolean targetTravelCompleted = isTargetFieldPositionAchieved() && isTargetRotationAchieved();
         if (stateTimedOut) Log.d(logTag, "Exited because timed out. ");
         if (targetTravelCompleted) Log.d(logTag, "Exited because travel completed");
         if (!autonOpMode.opModeIsActive()) Log.d(logTag, "Exited because opMode is no longer active");
@@ -227,10 +234,13 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         return currentTravel;
     }
 
+    public boolean isTargetFieldPositionAchieved(){
+        double currentPositionError = poseError.getMagnitude();
+        return currentPositionError <= accuracy.getPositionalAccuracy();
+    }
     private boolean isTargetRotationAchieved(){
-        double allowableHeadingErrorDeg = accuracy.STANDARD.getHeadingAccuracyDeg();
+        double allowableHeadingErrorDeg = accuracy.getHeadingAccuracyDeg();
         double headingError = poseError.getHeadingErrorDeg();
-//        double headingIntegrator = poseError.getHeadingErrorDegSum();
         boolean headingAchieved =  Math.abs(headingError) <= allowableHeadingErrorDeg;
         return headingAchieved;
     }

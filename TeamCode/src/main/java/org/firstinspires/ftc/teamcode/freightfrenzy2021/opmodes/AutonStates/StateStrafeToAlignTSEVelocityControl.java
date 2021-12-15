@@ -6,7 +6,10 @@ import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateAlignToMoveTSEVelocityControl extends EbotsAutonStateVelConBase{
+public class StateStrafeToAlignTSEVelocityControl extends EbotsAutonStateVelConBase{
+
+    // this static class must be created specific for this state, otherwise will fall to abstract class
+    private static double stateUndoTravelDistance = 0.0;
 
     /**
      * Within this constructor the following variables must be set:
@@ -16,7 +19,7 @@ public class StateAlignToMoveTSEVelocityControl extends EbotsAutonStateVelConBas
 
      * @param autonOpMode
      */
-    public StateAlignToMoveTSEVelocityControl(EbotsAutonOpMode autonOpMode){
+    public StateStrafeToAlignTSEVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
@@ -26,18 +29,24 @@ public class StateAlignToMoveTSEVelocityControl extends EbotsAutonStateVelConBas
         double multiplier = 0.0;
         if (barCodePosition == BarCodePosition.MIDDLE){
             multiplier = 1.0;
-        } else if( barCodePosition == BarCodePosition.RIGHT){
-            multiplier = 2.0;
         }
-        travelDistance = 8.4 * multiplier;
+        travelDistance = 4.2 * multiplier;
+
+        stateUndoTravelDistance = 4.2 - travelDistance;
         travelFieldHeadingDeg = 0.0;
-        targetHeadingDeg = 90.0;
+        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
+
 
         initAutonState();
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
 
+    }
+
+    // Must be created specific for this class to not invoke abstract class method
+    public static double getStateUndoTravelDistance() {
+        return stateUndoTravelDistance;
     }
 
 

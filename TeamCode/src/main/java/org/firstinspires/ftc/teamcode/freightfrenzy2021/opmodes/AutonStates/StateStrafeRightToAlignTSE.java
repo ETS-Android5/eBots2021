@@ -24,7 +24,7 @@ public class StateStrafeRightToAlignTSE implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
-    private double travelDistance = 4.2;
+    private double travelDistance = 0;
 
     public StateStrafeRightToAlignTSE(EbotsAutonOpMode autonOpMode){
         Log.d(logTag, "Entering StatePushOffWithEncoders constructor");
@@ -33,11 +33,9 @@ public class StateStrafeRightToAlignTSE implements EbotsAutonState{
         motionController = new DriveToEncoderTarget(autonOpMode);
 
         BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
-        double multiplier = 0.0;
         if (barCodePosition == BarCodePosition.MIDDLE){
-            multiplier = 1.0;
+            travelDistance = 4.2;
         }
-        travelDistance *= multiplier;
         targetClicks = UtilFuncs.calculateTargetClicks(travelDistance);
         double maxTranslateSpeed = Speed.FAST.getMeasuredTranslateSpeed();
         stateTimeLimit = (long) (travelDistance / maxTranslateSpeed + 2000);

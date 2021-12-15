@@ -8,23 +8,27 @@ import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
+import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateEnterWarehouseForCollect extends EbotsAutonStateVelConBase{
+public class StateEnterWarehouseForCollectVelocityControl extends EbotsAutonStateVelConBase{
+    private static double stateUndoTravelDistance;
 
-
-    public StateEnterWarehouseForCollect(EbotsAutonOpMode autonOpMode){
+    Pose startPose;
+    public StateEnterWarehouseForCollectVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
-
+        startPose = new Pose(currentPose.getX(), currentPose.getY(), currentPose.getHeadingDeg());
         motionController.setSpeed(Speed.MEDIUM);
         travelDistance = 32.0;
+        stateUndoTravelDistance = travelDistance;
         travelFieldHeadingDeg = 0.0;
         targetHeadingDeg = 0.0;
 
@@ -36,6 +40,10 @@ public class StateEnterWarehouseForCollect extends EbotsAutonStateVelConBase{
 
         Log.d(logTag, "Constructor complete");
 
+    }
+
+    public static double getStateUndoTravelDistance(){
+        return stateUndoTravelDistance;
     }
 
     @Override
@@ -53,9 +61,11 @@ public class StateEnterWarehouseForCollect extends EbotsAutonStateVelConBase{
         super.performTransitionalActions();
 
         // Now pass the strafe clicks to the opmode for processing
-        int avgClicksTraveled = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksEnterWarehouse(avgClicksTraveled);
-        Log.d(logTag, "Setting forwardClicksEnterWarehouse to " + String.format("%d", avgClicksTraveled));
+        // calculate the distance traveled using poseError
+        PoseError distanceTraveledPoseError = new PoseError(startPose, currentPose, autonOpMode);
+        stateUndoTravelDistance = distanceTraveledPoseError.getMagnitude();
+
+        Log.d(logTag, "Just set stateUndoTravelDistance to " + String.format("%.2f", stateUndoTravelDistance));
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

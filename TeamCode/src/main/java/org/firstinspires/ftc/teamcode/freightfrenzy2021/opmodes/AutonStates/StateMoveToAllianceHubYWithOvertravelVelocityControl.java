@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateStrafeToAllianceHubYWithOvertravel extends EbotsAutonStateVelConBase{
+public class StateMoveToAllianceHubYWithOvertravelVelocityControl extends EbotsAutonStateVelConBase{
 
     private final double HUB_DISTANCE_FROM_WALL = 48.0;
     private final double ROBOT_HALF_WIDTH = RobotSize.ySize.getSizeValue();
@@ -24,24 +24,35 @@ public class StateStrafeToAllianceHubYWithOvertravel extends EbotsAutonStateVelC
     private final static double OVERTRAVEL_INCHES = 6.0;
 
 
-    public StateStrafeToAllianceHubYWithOvertravel (EbotsAutonOpMode autonOpMode){
+
+    public StateMoveToAllianceHubYWithOvertravelVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
+        boolean debugOn = true;
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
-        motionController.setSpeed(Speed.MEDIUM);
+        motionController.setSpeed(Speed.FAST);
         int allianceSign = (AllianceSingleton.isBlue()) ? 1 : -1;
 
         // because the bucket position is asymmetrical, the drive distance from the wall must
         // be adjusted based on alliance.  If red, subtract from travel distance.  add if blue
 
-        double pushOffDistance = StatePushOffWithVelocityControl.getTravelDistance();
-        Log.d(logTag, "Acquired travelDistance from StatePushOffWithVelocityControl: " +
-                String.format(twoDec, pushOffDistance));
+//        double pushOffDistance = StatePushOffWithVelocityControl.getTravelDistance();
+//        Log.d(logTag, "Acquired travelDistance from StatePushOffWithVelocityControl: " +
+//                String.format(twoDec, pushOffDistance));
 
-        travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_WIDTH - pushOffDistance +
-                (BUCKET_CENTER_OFFSET * allianceSign) + OVERTRAVEL_INCHES + 6.0;
+        travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_WIDTH +
+                (BUCKET_CENTER_OFFSET * allianceSign) + OVERTRAVEL_INCHES;
 
+
+        if (debugOn){
+            Log.d(logTag, "Contributors to travel distance: \n" +
+                    "HUB_DISTANCE_FROM_WALL: " + String.format(twoDec, HUB_DISTANCE_FROM_WALL) + "\n" +
+                    "ROBOT_HALF_WIDTH: " + String.format(twoDec, ROBOT_HALF_WIDTH) + "\n" +
+                    "BUCKET_CENTER_OFFSET: " + String.format(twoDec, BUCKET_CENTER_OFFSET) + "\n" +
+                    "OVERTRAVEL_INCHES: " + String.format(twoDec, OVERTRAVEL_INCHES) + "\n"
+                    );
+        }
         travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
