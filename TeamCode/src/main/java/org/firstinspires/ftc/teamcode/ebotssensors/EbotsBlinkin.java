@@ -68,6 +68,12 @@ public class EbotsBlinkin {
         ledState = LedState.ON;
     }
 
+    public void lightsYellow(){
+        blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+        ledState = LedState.ON;
+    }
+
+
     public void lightsOff(){
         blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         ledState = LedState.OFF;

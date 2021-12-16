@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StatePushOffWallBlueVelocityControl extends EbotsAutonStateVelConBase{
+public class StatePushOffCarouselWithVelocityControl extends EbotsAutonStateVelConBase{
 
     private static double stateUndoTravelDistance = 4.0;
     /**
@@ -17,7 +17,8 @@ public class StatePushOffWallBlueVelocityControl extends EbotsAutonStateVelConBa
 
      * @param autonOpMode
      */
-    public StatePushOffWallBlueVelocityControl(EbotsAutonOpMode autonOpMode){
+
+    public StatePushOffCarouselWithVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
@@ -25,15 +26,16 @@ public class StatePushOffWallBlueVelocityControl extends EbotsAutonStateVelConBa
         boolean isCarouselSide = autonOpMode.getStartingSide() == StartingSide.CAROUSEL;
         boolean isBlue = AllianceSingleton.isBlue();
 
-        travelDistance = 4.0;
         if (isCarouselSide && isBlue){
             travelDistance = 8.0;
+        } else if(isCarouselSide && !isBlue){
+            travelDistance = 8.0;
         }
+
         stateUndoTravelDistance = travelDistance;
 
-        travelDirectionDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
-        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
-
+        travelDirectionDeg = isBlue ? -90.0 : 90.0;
+        targetHeadingDeg = isBlue ? AllianceSingleton.getDriverFieldHeadingDeg() : 0.0;
 
         initAutonState();
         setDriveTarget();

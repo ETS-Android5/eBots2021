@@ -7,6 +7,7 @@ public enum RobotSize {
 
     CsysDirection csysDirection;
     double sizeValue;
+    final static double bucketOffset = 1.0;
 
     RobotSize(CsysDirection csysDirectionIn, double sizeValueIn){
         this.csysDirection = csysDirectionIn;
@@ -19,5 +20,9 @@ public enum RobotSize {
 
     public double getSizeValue() {
         return sizeValue;
+    }
+
+    public static double getBucketOffset() {
+        return bucketOffset;
     }
 }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCalibratingImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCollectFreightWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDelayTenSeconds;
@@ -101,6 +102,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
 
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
+        itinerary.add(StateCalibratingImu.class);
         itinerary.add(StateOpenCVObserve.class);
 //        itinerary.add(StateCollectFreightWithVelocityControl.class);
 //        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);

@@ -14,7 +14,10 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateMoveToHubYCarouselVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateNavigateToWarehouse;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateParkInStorageUnit;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateParkInStorageUnitVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOff;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffCarouselWithVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWallBlueVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToCarouselUsingVelocityControl;
@@ -22,6 +25,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHub;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingImage;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotate180;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForDeliverDuck;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForHubDump;
@@ -38,24 +42,22 @@ public class RoutineCarousel extends EbotsAutonRoutine{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public RoutineCarousel(){
 
-        itinerary.add(StatePushOffWithVelocityControl.class);
+        itinerary.add(StatePushOffWallBlueVelocityControl.class);
         itinerary.add(StateRotateToZeroDegreesVelocityControl.class);
         itinerary.add(StateReverseToCarouselUsingVelocityControl.class);
         itinerary.add(StateDeliverDuck.class);
-        itinerary.add(StatePushOffWithVelocityControl.class);
+        itinerary.add(StatePushOffCarouselWithVelocityControl.class);
         itinerary.add(StateRotateToFieldCenterVelocityControl.class);
 
         // raises are while moving
         itinerary.add(StateMoveToHubYCarouselVelocityControl.class);
         // can be removed if manage field heading during travel
         itinerary.add(StateRotateTo180VelocityControl.class);
-        itinerary.add(StateReverseToCarouselUsingVelocityControl.class);
+        itinerary.add(StateReverseToHubUsingVelocityControl.class);
         itinerary.add(StateDumpFreightV2.class);
-        itinerary.add(StatePushOffWithEncoders.class);
         // can be removed if manage field heading during travel
-        itinerary.add(StateRotate180.class);
         itinerary.add(StateDriveToWallVelocityControl.class);
-        itinerary.add(StateParkInStorageUnit.class);
+        itinerary.add(StateParkInStorageUnitVelocityControl.class);
 
 //        itinerary.add(StateRotateToZeroDegreesV2.class);
 //        itinerary.add(StateNavigateToWarehouse.class);

@@ -19,7 +19,7 @@ public class StateDriveToWallVelocityControl extends EbotsAutonStateVelConBase{
 
         // Must define
         motionController.setSpeed(Speed.MEDIUM);
-        travelDistance = 36.72;
+        travelDistance = 33.5;
 
         if (debugOn){
             Log.d(logTag, "travelDistance: " + String.format(twoDec, travelDistance));

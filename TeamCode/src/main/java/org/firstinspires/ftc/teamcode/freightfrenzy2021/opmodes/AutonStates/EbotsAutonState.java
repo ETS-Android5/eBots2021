@@ -129,6 +129,9 @@ public interface EbotsAutonState {
         } else if (targetState == StateRotateToDeliverDuckBlueVelocityControl.class) {
             newState = new StateRotateToDeliverDuckBlueVelocityControl(autonOpMode);
 
+        } else if (targetState == StatePushOffCarouselWithVelocityControl.class) {
+            newState = new StatePushOffCarouselWithVelocityControl(autonOpMode);
+
 
         } else if (targetState == StateReverseToCarouselUsingVelocityControl.class) {
             newState = new StateReverseToCarouselUsingVelocityControl(autonOpMode);
@@ -150,6 +153,9 @@ public interface EbotsAutonState {
 
         } else if (targetState == StateParkInStorageUnitVelocityControl.class) {
             newState = new StateParkInStorageUnitVelocityControl(autonOpMode);
+
+        } else if (targetState == StateCalibratingImu.class) {
+            newState = new StateCalibratingImu(autonOpMode);
 
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);

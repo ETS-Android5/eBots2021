@@ -16,10 +16,12 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToCarouselUsingVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToCarouselWithEncoders;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingEncoders;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotate180;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateForDeliverDuck;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateTo180VelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToDeliverDuckBlue;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToDeliverDuckBlueVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToFieldCenter;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToFieldCenterVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesVelocityControl;
@@ -33,13 +35,13 @@ public class RoutineBlueCarousel extends EbotsAutonRoutine{
         itinerary.add(StatePushOffWallBlueVelocityControl.class);
         itinerary.add(StateRotateToZeroDegreesVelocityControl.class);
         itinerary.add(StateReverseToCarouselUsingVelocityControl.class);
-        itinerary.add(StateRotateToZeroDegreesVelocityControl.class);
+        itinerary.add(StateRotateToDeliverDuckBlueVelocityControl.class);
         itinerary.add(StateDeliverDuck.class);
         itinerary.add(StatePushOffWithVelocityControl.class);
         itinerary.add(StateRotateToFieldCenterVelocityControl.class);
         itinerary.add(StateMoveToHubYCarouselVelocityControl.class);
         itinerary.add(StateRotateTo180VelocityControl.class);
-        itinerary.add(StateReverseToCarouselUsingVelocityControl.class);
+        itinerary.add(StateReverseToHubUsingVelocityControl.class);
         itinerary.add(StateDumpFreightV2.class);
         itinerary.add(StateDriveToWallVelocityControl.class);
         itinerary.add(StateParkInStorageUnit.class);

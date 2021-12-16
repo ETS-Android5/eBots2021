@@ -17,6 +17,7 @@ public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
 
      * @param autonOpMode
      */
+    @Deprecated
     public StatePushOffWithVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
