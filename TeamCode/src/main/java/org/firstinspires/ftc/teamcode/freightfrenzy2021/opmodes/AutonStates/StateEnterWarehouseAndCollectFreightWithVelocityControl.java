@@ -22,9 +22,12 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
     private static double stateUndoTravelDistance = 0.0;
     private final Pose startPose;
 
-    int ballSightingScore = 0;
-    int boxSightingScore = 0;
-    int sightingThreshold = 2;
+    private boolean isSpeedSlow = false;
+    private int ballSightingScore = 0;
+    private int boxSightingScore = 0;
+    private int sightingThreshold = 2;
+    private final double enterWarehouseDistance = 38.0;
+    private final double collectDistance = 24.0;
 
 
 
@@ -45,45 +48,22 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
 
         // Must define
 
-        travelDistance = 24.0;
+
+
+        travelDistance = enterWarehouseDistance + collectDistance;
         travelDirectionDeg = 0.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();
         setDriveTarget();
 
-        stateTimeLimit = 3500;
+        stateTimeLimit = 5500;
 
         Intake.getInstance(autonOpMode.hardwareMap).fullPower();
         freightDetector = autonOpMode.getFreightDetector();
 
         // turn on the lights
         EbotsBlinkin.getInstance(autonOpMode.hardwareMap).lightsOn();
-
-
-//        // receive a reference to Freight detector instead of this code.
-//        EbotsWebcam bucketWebCam = new EbotsWebcam(autonOpMode.hardwareMap, "bucketCam", RobotSide.FRONT, 0,-3.25f, 9.0f);
-//        WebcamName webcamName = bucketWebCam.getWebcamName();
-//        // With live preview
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
-//        Log.d(logTag, "camera instantiated");
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-//        {
-//            @Override
-//            public void onOpened()
-//            {
-//                Log.d(logTag, "The camera is now open..." + stopWatchState.toString());
-//                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-//                camera.setPipeline(freightDetector);
-//
-//            }
-//            @Override
-//            public void onError(int errorCode)
-//            {
-//                Log.d(logTag, "There was an error");
-//            }
-//        });
-//        Log.d(logTag, "Camera for Freight Detector Instantiated");
 
         Log.d(logTag, "Constructor complete");
 
@@ -145,6 +125,16 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
     @Override
     public void performStateActions() {
         super.performStateActions();
+        double distanceTraveled = new PoseError(startPose, currentPose, autonOpMode).getMagnitude();
+
+        if (!isSpeedSlow && distanceTraveled > enterWarehouseDistance) {
+            motionController.setSpeed(Speed.SLOW);
+            Log.d(logTag, "Shifted to slower for collect " +
+                    String.format(twoDec, distanceTraveled) +
+                    " of target travel " + String.format(twoDec, travelDistance));
+            isSpeedSlow = true;
+        }
+
     }
 
     @Override
@@ -152,17 +142,19 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
         super.performTransitionalActions();
         EbotsBlinkin.getInstance(autonOpMode.hardwareMap).lightsOff();
 
-        // Now pass the strafe clicks to the opmode for processing
-        int avgClicksTraveled = motionController.getAverageClicks();
-        autonOpMode.setForwardClicksCollect(avgClicksTraveled);
-        Log.d(logTag, "Setting forwardClicksCollect to " + String.format("%d", avgClicksTraveled));
-
         // move the bucket to travel position
         Bucket.getInstance(autonOpMode).setState(BucketState.TRAVEL);
 
         Intake.getInstance(autonOpMode.hardwareMap).stop();
 
         stateUndoTravelDistance = new PoseError(startPose, currentPose, autonOpMode).getMagnitude();
+        Log.d(logTag, "Setting stateUndoTravelDistance to: " + String.format(twoDec, stateUndoTravelDistance));
+
+        // if failed to collect freight, then clear the remaining autonstates and just park
+        if(!exitedWithFreight){
+            autonOpMode.clearRemainingItinerary();
+            Log.d(logTag, "Exiting state without freight, itinerary cleared!");
+        }
 
         telemetry.addLine("Exiting " + this.getClass().getSimpleName());
         telemetry.update();

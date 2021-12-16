@@ -171,6 +171,9 @@ public abstract class EbotsAutonOpMode extends LinearOpMode {
         this.itinerary.addAll(routine.getRoutineItinerary());
     }
 
+    public void clearRemainingItinerary(){
+        itinerary.clear();
+    }
 
     public void initEbotsImu(){
         ebotsimu = EbotsImu.getInstance(hardwareMap);

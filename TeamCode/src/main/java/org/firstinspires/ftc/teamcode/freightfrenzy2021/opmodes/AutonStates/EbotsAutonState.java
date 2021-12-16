@@ -157,6 +157,12 @@ public interface EbotsAutonState {
         } else if (targetState == StateCalibratingImu.class) {
             newState = new StateCalibratingImu(autonOpMode);
 
+        } else if (targetState == StateEnterWarehouseAndCollectFreightWithVelocityControl.class) {
+            newState = new StateEnterWarehouseAndCollectFreightWithVelocityControl(autonOpMode);
+
+        } else if (targetState == StateUndoEnterWarehouseAndCollectFreightWithVelocityControl.class) {
+            newState = new StateUndoEnterWarehouseAndCollectFreightWithVelocityControl(autonOpMode);
+
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

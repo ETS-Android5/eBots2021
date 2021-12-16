@@ -41,6 +41,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
     private EbotsImu ebotsimu;
     private OpenCvCamera camera;
     private boolean stateComplete = false;
+    private boolean allStatesCompleted = false;
 
 
     @Override
@@ -133,8 +134,9 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
             currentState = EbotsAutonState.get(nextStateClass, this);
             logNewlyCreatedState(currentState);
             telemetry.clearAll();
-        } else {
-//            Log.d(logTag, "No more states in routine!!!");
+        } else if(!allStatesCompleted){
+            allStatesCompleted = true;
+            Log.d(logTag, "Exiting State machine -->No more states in routine!!!");
         }
     }
 
@@ -195,5 +197,7 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         Log.d(logTag, "Constructor complete");
 
     }
+
+
 
 }
