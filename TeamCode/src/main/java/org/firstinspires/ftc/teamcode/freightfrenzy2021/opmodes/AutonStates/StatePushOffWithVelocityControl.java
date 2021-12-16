@@ -2,17 +2,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
-import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
-import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDriveVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
 
+    private static double stateUndoTravelDistance = 4.0;
     /**
      * Within this constructor the following variables must be set:
      * @implSpec travelDistance
@@ -26,9 +22,16 @@ public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
+        boolean isCarouselSide = autonOpMode.getStartingSide() == StartingSide.CAROUSEL;
+        boolean isBlue = AllianceSingleton.isBlue();
 
-        travelDistance = 6.0;
-        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
+        travelDistance = 4.0;
+        if (isCarouselSide && isBlue){
+            travelDistance = 8.0;
+        }
+        stateUndoTravelDistance = travelDistance;
+
+        travelDirectionDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();
@@ -38,6 +41,9 @@ public class StatePushOffWithVelocityControl extends EbotsAutonStateVelConBase{
 
     }
 
+    public static double getStateUndoTravelDistance() {
+        return stateUndoTravelDistance;
+    }
 
     @Override
     public boolean shouldExit() {

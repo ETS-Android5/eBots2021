@@ -5,10 +5,6 @@ import android.util.Log;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
-import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateReverseToHubUsingVelocityControl extends EbotsAutonStateVelConBase{
@@ -22,21 +18,25 @@ public class StateReverseToHubUsingVelocityControl extends EbotsAutonStateVelCon
         motionController.setSpeed(Speed.FAST);
 
         StartingSide startingSide = autonOpMode.getStartingSide();
-        if(startingSide==StartingSide.CAROUSEL && !AllianceSingleton.isBlue()) {
+        boolean isCarousel = autonOpMode.getStartingSide() == StartingSide.CAROUSEL;
+        boolean isBlue = AllianceSingleton.isBlue();
+
+        if(isCarousel && isBlue) {
             travelDistance = 20.14;
-        } else if (startingSide==StartingSide.CAROUSEL && AllianceSingleton.isBlue()){
+        } else if (isCarousel && !isBlue){
             travelDistance = 26.58;
-        } else if(startingSide==StartingSide.WAREHOUSE && !AllianceSingleton.isBlue()) {
-            // starting side is Warehouse
-            double additionalTravel = -1.0;
-            travelDistance = additionalTravel + StateStrafeToAlignTSEVelocityControl.getStateStrafeDistance();
-        } else if(startingSide==StartingSide.WAREHOUSE && AllianceSingleton.isBlue()) {
+
+        } else if(!isCarousel && isBlue) {
             // starting side is Warehouse
             double additionalTravel = 1.0;
             travelDistance = additionalTravel + StateStrafeToAlignTSEVelocityControl.getStateStrafeDistance();
+        } else if(!isCarousel && !isBlue) {
+            // starting side is Warehouse
+            double additionalTravel = -1.0;
+            travelDistance = additionalTravel + StateStrafeToAlignTSEVelocityControl.getStateStrafeDistance();
         }
-        travelFieldHeadingDeg = startingSide==StartingSide.CAROUSEL ? 0.0 : 180.0;
-        targetHeadingDeg = startingSide==StartingSide.CAROUSEL ? 180.0 : 0.0;
+        travelDirectionDeg = isCarousel ? 0.0 : 180.0;
+        targetHeadingDeg = isCarousel ? 180.0 : 0.0;
 
         initAutonState();
         setDriveTarget();

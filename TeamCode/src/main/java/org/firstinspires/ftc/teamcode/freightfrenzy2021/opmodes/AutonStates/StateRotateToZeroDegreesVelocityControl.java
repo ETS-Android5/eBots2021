@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateRotateToZeroDegreesVelocityControl extends EbotsAutonStateVelConBase{
@@ -22,7 +21,7 @@ public class StateRotateToZeroDegreesVelocityControl extends EbotsAutonStateVelC
         // Must define
 
         travelDistance = 0.0;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

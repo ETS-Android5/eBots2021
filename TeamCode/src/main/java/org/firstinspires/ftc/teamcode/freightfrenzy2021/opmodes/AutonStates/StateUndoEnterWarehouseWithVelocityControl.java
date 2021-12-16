@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
-import org.openftc.easyopencv.OpenCvCamera;
 
 public class StateUndoEnterWarehouseWithVelocityControl extends EbotsAutonStateVelConBase{
 
@@ -16,7 +13,7 @@ public class StateUndoEnterWarehouseWithVelocityControl extends EbotsAutonStateV
         // Must define
 
         travelDistance = StateEnterWarehouseForCollectVelocityControl.getStateUndoTravelDistance();
-        travelFieldHeadingDeg = 180.0;
+        travelDirectionDeg = 180.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

@@ -24,7 +24,7 @@ public class StateStrafeToAllowTurnToAllianceHubVelocityControl extends EbotsAut
         travelDistance = StateStrafeToAlignTSEVelocityControl.getStateUndoTravelDistance();
         Log.d(logTag, "travelDistance received from StateStrafeToAlignTSEVelocityControl" +
                 String.format(twoDec, travelDistance));
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();

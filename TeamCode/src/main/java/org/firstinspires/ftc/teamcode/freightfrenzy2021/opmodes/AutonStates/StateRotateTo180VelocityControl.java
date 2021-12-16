@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateVelConBase{
+public class StateRotateTo180VelocityControl extends EbotsAutonStateVelConBase{
 
     /**
      * Within this constructor the following variables must be set:
@@ -16,22 +16,20 @@ public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateV
 
      * @param autonOpMode
      */
-    public StateUndoPushOffAllianceHubVelocityControl(EbotsAutonOpMode autonOpMode){
+    public StateRotateTo180VelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
-
-        motionController.setSpeed(Speed.SLOW);
-        travelDistance = StatePushOffWithVelocityControl.getTravelDistance();
-        travelDirectionDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 0.0 : 180.0;
-        targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        motionController.setSpeed(Speed.MEDIUM);
+        travelDistance = 0.0;
+        travelDirectionDeg = 0.0;
+        targetHeadingDeg = 180.0;
 
         initAutonState();
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
-
     }
 
 

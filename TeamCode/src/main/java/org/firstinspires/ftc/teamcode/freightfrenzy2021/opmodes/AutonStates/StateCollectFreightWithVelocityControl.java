@@ -2,28 +2,16 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
-import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class StateCollectFreightWithVelocityControl extends EbotsAutonStateVelConBase{
     FreightDetector freightDetector;
@@ -58,7 +46,7 @@ public class StateCollectFreightWithVelocityControl extends EbotsAutonStateVelCo
         // Must define
 
         travelDistance = 24.0;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

@@ -2,18 +2,11 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateEnterWarehouseForCollectVelocityControl extends EbotsAutonStateVelConBase{
@@ -29,7 +22,7 @@ public class StateEnterWarehouseForCollectVelocityControl extends EbotsAutonStat
         motionController.setSpeed(Speed.MEDIUM);
         travelDistance = 38.0;
         stateUndoTravelDistance = travelDistance;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

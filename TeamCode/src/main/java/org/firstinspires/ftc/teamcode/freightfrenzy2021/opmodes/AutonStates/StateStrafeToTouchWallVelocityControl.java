@@ -4,13 +4,10 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
 import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelConBase{
@@ -39,7 +36,7 @@ public class StateStrafeToTouchWallVelocityControl extends EbotsAutonStateVelCon
         // Must define
 
         travelDistance = 54.0;
-        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
+        travelDirectionDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

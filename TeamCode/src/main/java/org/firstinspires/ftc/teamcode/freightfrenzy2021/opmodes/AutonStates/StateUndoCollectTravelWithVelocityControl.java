@@ -2,19 +2,8 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
-import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
-import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Intake;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.opencvpipelines.FreightDetector;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class StateUndoCollectTravelWithVelocityControl extends EbotsAutonStateVelConBase{
 
@@ -31,7 +20,7 @@ public class StateUndoCollectTravelWithVelocityControl extends EbotsAutonStateVe
 
 
         travelDistance = StateCollectFreightWithVelocityControl.getStateUndoTravelDistance();
-        travelFieldHeadingDeg = 180.0;
+        travelDirectionDeg = 180.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

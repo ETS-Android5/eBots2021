@@ -22,7 +22,7 @@ public class StateStrafeTowardWarehouseForDump extends EbotsAutonStateVelConBase
         // Must define
 
         travelDistance = AllianceSingleton.isBlue() ? 3.07 :  6.13;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();

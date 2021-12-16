@@ -39,7 +39,7 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
 
     protected boolean firstPass = true;
     protected static double travelDistance = 0.0;
-    protected double travelFieldHeadingDeg = 0;
+    protected double travelDirectionDeg = 0;
     protected double targetHeadingDeg = 0;
     protected boolean rotationOnly = false;
     Accuracy accuracy = Accuracy.STANDARD;
@@ -142,8 +142,8 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
         if (travelDistance == 0.0 && targetHeadingDeg != currentPose.getHeadingDeg()){
             rotationOnly = true;
         }
-        double xTravel = Math.cos(Math.toRadians(travelFieldHeadingDeg)) * travelDistance;
-        double yTravel = Math.sin(Math.toRadians(travelFieldHeadingDeg)) * travelDistance;
+        double xTravel = Math.cos(Math.toRadians(travelDirectionDeg)) * travelDistance;
+        double yTravel = Math.sin(Math.toRadians(travelDirectionDeg)) * travelDistance;
         FieldPosition requestedTravel = new FieldPosition(xTravel, yTravel);
         FieldPosition targetFieldPosition = currentPose.getFieldPosition().offsetFunc(requestedTravel);
         targetPose = new Pose(targetFieldPosition, targetHeadingDeg);
@@ -162,7 +162,7 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
     protected void setDriveTarget(){
         Log.d(logTag, "Setting drive target with travelDistance: " +
                 String.format(twoDec, travelDistance) + ", " +
-                "travelFieldHeading: " + String.format(twoDec, travelFieldHeadingDeg) + ", " +
+                "travelFieldHeading: " + String.format(twoDec, travelDirectionDeg) + ", " +
                 "targetHeading: " + String.format(twoDec, targetHeadingDeg));
         // Note, the auton motion controller is limited to travel in 4 cardinal directions
         motionController.setEncoderTarget(poseError);
@@ -224,8 +224,8 @@ public abstract class EbotsAutonStateVelConBase implements EbotsAutonState{
 
         // calculate change in field position
         // this is a simplified calculation and only works in the 4 cardinal directions
-        double xTravel = Math.cos(Math.toRadians(travelFieldHeadingDeg)) * translationInches;
-        double yTravel = Math.sin(Math.toRadians(travelFieldHeadingDeg)) * translationInches;
+        double xTravel = Math.cos(Math.toRadians(travelDirectionDeg)) * translationInches;
+        double yTravel = Math.sin(Math.toRadians(travelDirectionDeg)) * translationInches;
         FieldPosition currentTravel = new FieldPosition(xTravel, yTravel);
 
         // update last average clicks

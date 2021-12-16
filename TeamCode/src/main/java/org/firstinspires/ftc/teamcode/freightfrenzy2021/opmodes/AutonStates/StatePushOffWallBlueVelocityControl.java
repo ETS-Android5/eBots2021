@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateVelConBase{
+public class StatePushOffWallBlueVelocityControl extends EbotsAutonStateVelConBase{
 
+    private static double stateUndoTravelDistance = 4.0;
     /**
      * Within this constructor the following variables must be set:
      * @implSpec travelDistance
@@ -16,16 +17,22 @@ public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateV
 
      * @param autonOpMode
      */
-    public StateUndoPushOffAllianceHubVelocityControl(EbotsAutonOpMode autonOpMode){
+    public StatePushOffWallBlueVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
+        boolean isCarouselSide = autonOpMode.getStartingSide() == StartingSide.CAROUSEL;
+        boolean isBlue = AllianceSingleton.isBlue();
 
-        motionController.setSpeed(Speed.SLOW);
-        travelDistance = StatePushOffWithVelocityControl.getTravelDistance();
-        travelDirectionDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 0.0 : 180.0;
-        targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        travelDistance = 4.0;
+        if (isCarouselSide && isBlue){
+            travelDistance = 8.0;
+        }
+        stateUndoTravelDistance = travelDistance;
+
+        travelDirectionDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
+        targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();
         setDriveTarget();
@@ -34,6 +41,9 @@ public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateV
 
     }
 
+    public static double getStateUndoTravelDistance() {
+        return stateUndoTravelDistance;
+    }
 
     @Override
     public boolean shouldExit() {

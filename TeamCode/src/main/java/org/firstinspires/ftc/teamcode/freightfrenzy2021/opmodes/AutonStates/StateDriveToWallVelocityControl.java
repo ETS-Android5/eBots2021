@@ -2,38 +2,37 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
+import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateVelConBase{
+public class StateDriveToWallVelocityControl extends EbotsAutonStateVelConBase{
 
-    /**
-     * Within this constructor the following variables must be set:
-     * @implSpec travelDistance
-     * @implSpec travelFieldHeading
-     * @implSpec targetHeadingDeg
 
-     * @param autonOpMode
-     */
-    public StateUndoPushOffAllianceHubVelocityControl(EbotsAutonOpMode autonOpMode){
+    public StateDriveToWallVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
+        boolean debugOn = true;
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
+        motionController.setSpeed(Speed.MEDIUM);
+        travelDistance = 36.72;
 
-        motionController.setSpeed(Speed.SLOW);
-        travelDistance = StatePushOffWithVelocityControl.getTravelDistance();
-        travelDirectionDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 0.0 : 180.0;
-        targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        if (debugOn){
+            Log.d(logTag, "travelDistance: " + String.format(twoDec, travelDistance));
+        }
+
+        travelDirectionDeg = 180.0;
+        targetHeadingDeg = 180.0;
 
         initAutonState();
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
-
     }
-
 
     @Override
     public boolean shouldExit() {

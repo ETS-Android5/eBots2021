@@ -78,7 +78,7 @@ Instance Methods
 
     @Override
     public void performStateActions() {
-        carousel.startMotor();
+        carousel.deliverDuckAuton();
 
         for (DcMotorEx m : motors) {
             m.setPower(-0.10);

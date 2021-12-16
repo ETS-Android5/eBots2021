@@ -94,6 +94,14 @@ public class Carousel {
         stopWatchDeliver.reset();
     }
 
+    public void deliverDuckAuton(){
+        int spinSign = AllianceSingleton.isBlue() ? -1 : 1;
+        targetVelocity = startVelocity;
+        carouselMotor.setVelocity(targetVelocity * spinSign);
+        carouselState = CarouselState.ON;
+        stopWatchDeliver.reset();
+    }
+
     public void stopMotor (){
 //        carouselMotor.setPower(0);
         carouselMotor.setVelocity(0.0);

@@ -46,7 +46,7 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
         // Must define
 
         travelDistance = 24.0;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = 0.0;
 
         initAutonState();

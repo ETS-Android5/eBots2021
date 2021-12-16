@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StatePushOffAllianeHubWithVelocityControl extends EbotsAutonStateVelConBase{
@@ -23,7 +22,7 @@ public class StatePushOffAllianeHubWithVelocityControl extends EbotsAutonStateVe
         // Must define
 
         travelDistance = 2.0;
-        travelFieldHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        travelDirectionDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
         targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
 
         initAutonState();

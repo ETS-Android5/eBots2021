@@ -4,38 +4,39 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotsenums.StartingSide;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
-public class StateUndoPushOffAllianceHubVelocityControl extends EbotsAutonStateVelConBase{
+public class StateReverseToCarouselUsingVelocityControl extends EbotsAutonStateVelConBase{
 
-    /**
-     * Within this constructor the following variables must be set:
-     * @implSpec travelDistance
-     * @implSpec travelFieldHeading
-     * @implSpec targetHeadingDeg
 
-     * @param autonOpMode
-     */
-    public StateUndoPushOffAllianceHubVelocityControl(EbotsAutonOpMode autonOpMode){
+    private final boolean isCarouselSide;
+    private final boolean isBlue;
+
+    public StateReverseToCarouselUsingVelocityControl(EbotsAutonOpMode autonOpMode){
         super(autonOpMode);
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
+        motionController.setSpeed(Speed.MEDIUM);
+        isCarouselSide = autonOpMode.getStartingSide() == StartingSide.CAROUSEL;
+        isBlue = AllianceSingleton.isBlue();
+        if(isCarouselSide && isBlue) {
+            travelDistance = 17.38;
+        } else if (isCarouselSide && !isBlue) {
+            travelDistance = 10.22;
+        }
 
-        motionController.setSpeed(Speed.SLOW);
-        travelDistance = StatePushOffWithVelocityControl.getTravelDistance();
-        travelDirectionDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 0.0 : 180.0;
-        targetHeadingDeg = autonOpMode.getStartingSide() == StartingSide.CAROUSEL ? 180.0 : 0.0;
+        travelDirectionDeg = 180.0;
+        targetHeadingDeg = 0.0;
 
         initAutonState();
         setDriveTarget();
 
         Log.d(logTag, "Constructor complete");
-
     }
 
-
-    @Override
+      @Override
     public boolean shouldExit() {
         return super.shouldExit();
     }

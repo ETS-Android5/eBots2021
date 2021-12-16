@@ -15,7 +15,7 @@ public class StateUndoOvertravelVelocityControl extends EbotsAutonStateVelConBas
         // Must define
 
         travelDistance = StateMoveToAllianceHubYWithOvertravelVelocityControl.getOvertravelInches();
-        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
+        travelDirectionDeg = AllianceSingleton.isBlue() ? 90.0 : -90.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();

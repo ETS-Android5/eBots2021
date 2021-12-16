@@ -39,7 +39,7 @@ public class StateStrafeToAlignTSEVelocityControl extends EbotsAutonStateVelConB
         travelDistance = stateStrafeDistance * multiplier;
 
         stateUndoTravelDistance = stateStrafeDistance - travelDistance;
-        travelFieldHeadingDeg = 0.0;
+        travelDirectionDeg = 0.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
 

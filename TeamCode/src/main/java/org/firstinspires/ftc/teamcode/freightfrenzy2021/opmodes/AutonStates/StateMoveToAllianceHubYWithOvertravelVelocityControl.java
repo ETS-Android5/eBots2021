@@ -2,18 +2,11 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.BarCodePosition;
-import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSize;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
-import org.firstinspires.ftc.teamcode.ebotsutil.FieldPosition;
-import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Arm;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.DriveToEncoderTarget;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateMoveToAllianceHubYWithOvertravelVelocityControl extends EbotsAutonStateVelConBase{
@@ -53,7 +46,7 @@ public class StateMoveToAllianceHubYWithOvertravelVelocityControl extends EbotsA
                     "OVERTRAVEL_INCHES: " + String.format(twoDec, OVERTRAVEL_INCHES) + "\n"
                     );
         }
-        travelFieldHeadingDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
+        travelDirectionDeg = AllianceSingleton.isBlue() ? -90.0 : 90.0;
         targetHeadingDeg = AllianceSingleton.getDriverFieldHeadingDeg();
 
         initAutonState();
