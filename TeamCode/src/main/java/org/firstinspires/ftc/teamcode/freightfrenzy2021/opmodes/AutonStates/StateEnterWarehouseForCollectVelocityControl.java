@@ -27,7 +27,7 @@ public class StateEnterWarehouseForCollectVelocityControl extends EbotsAutonStat
         // Must define
         startPose = new Pose(currentPose.getX(), currentPose.getY(), currentPose.getHeadingDeg());
         motionController.setSpeed(Speed.MEDIUM);
-        travelDistance = 32.0;
+        travelDistance = 38.0;
         stateUndoTravelDistance = travelDistance;
         travelFieldHeadingDeg = 0.0;
         targetHeadingDeg = 0.0;

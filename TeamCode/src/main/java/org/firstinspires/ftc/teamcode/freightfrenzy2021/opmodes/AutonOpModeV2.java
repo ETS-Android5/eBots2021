@@ -102,9 +102,9 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         // Setup the pre-match autonStates
         itinerary.add(StateConfigureRoutine.class);
         itinerary.add(StateOpenCVObserve.class);
-        itinerary.add(StateCollectFreightWithVelocityControl.class);
-        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
-        itinerary.add(StateDelayTenSeconds.class);
+//        itinerary.add(StateCollectFreightWithVelocityControl.class);
+//        itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
+//        itinerary.add(StateDelayTenSeconds.class);
 
         telemetry.addLine("Initialization complete!");
         telemetry.update();

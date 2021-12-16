@@ -2,12 +2,11 @@ package org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ebotsenums.Speed;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
-import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.Pose;
+import org.firstinspires.ftc.teamcode.ebotsutil.PoseError;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
@@ -39,6 +38,11 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
 
     private String logTag = "EBOTS";
     private boolean firstPass = true;
+    private final Pose currentPose;
+    private final Pose targetPose;
+    private final PoseError poseError;
+    private final EbotsImu ebotsImu;
+    private int loopCount = 0;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
@@ -49,9 +53,15 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
         telemetry = autonOpMode.telemetry;
         this.motionController = autonOpMode.getMotionController();
 //        this.motionController = new AutonDrive(autonOpMode);
-        this.motionController.setSpeed(Speed.MEDIUM);
+        this.motionController.setSpeed(Speed.FAST);
+
 //        targetHeadingDeg = (AllianceSingleton.isBlue() ? 0 : 0);
         targetHeadingDeg = 0;
+        ebotsImu = EbotsImu.getInstance(autonOpMode.hardwareMap);
+        currentPose = autonOpMode.getCurrentPose();
+        targetPose = new Pose(currentPose.getX(),currentPose.getY(),0);
+        poseError = new PoseError(currentPose, targetPose, autonOpMode);
+
     }
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
@@ -66,8 +76,9 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     @Override
     public boolean shouldExit() {
-        headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - EbotsImu.getInstance(autonOpMode.hardwareMap).getCurrentFieldHeadingDeg(true));
-
+        currentPose.setHeadingDeg(ebotsImu.getCurrentFieldHeadingDeg(true));
+        poseError.calculateError(currentPose, targetPose, 0);
+        headingErrorDeg = poseError.getHeadingErrorDeg();
         if (firstPass){
             Log.d(logTag, "heading error is " + String.format("%.2f", headingErrorDeg));
             firstPass = false;
@@ -87,6 +98,7 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
             Log.d(logTag, autonOpMode.getClass().getSimpleName());
         }
         updateTelemetry();
+        loopCount++;
 
         return isTargetHeadingSustained | stateTimedOut | !autonOpMode.opModeIsActive();
 //        return isTargetHeadingSustained | stateTimedOut;
@@ -94,8 +106,14 @@ public class StateRotateForDeliverDuck implements EbotsAutonState{
 
     @Override
     public void performStateActions() {
-        Log.d(logTag, "in state actions for " + autonOpMode.getClass().getSimpleName());
-        motionController.rotateToFieldHeadingFromError(headingErrorDeg);
+//        Log.d(logTag, "in state actions for " + autonOpMode.getClass().getSimpleName());
+//        motionController.rotateToFieldHeadingFromError(headingErrorDeg);
+        motionController.calculateDriveFromError(poseError);
+        boolean debugOn = (loopCount % 10 == 0);
+        if (debugOn){
+            Log.d("EBOTS", poseError.toString());
+        }
+
     }
 
     @Override

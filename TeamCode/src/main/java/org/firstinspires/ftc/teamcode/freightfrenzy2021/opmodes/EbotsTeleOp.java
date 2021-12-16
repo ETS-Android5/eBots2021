@@ -100,7 +100,7 @@ public class EbotsTeleOp extends LinearOpMode {
         Telemetry.Item zeroHeadingLine = null;
         telemetry.addData("Motion Controller", motionController.getName());
         telemetry.addData("Current Distance", distanceSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getSpeed()));
+        telemetry.addData("Carousel Speed (fmt)", String.format(twoDecimals, carousel.getPower()));
         telemetry.addData("Intake Speed", String.format(twoDecimals, intake.getSpeed()));
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());

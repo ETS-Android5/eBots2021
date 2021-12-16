@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -15,29 +17,48 @@ public class Carousel {
     Instance Attributes
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     double speed;
-    StopWatch stopWatch;
+    StopWatch stopWatchInput;
+    StopWatch stopWatchDeliver = new StopWatch();
     boolean isTouching;
     int encoderClicks;
     DcMotorEx carouselMotor;
     private static Carousel carouselInstance = null;
+    private double targetVelocity = 800;
+    private CarouselState carouselState = CarouselState.OFF;
+    private final double startVelocity = 800;
+
+    public enum CarouselState{
+        ON,
+        OFF
+    }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Carousel(HardwareMap hardwareMap){
         initMotor(hardwareMap);
-        stopWatch = new StopWatch();
+        stopWatchInput = new StopWatch();
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Getters & Setters
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    private void setSpeed(double amount){
-        double newPower = carouselMotor.getPower() + amount;
-        carouselMotor.setPower(newPower);
+    private void setVelocity(double amount){
+        double newVelocity = carouselMotor.getVelocity() + amount;
+        targetVelocity = newVelocity;
+        carouselMotor.setVelocity(targetVelocity);
+        if(targetVelocity == 0.0){
+            carouselState = CarouselState.OFF;
+        } else {
+            carouselState = CarouselState.ON;
+        }
     }
-    public double getSpeed(){
+    public double getPower(){
         return carouselMotor.getPower();
+    }
+
+    public double getMotorVelocity() {
+        return carouselMotor.getVelocity();
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,30 +87,65 @@ public class Carousel {
         if(AllianceSingleton.getAlliance() == Alliance.BLUE){
             spinSign = -1;
         }
-        carouselMotor.setPower(0.27 * spinSign);
+
+//        carouselMotor.setPower(0.27 * spinSign);
+        carouselMotor.setVelocity(targetVelocity * spinSign);
+        carouselState = CarouselState.ON;
+        stopWatchDeliver.reset();
     }
 
-    public void stopMotor (){carouselMotor.setPower(0);}
+    public void stopMotor (){
+//        carouselMotor.setPower(0);
+        carouselMotor.setVelocity(0.0);
+        carouselState = CarouselState.OFF;
+    }
 
     public void handleUserInput(Gamepad gamepad){
+        long timeOut = 400;
+        boolean lockoutActive = stopWatchInput.getElapsedTimeMillis() < timeOut;
+        updateTargetVelocity();
+        if (lockoutActive) return;
+
         int spinSign = 1;
         if(AllianceSingleton.getAlliance() == Alliance.BLUE){
             spinSign = -1;
         }
-        double increment = 0.05 * spinSign;
-        long timeOut = 400;
-      if(gamepad.right_bumper && stopWatch.getElapsedTimeMillis() > timeOut){
+        double increment = 50 * spinSign;
+      if(gamepad.right_bumper && carouselState == CarouselState.OFF){
           startMotor();
-          stopWatch.reset();
-      } else if(gamepad.dpad_up && stopWatch.getElapsedTimeMillis() > timeOut){
-          setSpeed(increment);
-          stopWatch.reset();
-      } else if(gamepad.dpad_down && stopWatch.getElapsedTimeMillis() > timeOut){
-          setSpeed(-increment);
-          stopWatch.reset();
-      }else if(gamepad.left_bumper){
+          stopWatchInput.reset();
+      } else if(gamepad.dpad_up){
+          setVelocity(increment);
+          stopWatchInput.reset();
+      } else if(gamepad.dpad_down){
+          setVelocity(-increment);
+          stopWatchInput.reset();
+      }else if(gamepad.left_bumper && gamepad.left_trigger < 0.3){
+          // left bumper with left trigger is reserved for intake
           stopMotor();
       }
+
+    }
+
+    public void updateTargetVelocity(){
+        double rampTime = 2500;
+        double postDeliveryTime = rampTime + 500;
+        double velocityIncrease = 1000;
+        boolean inDeliveryMode = carouselState == CarouselState.ON &&
+                stopWatchDeliver.getElapsedTimeMillis() < rampTime;
+        boolean postDeliveryMode = carouselState == CarouselState.ON &&
+                stopWatchDeliver.getElapsedTimeMillis() > postDeliveryTime;
+
+        if(inDeliveryMode){
+            double rampPercentage = stopWatchDeliver.getElapsedTimeMillis() / rampTime;
+            rampPercentage = Math.min(rampPercentage, 1);
+            targetVelocity = startVelocity + (rampPercentage * velocityIncrease);
+            carouselMotor.setVelocity(targetVelocity);
+//            Log.d("EBOTS", "targetVelocity: " + String.format("%.1f", targetVelocity));
+        }
+        if (postDeliveryMode && targetVelocity != startVelocity){
+            targetVelocity = startVelocity;
+        }
 
     }
 

@@ -59,18 +59,14 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
         // Must add state to back up to entry point, reverse travel during StateCollectFreightWithEncoders
         itinerary.add(StateUndoCollectTravelWithVelocityControl.class);
 
-        // alignment only, no need for passing to opMode
-//        itinerary.add(StateStrafeAlignToWall.class);
-
         // Move back to alliance hub for strafing
         itinerary.add(StateUndoEnterWarehouseWithVelocityControl.class);
 
         // strafe back to the hub y position previously used
         itinerary.add(StateStrafeToAllianceHubAfterCollectVelocityControl.class);
-//
-//        // Prepare to dump in alliance hub
-//        itinerary.add(StateUndoPushOffAllianceHubVelocityControl.class);
-//
+        // alignment only, no need for passing to opMode
+        itinerary.add(StateReverseToHubUsingVelocityControl.class);
+
         itinerary.add(StateDumpFreightV2.class);
 //
 //        itinerary.add(StatePushOffAllianeHubWithVelocityControl.class);

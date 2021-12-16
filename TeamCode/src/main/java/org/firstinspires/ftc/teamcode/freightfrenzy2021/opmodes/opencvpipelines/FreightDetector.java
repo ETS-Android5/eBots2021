@@ -23,7 +23,7 @@ public class FreightDetector extends OpenCvPipeline {
     double confidenceBox;
     double confidenceBall;
     boolean hsvBoxDebug = false;
-    boolean hsvBallDebug = true;
+    boolean hsvBallDebug = false;
 
     //Check the co ordinates
 //    Rect frameRect = new Rect(new Point(130, 20), new Point(190, 80));
@@ -93,7 +93,7 @@ public class FreightDetector extends OpenCvPipeline {
     private void determineFreightPresence() {
         // calculate values for this loop
         double confidenceThresholdBox = 0.7;
-        double confidenceThresholdBall = 0.85;
+        double confidenceThresholdBall = 0.50;
         confidenceBox = calculateConfidenceBox(frameHsv);
         confidenceBall = calculateConfidenceBall(frameHsv);
         boolean nowBox = confidenceBox >= confidenceThresholdBox;

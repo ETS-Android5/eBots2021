@@ -20,7 +20,7 @@ public class StateMoveToAllianceHubYWithOvertravelVelocityControl extends EbotsA
 
     private final double HUB_DISTANCE_FROM_WALL = 48.0;
     private final double ROBOT_HALF_WIDTH = RobotSize.ySize.getSizeValue();
-    private final double BUCKET_CENTER_OFFSET = 2.5;
+    private final double BUCKET_CENTER_OFFSET = 1.0;
     private final static double OVERTRAVEL_INCHES = 6.0;
 
 

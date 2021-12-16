@@ -14,7 +14,6 @@ public class StateUndoEnterWarehouseWithVelocityControl extends EbotsAutonStateV
         Log.d(logTag, "Entering " + this.getClass().getSimpleName() + " constructor");
 
         // Must define
-        targetClicks = autonOpMode.getForwardClicksEnterWarehouse();
 
         travelDistance = StateEnterWarehouseForCollectVelocityControl.getStateUndoTravelDistance();
         travelFieldHeadingDeg = 180.0;

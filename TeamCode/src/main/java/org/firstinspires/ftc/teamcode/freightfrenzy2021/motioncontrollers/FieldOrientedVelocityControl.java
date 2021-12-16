@@ -119,29 +119,29 @@ public class FieldOrientedVelocityControl implements EbotsMotionController {
         double spinInput = -gamepad.right_stick_x * maxAllowedSpinVelocity;    //Positive means to spin to the left (counterclockwise (CCW) when looking down on robot)
 
         // See if override is requested and set flag and target heading
-        boolean spinOverrideActive = false;
-        double targetHeadingDeg = 0;
-        if(gamepad.right_trigger > 0.3){
-            spinOverrideActive = true;
-            targetHeadingDeg = -AllianceSingleton.getDriverFieldHeadingDeg();    // note negative sign
-        } else if(gamepad.right_bumper){
-            spinOverrideActive = true;
-            targetHeadingDeg = 0.0;
-        } else if(gamepad.left_bumper){
-            spinOverrideActive = true;
-            targetHeadingDeg = AllianceSingleton.isBlue() ? 30.0 : -30.0;
-        }
-
-        // If override active, calculate spin signal based on PID coefficients and heading error
-        if (spinOverrideActive){
-            double headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - currentHeadingDeg);
-            // apply PID
-            spinInput = headingErrorDeg * speed.getS_p() * maxAllowedSpinVelocity;
-            // don't over-saturate signal while preserving sign
-            double spinSign = Math.signum(spinInput);
-            spinInput = Math.min(maxAllowedSpinVelocity, Math.abs(spinInput));
-            spinInput = spinInput * spinSign;
-        }
+//        boolean spinOverrideActive = false;
+//        double targetHeadingDeg = 0;
+//        if(gamepad.right_trigger > 0.3){
+//            spinOverrideActive = true;
+//            targetHeadingDeg = -AllianceSingleton.getDriverFieldHeadingDeg();    // note negative sign
+//        } else if(gamepad.right_bumper){
+//            spinOverrideActive = true;
+//            targetHeadingDeg = 0.0;
+//        } else if(gamepad.left_bumper){
+//            spinOverrideActive = true;
+//            targetHeadingDeg = AllianceSingleton.isBlue() ? 30.0 : -30.0;
+//        }
+//
+//        // If override active, calculate spin signal based on PID coefficients and heading error
+//        if (spinOverrideActive){
+//            double headingErrorDeg = UtilFuncs.applyAngleBounds(targetHeadingDeg - currentHeadingDeg);
+//            // apply PID
+//            spinInput = headingErrorDeg * speed.getS_p() * maxAllowedSpinVelocity;
+//            // don't over-saturate signal while preserving sign
+//            double spinSign = Math.signum(spinInput);
+//            spinInput = Math.min(maxAllowedSpinVelocity, Math.abs(spinInput));
+//            spinInput = spinInput * spinSign;
+//        }
 
 
         //  Step 1:  Calculate the magnitude for drive signal (hypotenuse of xDirDrive and yDirDrive signal)
@@ -187,9 +187,11 @@ public class FieldOrientedVelocityControl implements EbotsMotionController {
 
         // Apply a final refinement to the drive
         // Either: apply super slo-mo  OR  maximize power when driving fast
-        if (superSloMoInput < thresholdValue){
+        if (superSloMoInput < thresholdValue) {
             superSloMoInput = Math.max(0.3, superSloMoInput);
             applyScaleToCalculatedVelocity(superSloMoInput);
+        } else if(gamepad.right_trigger > 0.3){
+            applyScaleToCalculatedVelocity(0.5);
         }else if (requestedTranslateVelocity >= (thresholdValue * maxAllowedVelocity) &&
                 maxCalculatedVelocityMagnitude < requestedTranslateVelocity){
             // sometimes the calculation doesn't drive as fast as expected

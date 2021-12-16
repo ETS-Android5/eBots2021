@@ -5,16 +5,13 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotsenums.RobotSide;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
-import org.firstinspires.ftc.teamcode.ebotssensors.EbotsColorSensor;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.ebotsutil.UtilFuncs;
@@ -168,7 +165,8 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         if(motionController instanceof FieldOrientedVelocityControl){
             ((FieldOrientedVelocityControl) motionController).addVelocitiesToTelemetry(telemetry);
         }
-
+        telemetry.addData("Carousel Power", carousel.getPower());
+        telemetry.addData("Carousel Speed", carousel.getMotorVelocity());
         telemetry.addData("Arm isAtBottom", arm.isAtBottom());
         telemetry.addData("Arm position", arm.getPosition());
         telemetry.addData("Arm is zeroed ", arm.getIsZeroed());
