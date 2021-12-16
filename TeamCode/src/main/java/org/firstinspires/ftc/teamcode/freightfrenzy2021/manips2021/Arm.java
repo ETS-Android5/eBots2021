@@ -31,6 +31,7 @@ public class Arm {
     private static Arm armInstance = null;
     private Level targetLevel;
     HardwareMap hardwareMap;
+    private boolean rotateToCollectWhenReturnToBottom = false;
 
     private LinearOpMode opMode;
     private ArmState armState;
@@ -59,7 +60,9 @@ public class Arm {
         AT_LEVEL_3,
         MOVING_UP,
         MOVING_DOWN,
-        JUST_DUMPED
+        JUST_DUMPED,
+        INITIALIZED,
+        NEW
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,6 +70,7 @@ public class Arm {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Arm(LinearOpMode opMode) {
         Log.d(logTag, "Instantiating arm...");
+        armState = ArmState.NEW;
         this.init(opMode);
     }
 
@@ -86,9 +90,17 @@ public class Arm {
         return armMotor.getCurrentPosition();
     }
 
+    public boolean isInitialized(){
+        return armState == ArmState.INITIALIZED;
+    }
+
     public ArmState getArmState() {
         updateArmState();
         return armState;
+    }
+
+    public void setFlagToRotateAtBottom(){
+        this.rotateToCollectWhenReturnToBottom = true;
     }
 
     public LinearOpMode getOpMode() {
@@ -120,7 +132,11 @@ public class Arm {
         updateArmState();
         isAtLevelOne = (armState == ArmState.AT_LEVEL_1);
         if (!wasAtLevelOne && isAtLevelOne){
-            returnFlag = true;
+            // If just arrived at level One and
+            if(rotateToCollectWhenReturnToBottom){
+                returnFlag = true;
+                rotateToCollectWhenReturnToBottom = false;
+            }
             wasAtLevelOne = true;
         }
         return returnFlag;
@@ -155,12 +171,14 @@ public class Arm {
     //Return the instance if not present
     public static Arm getInstance(LinearOpMode opMode){
         if (armInstance == null){
+            Log.d(logTag, "Arm::getInstance --> Arm is null, about to create a new instance...");
             armInstance = new Arm(opMode);
-            Log.d(logTag, "Arm::getInstance --> Arm was null, new arm created");
+            Log.d(logTag, "Arm::getInstance --> New arm created");
 
         } else if(armInstance.getOpMode() != opMode){
+            Log.d(logTag, "Arm::getInstance --> opMode is stale, about to create a new instance...");
             armInstance = new Arm(opMode);
-            Log.d(logTag, "Arm::getInstance --> Arm instance instantiated because opMode didn't match");
+            Log.d(logTag, "Arm::getInstance --> New arm instance created because opMode didn't match");
         } else{
             Log.d(logTag, "Arm::getInstance --> Existing instance of arm provided");
         }
@@ -172,53 +190,74 @@ public class Arm {
     Instance Methods
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public void init(LinearOpMode opMode){
+        Log.d(logTag, "Inside Arm::init...");
         this.opMode = opMode;
         this.hardwareMap = this.opMode.hardwareMap;
         isZeroed = false;
         this.armMotor = this.hardwareMap.get(DcMotorEx.class, "armMotor");
         this.zeroLimitSwitch = this.hardwareMap.get(DigitalChannel.class, "zeroLimitSwitch");
+
+        if (!isAtBottom()){
+            Log.d(logTag, "Limit switch was not engaged, preparing to move are to zeroArmHeight");
+            zeroArmHeight();
+        } else {
+            Log.d(logTag, "Limit switch was already engaged, about to performZeroActions...");
+            performZeroActions();
+        }
         armMotor.setTargetPosition(0);
 
+        if(isAtBottom()) armState = ArmState.INITIALIZED;
+
         // These lines are added because limit switch is not working properly
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        isZeroed = true;
-        armState = ArmState.AT_LEVEL_1;
-        targetLevel = Level.ONE;
-        wasAtLevelOne = true;
+//        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        isZeroed = true;
+//        armState = ArmState.AT_LEVEL_1;
+//        targetLevel = Level.ONE;
+//        wasAtLevelOne = true;
         //****************************************
-
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        armMotor.setPower(0.0);
-
     }
 
     public void zeroArmHeight(){
         Log.d(logTag, "Entering zeroArmHeight");
+
+        isZeroed = false;
         if(isAtBottom()) {
             Log.d(logTag, "Arm is at bottom...");
             performZeroActions();
             return;
         }
 
-        StopWatch stopWatchZero = new StopWatch();
-        long timeLimit = 250;
-        boolean isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
+        Log.d(logTag, "Preparing to rotate bucket to travel position...");
+        rotateBucketToTravelPosition();
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        while (!isAtBottom() && !isTimedOut && opMode.opModeIsActive()){
+        Log.d(logTag, "Preparing to move arm...");
+        StopWatch stopWatchZero = new StopWatch();
+        long timeLimit = 600;
+        boolean isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
+
+        // the flags used to determine if the bucket needs to rotate must be managed relative to whether this is during init
+        // duringInit, the bucket status is unreliable.  Assume the bucket is not in Travel position
+        // and the opMode monitor exit conditions are a function of whether in init or not
+        boolean duringInit = !opMode.opModeIsActive();
+        boolean exitRequested = opModeExitRequested(duringInit);
+
+        while (!isAtBottom() && !isTimedOut && !exitRequested){
             armMotor.setPower(-0.25);
             isTimedOut = stopWatchZero.getElapsedTimeMillis() >= timeLimit;
         }
+        if (isTimedOut) Log.d(logTag, "Exited movement because timed out");
+        if (isAtBottom()) Log.d(logTag, "Exited movement because reached bottom");
+        if (exitRequested) Log.d(logTag, "Exited because opMode requested exit");
         // stop the motor
         armMotor.setPower(0.0);
 
         if(isAtBottom()){
             performZeroActions();
         } else{
-            Log.d(logTag, "Zero operation timed out!!");
+            Log.d(logTag, "!!! Zero operation NOT successful !!!");
             int currentPosition = armMotor.getCurrentPosition();
             armMotor.setTargetPosition(currentPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -227,7 +266,7 @@ public class Arm {
     }
 
     private void performZeroActions(){
-        Log.d(logTag, "Zero is reached");
+        Log.d(logTag, "Entering Arm::performZeroActions...");
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setTargetPosition(0);
         isZeroed = true;
@@ -237,6 +276,7 @@ public class Arm {
         armState = ArmState.AT_LEVEL_1;
         targetLevel = Level.ONE;
         wasAtLevelOne = true;
+        Log.d(logTag, "Exiting Arm::performZeroActions");
     }
 
     public void moveToLevel(Level level){
@@ -255,15 +295,42 @@ public class Arm {
 
     private void rotateBucketToTravelPosition(){
         Bucket bucket = Bucket.getInstance(opMode);
+        Log.d(logTag, "Bucket position: " + bucket.getBucketState());
         EbotsBlinkin ebotsBlinkin = EbotsBlinkin.getInstance(opMode.hardwareMap);
         ebotsBlinkin.lightsOff();
         long rotateTime = 400L;
         StopWatch stopWatch = new StopWatch();
-        boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
+//        boolean bucketInTravelPosition = bucket.getBucketState() == BucketState.TRAVEL;
+//        if (!bucketInTravelPosition) bucket.setState(BucketState.TRAVEL);
+
+        // the flags used to determine if the bucket needs to rotate must be managed relative to whether this is during init
+        // duringInit, the bucket status is unreliable.  Assume the bucket is not in Travel position
+        // and the opMode monitor exit conditions are a function of whether in init or not
+
+        // Note, during init, opoModeIsActive evaluates to false
+        boolean duringInit = !opMode.opModeIsActive();
+        boolean exitRequested = opModeExitRequested(duringInit);
+
+        boolean bucketInTravelPosition = duringInit ? false : bucket.getBucketState() == BucketState.TRAVEL;
         if (!bucketInTravelPosition) bucket.setState(BucketState.TRAVEL);
-        while (opMode.opModeIsActive() && !bucketInTravelPosition) {
+        while (!exitRequested && !bucketInTravelPosition) {
             bucketInTravelPosition = stopWatch.getElapsedTimeMillis() > rotateTime;
         }
+    }
+
+    /**
+     * Returns whether the user has requested exit and is conditional based on if opMode is started
+     * @param duringInit:  whether the opModeIsActive or not.  It's not active during init
+     * @return if exit is requested
+     */
+    private boolean opModeExitRequested(boolean duringInit){
+        boolean exitRequested;
+        if (duringInit){
+            exitRequested = opMode.isStarted() | opMode.isStopRequested();
+        } else {
+            exitRequested = !opMode.opModeIsActive();
+        }
+        return exitRequested;
     }
 
     @Deprecated

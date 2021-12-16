@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.ebotsenums.BucketState;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOp;
-import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsTeleOpV2;
 
 public class Bucket {
 
@@ -153,6 +151,7 @@ public class Bucket {
             Log.d("EBOTS", "Bucket tilt to Collect DENIED!!!");
         } else if (bucketState == BucketState.DUMP && dumpAchieved){
             // if state was DUMP and dump achieved them return arm to level 1
+            arm.setFlagToRotateAtBottom();
             arm.moveToLevel(Arm.Level.ONE);
             bucketState = BucketState.TRAVEL;
         } else {

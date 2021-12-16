@@ -66,8 +66,10 @@ public class EbotsTeleOpV2 extends LinearOpMode {
         bucket = Bucket.getInstance(this);
         bucket.setState(BucketState.COLLECT);
 
+        Log.d(logTag, "About to call Arm.getInstance from " + this.getClass().getSimpleName());
         arm = Arm.getInstance(this);
 
+        Log.d(logTag, "About to call UtilFuncs.initManips from " + this.getClass().getSimpleName());
         UtilFuncs.initManips(arm,carousel,this);
 
         ebotsBlinkin = EbotsBlinkin.getInstance(hardwareMap);

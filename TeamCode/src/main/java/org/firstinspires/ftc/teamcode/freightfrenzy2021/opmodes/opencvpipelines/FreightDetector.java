@@ -78,8 +78,10 @@ public class FreightDetector extends OpenCvPipeline {
             Log.d("EBOTS", "hsv size: " + frameHsv.size().toString());
             Log.d("EBOTS", "hsv cols: " + String.format("%d", frameHsv.cols()));
             Log.d("EBOTS", "val1: " + Arrays.toString(frameHsv.get(0,0)));
-            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(input.cols()/2,input.rows()/2)));
-            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.cols()-1,input.rows()-1)));
+//            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get((input.rows()/2),(input.cols()/2))));
+            Log.d("EBOTS", "val2: " + Arrays.toString(frameHsv.get(14,29)));
+//            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(input.cols()-1,input.rows()-1)));
+            Log.d("EBOTS", "val3: " + Arrays.toString(frameHsv.get(29,59)));
             Log.d("EBOTS", "Average Hue: " + String.format("%d", averageHue));
         }
         // draw a bounding rectangle
