@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsBlinkin;
 import org.firstinspires.ftc.teamcode.ebotssensors.EbotsImu;
 import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
+import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 
 public class StateCalibratingImu implements EbotsAutonState{
@@ -15,7 +16,8 @@ public class StateCalibratingImu implements EbotsAutonState{
     private DigitalChannel backRollerTouch;
     private boolean initComplete = false;
     private EbotsAutonOpMode autonOpMode;
-    HardwareMap hardwareMap;
+    private HardwareMap hardwareMap;
+    private EbotsImu ebotsImu;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Instance Attributes
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -34,7 +36,7 @@ public class StateCalibratingImu implements EbotsAutonState{
             backRollerTouch = autonOpMode.hardwareMap.get(DigitalChannel.class, "rightBackTouch");
         }
         EbotsBlinkin.getInstance(hardwareMap).lightsRed();
-        EbotsImu.getInstance(hardwareMap);
+        ebotsImu = EbotsImu.getInstance(hardwareMap);
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +67,22 @@ public class StateCalibratingImu implements EbotsAutonState{
 
     @Override
     public void performTransitionalActions() {
-        EbotsBlinkin.getInstance(hardwareMap).lightsGreen();
+        long duration = 3000;
+        double cycleTime = 500;
+        StopWatch stopWatch = new StopWatch();
+        EbotsBlinkin ebotsBlinkin = EbotsBlinkin.getInstance(hardwareMap);
+
+        double currentCycle = Math.round(stopWatch.getElapsedTimeMillis() / cycleTime);
+        boolean cycleOn = currentCycle % 2 == 0;
+        while (!autonOpMode.isStarted() && !autonOpMode.isStopRequested() && stopWatch.getElapsedTimeMillis() < duration) {
+            if(cycleOn) {
+                ebotsBlinkin.lightsGreen();
+            } else {
+                ebotsBlinkin.lightsOff();
+            }
+            currentCycle = Math.round(stopWatch.getElapsedTimeMillis() / cycleTime);
+            cycleOn = currentCycle % 2 == 0;
+        }
+        ebotsBlinkin.lightsOff();
 }
 }

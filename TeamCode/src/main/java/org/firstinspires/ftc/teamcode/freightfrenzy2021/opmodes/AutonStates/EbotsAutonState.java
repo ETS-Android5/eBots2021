@@ -76,6 +76,10 @@ public interface EbotsAutonState {
             newState = new StateStrafeToAllianceHubAfterCollect(autonOpMode);
         } else if (targetState == StateStrafeAlignToWall.class) {
             newState = new StateStrafeAlignToWall(autonOpMode);
+
+        } else if (targetState == StateCalibratingImu.class) {
+            newState = new StateCalibratingImu(autonOpMode);
+
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

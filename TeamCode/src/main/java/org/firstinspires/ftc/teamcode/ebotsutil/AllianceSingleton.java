@@ -45,6 +45,7 @@ public class AllianceSingleton {
     }
 
     public static boolean isBlue() {
+        instantiateIfNull();
         return allianceSingleton.alliance == Alliance.BLUE;
     }
 

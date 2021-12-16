@@ -11,7 +11,9 @@ import org.firstinspires.ftc.teamcode.ebotssensors.EbotsWebcam;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Bucket;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.motioncontrollers.AutonDrive;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.EbotsAutonState;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateCalibratingImu;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateConfigureRoutine;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateDelayTenSeconds;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveBarCode;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateObserveTeamShippingElement;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateOpenCVObserve;
@@ -84,8 +86,8 @@ public class AutonOpModeV2 extends EbotsAutonOpMode {
         bucket.setState(BucketState.TRAVEL);
 
         // Setup the pre-match autonStates
-        itinerary.add(StateConfigureRoutine.class);
-        itinerary.add(StateOpenCVObserve.class);
+        itinerary.add(StateCalibratingImu.class);
+        itinerary.add(StateDelayTenSeconds.class);
 //        itinerary.add(StateObserveTeamShippingElement.class);
 
         telemetry.addLine("Initialization complete!");
