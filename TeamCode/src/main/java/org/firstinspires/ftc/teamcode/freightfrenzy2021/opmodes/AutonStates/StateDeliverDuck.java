@@ -78,8 +78,7 @@ Instance Methods
     public boolean shouldExit() {
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-//    return stateTimedOut | !autonOpMode.opModeIsActive();
-    return stateTimedOut;
+        return stateTimedOut | !autonOpMode.opModeIsActive();
 }
 
     @Override
