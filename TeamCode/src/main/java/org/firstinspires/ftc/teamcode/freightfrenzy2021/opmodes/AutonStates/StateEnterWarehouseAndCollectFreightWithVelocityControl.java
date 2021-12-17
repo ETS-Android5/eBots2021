@@ -26,8 +26,8 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
     private int ballSightingScore = 0;
     private int boxSightingScore = 0;
     private int sightingThreshold = 2;
-    private final double enterWarehouseDistance = 38.0;
-    private final double collectDistance = 24.0;
+    private final double enterWarehouseDistance = 24.0;
+    private final double collectDistance = 36.0;
 
 
 
@@ -41,7 +41,6 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
             bucket.setState(BucketState.COLLECT);
         }
 
-        motionController.setSpeed(Speed.SLOW);
         exitedWithFreight = false;
 
         startPose = new Pose(currentPose.getX(), currentPose.getY(), currentPose.getHeadingDeg());
@@ -106,7 +105,8 @@ public class StateEnterWarehouseAndCollectFreightWithVelocityControl extends Ebo
     public boolean shouldExit() {
         // standardExitConditions include opMode inactivated, travel complete, state timed out.
         updateLocationAndError();
-        updateFreightPresent();
+        boolean freightDetectionLockOut = stopWatchState.getElapsedTimeMillis() <= 500;
+        if (!freightDetectionLockOut) updateFreightPresent();
 
 
         boolean stateTimedOut = stopWatchState.getElapsedTimeMillis() > stateTimeLimit;

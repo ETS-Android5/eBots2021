@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.ebotsenums.Alliance;
+import org.firstinspires.ftc.teamcode.ebotsutil.AllianceSingleton;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.manips2021.Carousel;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.EbotsAutonOpMode;
 import org.firstinspires.ftc.teamcode.ebotsutil.StopWatch;
@@ -21,9 +22,9 @@ Class Attributes
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Instance Attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    Carousel carousel;
-    StopWatch stopWatch;
-    EbotsAutonOpMode autonOpMode;
+    private Carousel carousel;
+    private StopWatch stopWatch;
+    private EbotsAutonOpMode autonOpMode;
     long stateTimeLimit;
     private DcMotorEx frontLeft;
     private DcMotorEx frontRight;
@@ -37,6 +38,7 @@ Constructors
         HardwareMap hardwareMap = autonOpMode.hardwareMap;
         this.autonOpMode = autonOpMode;
         carousel = Carousel.getInstance(hardwareMap);
+        carousel.initMotor(hardwareMap);
         stopWatch = new StopWatch();
         stateTimeLimit = 4250;
         this.autonOpMode = autonOpMode;
@@ -57,6 +59,9 @@ Constructors
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
+        carousel.startMotor();
+
+
     }
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Getters & Setters
@@ -73,13 +78,14 @@ Instance Methods
     public boolean shouldExit() {
         boolean stateTimedOut = stopWatch.getElapsedTimeMillis() >= stateTimeLimit;
 
-    return stateTimedOut | !autonOpMode.opModeIsActive();
+//    return stateTimedOut | !autonOpMode.opModeIsActive();
+    return stateTimedOut;
 }
 
     @Override
     public void performStateActions() {
-        carousel.deliverDuckAuton();
-
+        autonOpMode.telemetry.addData("Carousel velocity", carousel.getMotorVelocity());
+        autonOpMode.telemetry.addData("Alliance is Blue", AllianceSingleton.isBlue());
         for (DcMotorEx m : motors) {
             m.setPower(-0.10);
         }

@@ -33,7 +33,8 @@ public class StateMoveToHubYCarouselVelocityControl extends EbotsAutonStateVelCo
         travelDistance = HUB_DISTANCE_FROM_WALL - ROBOT_HALF_LENGTH +
                 (BUCKET_CENTER_OFFSET * allianceSign) - offsetDistance;
 
-        travelDistance = isBlue ? 19.43 : 28.02;
+//        travelDistance = isBlue ? 19.43 : 28.02;
+        travelDistance = isBlue ? 30.0 : 28.02;
 
         if (debugOn){
             Log.d(logTag, "travelDistance: " + String.format(twoDec, travelDistance));

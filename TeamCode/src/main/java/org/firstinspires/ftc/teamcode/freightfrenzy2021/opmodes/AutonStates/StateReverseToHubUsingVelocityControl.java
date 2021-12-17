@@ -22,7 +22,7 @@ public class StateReverseToHubUsingVelocityControl extends EbotsAutonStateVelCon
         boolean isBlue = AllianceSingleton.isBlue();
 
         if(isCarousel && isBlue) {
-            travelDistance = 20.14;
+            travelDistance = 27.14;
         } else if (isCarousel && !isBlue){
             travelDistance = 26.58;
 

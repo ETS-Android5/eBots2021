@@ -26,6 +26,9 @@ public class Carousel {
     private double targetVelocity = 800;
     private CarouselState carouselState = CarouselState.OFF;
     private final double startVelocity = 800;
+    private final String logTag = "EBOTS";
+    private int spinSign;
+    private HardwareMap hardwareMap;
 
     public enum CarouselState{
         ON,
@@ -36,6 +39,7 @@ public class Carousel {
     Constructors
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     private Carousel(HardwareMap hardwareMap){
+        this.hardwareMap = hardwareMap;
         initMotor(hardwareMap);
         stopWatchInput = new StopWatch();
     }
@@ -68,6 +72,9 @@ public class Carousel {
     public static Carousel getInstance(HardwareMap hardwareMap){
         if (carouselInstance == null){
             carouselInstance = new Carousel(hardwareMap);
+        } else if (hardwareMap != carouselInstance.hardwareMap){
+            carouselInstance = new Carousel(hardwareMap);
+            Log.d("EBOTS", "Carousel hardware map doesn't match, creating new");
         }
         return carouselInstance;
     }
@@ -77,25 +84,31 @@ public class Carousel {
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     public void initMotor (HardwareMap hardwareMap){
          carouselMotor = hardwareMap.get(DcMotorEx.class,"carouselMotor");
-         carouselMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         carouselMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
          carouselMotor.setDirection(DcMotorSimple.Direction.REVERSE);
          speed = carouselMotor.getPower();
+         spinSign = (AllianceSingleton.isBlue()) ? -1 : 1;
+
     }
 
     public void startMotor (){
-        int spinSign = 1;
-        if(AllianceSingleton.getAlliance() == Alliance.BLUE){
-            spinSign = -1;
-        }
-
+        Log.d(logTag, "About to start motor");
+//        int spinSign = 1;
+//        if(AllianceSingleton.isBlue())
+//            spinSign = -1;
+//        }
+        targetVelocity = startVelocity * spinSign;
 //        carouselMotor.setPower(0.27 * spinSign);
-        carouselMotor.setVelocity(targetVelocity * spinSign);
+        Log.d(logTag, "Alliance is Blue: " + AllianceSingleton.isBlue());
+        Log.d(logTag, "targetVelocity: " + String.format("%.1f", targetVelocity));
+        Log.d(logTag, "spinSign: " + String.format("%d", spinSign));
+        carouselMotor.setVelocity(targetVelocity);
         carouselState = CarouselState.ON;
         stopWatchDeliver.reset();
     }
 
+    @Deprecated
     public void deliverDuckAuton(){
-        int spinSign = AllianceSingleton.isBlue() ? -1 : 1;
         targetVelocity = startVelocity;
         carouselMotor.setVelocity(targetVelocity * spinSign);
         carouselState = CarouselState.ON;
@@ -113,24 +126,20 @@ public class Carousel {
         boolean lockoutActive = stopWatchInput.getElapsedTimeMillis() < timeOut;
         updateTargetVelocity();
         if (lockoutActive) return;
-
-        int spinSign = 1;
-        if(AllianceSingleton.getAlliance() == Alliance.BLUE){
-            spinSign = -1;
-        }
         double increment = 50 * spinSign;
-      if(gamepad.right_bumper && carouselState == CarouselState.OFF){
-          startMotor();
-          stopWatchInput.reset();
-      } else if(gamepad.dpad_up){
-          setVelocity(increment);
-          stopWatchInput.reset();
-      } else if(gamepad.dpad_down){
-          setVelocity(-increment);
-          stopWatchInput.reset();
-      }else if(gamepad.left_bumper && gamepad.left_trigger < 0.3){
-          // left bumper with left trigger is reserved for intake
-          stopMotor();
+        if(gamepad.right_bumper && carouselState == CarouselState.OFF){
+              startMotor();
+              stopWatchInput.reset();
+        } else if(gamepad.dpad_up){
+              setVelocity(increment);
+              stopWatchInput.reset();
+        } else if(gamepad.dpad_down){
+              setVelocity(-increment);
+              stopWatchInput.reset();
+        }else if(gamepad.left_bumper && gamepad.left_trigger < 0.3){
+
+            // left bumper with left trigger is reserved for intake
+            stopMotor();
       }
 
     }
@@ -148,6 +157,7 @@ public class Carousel {
             double rampPercentage = stopWatchDeliver.getElapsedTimeMillis() / rampTime;
             rampPercentage = Math.min(rampPercentage, 1);
             targetVelocity = startVelocity + (rampPercentage * velocityIncrease);
+            targetVelocity *= spinSign;
             carouselMotor.setVelocity(targetVelocity);
 //            Log.d("EBOTS", "targetVelocity: " + String.format("%.1f", targetVelocity));
         }

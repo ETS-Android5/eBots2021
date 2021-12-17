@@ -163,6 +163,9 @@ public interface EbotsAutonState {
         } else if (targetState == StateUndoEnterWarehouseAndCollectFreightWithVelocityControl.class) {
             newState = new StateUndoEnterWarehouseAndCollectFreightWithVelocityControl(autonOpMode);
 
+        } else if (targetState == StateStrafeToAligNWallAfterCollectVelocityControl.class) {
+            newState = new StateStrafeToAligNWallAfterCollectVelocityControl(autonOpMode);
+
         } else if (targetState == StateDriveToCarousel.class) {
             newState = new StateDriveToCarousel(autonOpMode);
         } else if (targetState == StateObserveBarCode.class){

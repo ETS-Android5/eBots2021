@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.Stat
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StatePushOffAllianeHubWithVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateReverseToHubUsingVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateRotateToZeroDegreesVelocityControl;
+import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAligNWallAfterCollectVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAlignTSEVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllianceHubAfterCollectVelocityControl;
 import org.firstinspires.ftc.teamcode.freightfrenzy2021.opmodes.AutonStates.StateStrafeToAllowTurnToAllianceHubVelocityControl;
@@ -66,6 +67,7 @@ public class RoutineWarehouseWithCollect extends EbotsAutonRoutine{
 
         // combine the steps for enter warehouse and collect freight
         itinerary.add(StateEnterWarehouseAndCollectFreightWithVelocityControl.class);
+        itinerary.add(StateStrafeToAligNWallAfterCollectVelocityControl.class);
         itinerary.add(StateUndoEnterWarehouseAndCollectFreightWithVelocityControl.class);
 
         // strafe back to the hub y position previously used
