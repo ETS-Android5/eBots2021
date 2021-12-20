@@ -60,13 +60,14 @@ public class StateStrafeToAllianceHubAfterCollectVelocityControl extends EbotsAu
     }
 
     private void moveArmToTargetLevel() {
-        BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
-        Arm.Level targetLevel = Arm.Level.ONE;
-        if (barCodePosition == BarCodePosition.MIDDLE) {
-            targetLevel = Arm.Level.TWO;
-        } else if (barCodePosition == BarCodePosition.RIGHT) {
-            targetLevel = Arm.Level.THREE;
-        }
+//        BarCodePosition barCodePosition = autonOpMode.getBarCodePosition();
+//        Arm.Level targetLevel = Arm.Level.ONE;
+//        if (barCodePosition == BarCodePosition.MIDDLE) {
+//            targetLevel = Arm.Level.TWO;
+//        } else if (barCodePosition == BarCodePosition.RIGHT) {
+//            targetLevel = Arm.Level.THREE;
+//        }
+        Arm.Level targetLevel = Arm.Level.THREE;
         Arm arm = Arm.getInstance(autonOpMode);
         arm.moveToLevel(targetLevel);
     }

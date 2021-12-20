@@ -133,7 +133,7 @@ public class BarCodeScanner extends OpenCvPipeline {
                     validPixels++;
                     // if value is high enough (ignores black)
                     double currentHue = hsv.get(row, col)[0];
-                    if (currentHue < 45 | currentHue > 150) {
+                    if (currentHue < 30 | currentHue > 150) {
                         numRed++;
                     }
                 } else{
